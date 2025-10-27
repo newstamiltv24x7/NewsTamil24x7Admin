@@ -1,0 +1,68 @@
+// Invoice-1
+
+.invoice-1-wrapper {
+  font-family: "Montserrat", sans-serif;
+}
+
+.invoice-1.table-wrapper {
+  width: 1160px;
+  margin: 0 auto;
+}
+
+.invoice-1 h2 {
+  margin: 0;
+  font-weight: 500;
+  font-size: 40px;
+}
+
+.invoice-1 h6 {
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.invoice-1 span {
+  font-size: 18px;
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+.invoice-1 .banner-image {
+  margin: 13px 0 10px;
+}
+
+.invoice-1 .order-details td span {
+  margin-bottom: -4px;
+  display: block;
+}
+
+.invoice-1 .order-details th:first-child,
+.order-details td:first-child {
+  min-width: 490px;
+}
+
+.invoice-1 .order-details th:nth-child(2),
+.order-details td:nth-child(2) {
+  width: 20%;
+}
+
+@media (max-width: 1199px) {
+  .invoice-1 .table-wrapper {
+    width: 930px;
+  }
+  .invoice-1 .address {
+    width: 21% !important;
+  }
+}
+
+// invoice-2/3
+
+.invoice-2-wrapper,
+.invoice-3-wrapper {
+  span {
+    font-family: "Montserrat", sans-serif;
+    display: block;
+    color: #000248;
+  }
+}

@@ -1,0 +1,152 @@
+.story-check-content {
+  font-weight: 600;
+  font-size: 16px;
+  span {
+    font-weight: 500;
+    font-size: 14px;
+  }
+}
+
+.table-wrapper th svg {
+  font-size: 18px;
+  position: relative;
+  top: 4px;
+  cursor: pointer;
+}
+
+.fileName-container {
+  word-break: break-word;
+  max-height: 40px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 175px;
+  font-size: 14px;
+  font-weight: 550;
+}
+
+.loader-class {
+  pointer-events: none;
+  opacity: 0.3;
+}
+
+.completed-class {
+  opacity: 1;
+}
+
+.create-story .rdw-editor-main {
+  min-height: 30vh;
+}
+
+.textWrapper {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 3;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+}
+
+.py-18 {
+  padding: 14px 0 0 0 !important;
+  overflow: scroll !important;
+}
+
+.common-breadcrumbs-header {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  min-width: 400px;
+
+  ol {
+    margin: 0;
+  }
+
+  .active {
+    font-weight: 600;
+  }
+}
+
+.preview {
+  .category-wrapper {
+    position: relative;
+    font-size: 10px;
+    padding: 0 5px;
+    background: #1c1c1c;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: #fff;
+    height: 20px;
+    line-height: 20px;
+    display: inline-block;
+
+    ::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      z-index: 0;
+      bottom: -7px;
+      border-top: 8px solid #1c1c1c;
+      border-right: 8px solid transparent;
+    }
+  }
+
+  .createdBy {
+    color: #c4b6af;
+    font-weight: 500;
+    span {
+      color: #273b4e;
+      font-weight: 600;
+    }
+  }
+
+  .createdAt {
+    svg {
+      position: relative;
+      top: 4px;
+      font-size: 18px;
+    }
+    span {
+      color: #273b4e;
+      font-weight: 500;
+      padding-left: 8px;
+    }
+  }
+}
+
+.youtubePop .MuiPaper-root {
+  width: 40%;
+}
+
+.web-story-pop .MuiPaper-root {
+  max-width: 60vw !important;
+  width: 100%;
+}
+
+.web-story-pop1 .MuiPaper-root {
+  max-width: 30vw !important;
+  width: 100%;
+}
+
+.web-story-pop2 .MuiPaper-root {
+  max-width: 70vw !important;
+  width: 100%;
+}
+
+.hrules-check svg path {
+  fill: #fff !important;
+}
+
+.main-parent-menu {
+  list-style-type: none;
+  padding: 12px 0;
+  .main-child-menu {
+    list-style-type: disc;
+    padding-left: 20px;
+    font-size: 14px;
+    padding-top: 12px;
+    font-weight: 500;
+    ::before {
+      content: "";
+      position: absolute;
+    }
+  }
+}

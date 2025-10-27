@@ -1,0 +1,39 @@
+/* Define the base styles for the checkbox */
+input[type="checkbox"] {
+  position: relative;
+  cursor: pointer;
+  margin-right: 20px;
+}
+
+/* Hide the default checkbox appearance */
+input[type="checkbox"]::before {
+  content: "";
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+
+/* Style for the checked state */
+input[type="checkbox"]:checked::before {
+  background-color: #fe6a49;
+  border-color: #fe6a49;
+}
+
+/* Checkmark styles */
+input[type="checkbox"]:checked::after {
+  content: "";
+  position: absolute;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  top: 50%;
+  left: 6px;
+  transform: translateY(-50%) rotate(45deg);
+}

@@ -1,0 +1,42 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    }
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "src/Components/MasterPage/MainCategory/AddMainCategoryPop.js",
+    "src/Components/StoryPage/CreateStoryPageContainer.jsx",
+    "build/types/**/*.ts"
+, "src/Components/StoryPage/EditStoryPageContainer.jsx", "src/CommonComponent/ImageCrop/index.js", "src/Components/MasterPage/MainCategory/MainCategoryPage.jsx", "src/Components/Advertisement/Create/CreateAdContainer.jsx", "src/Components/Advertisement/Create/CreateAdContainer.jsx", "src/Redux/Reducers/CroppedImageSlice.js", "src/Redux/Reducers/CroppedImageSlice.js", "src/Components/WebStories/AddWebStory.jsx", "src/Components/WebStories/WebStoriesPageContainer.jsx", "src/Components/MasterPage/Youtube/YoutubePageContainer.jsx", "src/Components/StoryPage/NewsRoomList.jsx"  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

@@ -1,0 +1,38 @@
+# Node and Next.js
+/node_modules
+/.next
+
+# env files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Misc
+.DS_Store
+# Web and Admin builds
+/web/build
+/admin/build
+
+# Next.js build cache
+/.next
+/admin/.next
+
+# Node modules
+/node_modules
+/web/node_modules
+/admin/node_modules
+
+# Logs
+*.log
+
+news-tamil-93e7f-firebase-adminsdk-kmphu-0332d0cb20.json
+news-tamil-434706-p6-e3998b8efde6.json
+
+service_key.json

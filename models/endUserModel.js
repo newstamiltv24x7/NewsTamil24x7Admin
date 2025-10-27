@@ -1,0 +1,90 @@
+const mongoose = require("mongoose");
+var Schema = mongoose.Schema;
+// var validator = require("validator");
+
+const EndUserSchema = new Schema(
+  {
+    first_name: {
+      type: String,
+      required: [true, "Firstname is required"],
+      trim: true,
+    },
+    last_name: {
+      type: String,
+      required: [true, "Lastname is required"],
+      trim: true,
+    },
+    user_name: {
+      type: String,
+      required: [true, "Username is required"],
+      trim: true,
+    },
+    user_id: {
+      type: String,
+      required: [true, "User Id is required"],
+      trim: true,
+      unique: true
+    },
+    email: {
+      type: String,
+      required: [true, "Email number is is required"],
+      unique: true,
+      validate: {
+        validator: function (value) {
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          return emailRegex.test(value);
+        },
+        message: "Invalid email address",
+      },
+    },
+    password: {
+      type: String,
+      required: [true, "Password is required"],
+      trim: true,
+      timestamp: true,
+    },
+    c_password: {
+      type: String,
+      required: [true, "Confirm Password is required"],
+      trim: true,
+      timestamp: true,
+    },
+    slug_name: {
+      type: String,
+      trim: true,
+    },
+    role: {
+      type: String,
+    },
+    google_id: {
+      type: String,
+    },
+    c_user_img_url: {
+      type: String,
+      trim: true,
+    },
+    n_status: {
+      type: Number,
+      required: true,
+      enum: [0, 1],
+      default: 1,
+    },
+    n_published: {
+      type: Number,
+      required: true,
+      enum: [0, 1],
+      default: 1,
+    },
+    token: {
+      type: String,
+    },
+    key: {
+      type: String,
+    },
+  },
+  { strict: false, versionKey: false, timestamps: true }
+);
+
+const EndUser = mongoose.models.EndUser || mongoose.model("EndUser", EndUserSchema);
+
+module.exports = { EndUser };

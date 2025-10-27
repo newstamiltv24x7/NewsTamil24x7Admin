@@ -1,0 +1,29 @@
+@import "./style.scss";
+@import "./responsive.scss";
+
+//bootstrap
+@import 'bootstrap/dist/css/bootstrap.min.css';
+
+//fontawsome
+@import "~font-awesome/css/font-awesome.min.css"; 
+
+//simple-bar vertical scrollbar
+@import "simplebar-react/dist/simplebar.min.css";
+
+//react-perfect-scrollbar
+// @import "react-perfect-scrollbar/dist/css/styles.css";
+
+//react-toastify
+@import 'react-toastify/dist/ReactToastify.css';
+
+//feather_icon
+@import "./vendors/feather-icon.scss";
+
+//ico_font
+@import "./vendors/icofont.scss";
+
+//themify
+@import "./vendors/themify.scss";
+
+//flag_icons
+@import "./vendors/flag-icon.scss";
