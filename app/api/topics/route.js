@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import connectMongoDB from "../../../libs/mongodb";
-import Topic from "../../../models/topic";
+import Topic from "@/models/topic";
+import connectMongoDB from "@/libs/mongodb";
 
 let sendResponse = {
   appStatusCode: "",

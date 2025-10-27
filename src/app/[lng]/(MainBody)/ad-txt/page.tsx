@@ -1,7 +1,7 @@
 "use client";
 
 import { Box, Button } from "@mui/material";
-import { craeteAddTxtApi, getAddTxtWebApi } from "apiFunctions/ApiAction";
+import { craeteAddTxtApi, getAddTxtWebApi } from "@/apiFunctions/ApiAction";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { Card, CardBody, Input, Label, Spinner } from "reactstrap";

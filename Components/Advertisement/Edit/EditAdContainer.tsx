@@ -40,6 +40,7 @@ import { setCroppedImageSource } from "@/Redux/Reducers/CroppedImageSlice";
 import { useDispatch } from "react-redux";
 import { IoCloseCircle } from "react-icons/io5";
 
+
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
   clipPath: "inset(50%)",

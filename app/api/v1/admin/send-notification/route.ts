@@ -2,7 +2,7 @@ import admin from "firebase-admin";
 import { Message } from "firebase-admin/messaging";
 import { NextRequest, NextResponse } from "next/server";
 import connectMongoDB from "../../../../../libs/mongodb";
-import { FcmDeviceToken } from "models/fcmDeviceTokenModel";
+import { FcmDeviceToken } from "@/models/fcmDeviceTokenModel";
 
 // Initialize Firebase Admin SDK
 if (!admin.apps.length) {

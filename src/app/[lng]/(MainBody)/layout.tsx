@@ -4,14 +4,15 @@ import { ToastContainer } from "react-toastify";
 // import ThemeCustomizer from "@/Layout/ThemeCustomizer";
 import { useEffect, useState } from "react";
 import { redirect, usePathname } from "next/navigation";
-import Header from "Layout/Header/Header";
-import { SideBar } from "Layout/SideBar/SideBar";
-import TapTop from "Layout/TapTop";
-import { useAppDispatch, useAppSelector } from "Redux/Hooks";
-import { setToggleSidebar } from "Redux/Reducers/LayoutSlice";
-import { setLayout } from "Redux/Reducers/ThemeCustomizerSlice";
-import StoryPreview from "Layout/StoryPreview/StoryPreview";
-import { getAllSideBarMenu } from "apiFunctions/ApiAction";
+
+import { SideBar } from "@/Layout/SideBar/SideBar";
+import TapTop from "@/Layout/TapTop";
+import { useAppDispatch, useAppSelector } from "@/Redux/Hooks";
+import { setToggleSidebar } from "@/Redux/Reducers/LayoutSlice";
+import { setLayout } from "@/Redux/Reducers/ThemeCustomizerSlice";
+import StoryPreview from "@/Layout/StoryPreview/StoryPreview";
+import { getAllSideBarMenu } from "@/apiFunctions/ApiAction";
+import Header from "@/Layout/Header/Header";
 
 export default function RootLayout({
   children,

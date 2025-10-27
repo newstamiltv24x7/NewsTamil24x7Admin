@@ -35,6 +35,7 @@ import { useRouter } from "next/navigation";
 import { TransitionProps } from "@mui/material/transitions";
 import { useDispatch } from "react-redux";
 import { IoCloseCircle } from "react-icons/io5";
+
 // import StyledDemo from "@/CommonComponent/ImageCrop";
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
