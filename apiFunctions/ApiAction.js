@@ -17,8 +17,6 @@ export const OpenAIApiForConversion = async (body) => {
     });
 };
 
-// ----------------------------------------------------------------
-
 export const LoginApi = async (body) => {
   return await axios
     .post(`/api/v1/admin/sign_in`, body)

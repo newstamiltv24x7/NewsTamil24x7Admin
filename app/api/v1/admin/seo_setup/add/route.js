@@ -58,7 +58,6 @@ export async function POST(request) {
             n_status: n_status,
             n_published: n_published,
           };
-
           
          const Id = userRoleId._id.toString()
 

@@ -19,7 +19,7 @@ export async function POST(request) {
       const storyData = await Story.findOne({
         story_id: c_story_id,
       });
-      console.log(storyData,"<<< STORY DATA")
+      // console.log(storyData,"<<< STORY DATA")
     
       if (storyData) {
         await Story.updateOne({
@@ -28,7 +28,7 @@ export async function POST(request) {
           $inc: { view_count: 1 }
          },{ timestamps: false }
          ).then(async (result) => {
-          console.log(result,"<<< RESULTDD")
+          // console.log(result,"<<< RESULTDD")
             sendResponse["appStatusCode"] = 0;
             sendResponse["message"] = "Visited!!";
             sendResponse["payloadJson"] = storyData?.updatedAt;
