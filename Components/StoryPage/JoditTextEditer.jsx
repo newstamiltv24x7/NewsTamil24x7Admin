@@ -42,6 +42,54 @@ function JoditTextEditer(props) {
       readonly: false,
       toolbar: true,
       license: process.env.NEXT_PUBLIC_JODIT_LICENSE, // Add your license key here
+      extraButtons: [
+        {
+          name: "InsertRelatedArticle",
+          iconURL: "https://cdn-icons-png.flaticon.com/512/1063/1063376.png",
+          tooltip: "Insert Related News",
+          exec: async (editor) => {
+            const url = prompt("Enter News Article URL:");
+            if (!url) return;
+
+            try {
+              const res = await fetch("/api/v1/admin/story/meta", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ url }),
+              });
+
+              const data = await res.json();
+
+              if (!res.ok) {
+                alert(data.error || "Failed to fetch article details");
+                return;
+              }
+
+              const { title, image, url: articleUrl } = data.payload;
+
+              const html = `
+                <div class="jodit-related-article" style="background-color: #f8f9fa; padding: 15px; border-radius: 8px; margin: 20px 0; border: 1px solid #e9ecef; font-family: system-ui, -apple-system, sans-serif;">
+                    <h5 style="margin: 0 0 10px 0; font-size: 16px; font-weight: 700; color: #343a40;">Related Link</h5>
+                    <a href="${articleUrl}" target="_blank" style="text-decoration: none; display: flex; align-items: flex-start; gap: 15px; color: inherit;">
+                        <div style="flex-shrink: 0; width: 120px;">
+                            <img src="${image}" alt="${title}" style="width: 100%; height: auto; border-radius: 4px; object-fit: cover; aspect-ratio: 16/9; display: block;" />
+                        </div>
+                        <div style="flex: 1;">
+                            <p style="margin: 0; font-size: 15px; font-weight: 500; line-height: 1.5; color: #495057;">${title}</p>
+                        </div>
+                    </a>
+                </div>
+                <p><br/></p>
+              `;
+
+              editor.s.insertHTML(html);
+            } catch (error) {
+              console.error(error);
+              alert("An error occurred while fetching article details.");
+            }
+          },
+        },
+      ],
       // uploader: {
       //   url: 'https://xdsoft.net/jodit/finder/?action=fileUpload',
       //   insertImageAsBase64URI: false,
