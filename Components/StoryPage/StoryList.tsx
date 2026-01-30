@@ -144,7 +144,7 @@ export default function StoryList(props: any) {
             {[1, 2, 3, 4, 5]?.map((list) => (
               <tr key={list}>
                 {[1, 2, 3, 4, 5, 6, 7, 8, 9,10]?.map((item) => (
-                  <td>
+                  <td key={item}>
                     <Skeleton
                       animation="wave"
                       variant="rectangular"
@@ -225,7 +225,7 @@ export default function StoryList(props: any) {
                         user_id !== undefined && user_id === row.c_createdBy ? (
                           role_id === "9386b7e94c7e" &&
                           row.c_save_type === "published" ? (
-                            <Link href={{}}>
+                            <span>
                               <BiSolidMessageAltEdit
                                 style={{
                                   fontSize: "20px",
@@ -235,7 +235,7 @@ export default function StoryList(props: any) {
                                   top: 5,
                                 }}
                               />
-                            </Link>
+                            </span>
                           ) : (
                             <Link
                               href={{
@@ -255,7 +255,7 @@ export default function StoryList(props: any) {
                             </Link>
                           )
                         ) : (
-                          <Link href={{}}>
+                          <span>
                             <BiSolidMessageAltEdit
                               style={{
                                 fontSize: "20px",
@@ -265,7 +265,7 @@ export default function StoryList(props: any) {
                                 top: 5,
                               }}
                             />
-                          </Link>
+                          </span>
                         )
                       ) : (
                         <Link
