@@ -125,17 +125,17 @@ export async function POST(request) {
       }
     } else {
       sendResponse["appStatusCode"] = 4;
-      sendResponse["message"] = [];
+      sendResponse["message"] = "Authentication failed";
       sendResponse["payloadJson"] = [];
       sendResponse["error"] = verified.error;
       return NextResponse.json(sendResponse, { status: 200 });
     }
   } catch (err) {
     sendResponse["appStatusCode"] = 4;
-    sendResponse["message"] = [];
+    sendResponse["message"] = "Internal Server Error";
     sendResponse["payloadJson"] = [];
-    sendResponse["error"] = "Something went wrong!";
-    return NextResponse.json(sendResponse, { status: 400 });
+    sendResponse["error"] = err.message || "Something went wrong!";
+    return NextResponse.json(sendResponse, { status: 500 });
   }
 }
 

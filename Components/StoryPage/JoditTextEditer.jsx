@@ -1,4 +1,4 @@
-import React, { useRef, useMemo, useEffect } from "react";
+import React, { useRef, useMemo, useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import {
   Box,
@@ -11,14 +11,14 @@ import {
 } from "@mui/material";
 import Cookies from "js-cookie";
 
-// const JoditEditor = dynamic(() => import("jodit-react"), { ssr: false });
 const JoditEditor = dynamic(() => import("jodit-pro-react"), { ssr: false });
 
-
-
 function JoditTextEditer(props) {
+  const [token, setToken] = useState(null);
 
-  const token = Cookies.get("_token");
+  useEffect(() => {
+    setToken(Cookies.get("_token"));
+  }, []);
 
   const {
     inputs,
