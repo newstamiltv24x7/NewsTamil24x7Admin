@@ -3,12 +3,12 @@ import connectMongoDB from "@/libs/mongodb";
 import { create_UUID, verifyAccessToken } from "@/helper/helper";
 import { Categories } from "@/models/categoriesModel";
 
-let sendResponse = {
+const getSendResponse = () => ({
   appStatusCode: "",
   message: "",
   payloadJson: [],
   error: "",
-};
+});
 
 
 function createCategoriesList(categorieses, c_parentId = null) {
@@ -90,6 +90,7 @@ export async function POST(request) {
     await request.json();
 
   const verified = verifyAccessToken();
+  const sendResponse = getSendResponse();
 
   try {
     await connectMongoDB();
@@ -343,6 +344,7 @@ export async function POST(request) {
 export async function GET(request) {
   const id = request.nextUrl.searchParams.get("id");
   const c_category_id = request.nextUrl.searchParams.get("c_category_id");
+  const sendResponse = getSendResponse();
 
   try {
     const verified = verifyAccessToken();
