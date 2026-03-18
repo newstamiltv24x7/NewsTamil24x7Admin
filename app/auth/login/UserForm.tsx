@@ -82,8 +82,12 @@ export const UserForm = () => {
       Cookies.set("role_name", results?.payloadJson?.role);
       Cookies.set("user_name", results?.payloadJson?.user_name);
       Cookies.set("privileges", JSON.stringify(dummyArray));
-      toast.success("login successful");
-      await router.push(`/${i18LangStatus}/story`);
+      toast.success("login successful", {
+        onClose: () => {
+          router.push(`/${i18LangStatus}/story/create_story`);
+        },
+        autoClose: 500,
+      });
     } else {
       setLoader(false);
       toast.error("Something Went wrong, Please try after some time");
