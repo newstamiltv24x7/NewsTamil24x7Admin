@@ -594,14 +594,16 @@ const EditStoryPageContainer = () => {
         return 0;
       });
 
-      setInputs({
-        ...inputs,
-        main_category: sortedArray[0]?.c_category_id,
-        secondary_category: sortedArray[0]?.c_sub_categories[0]?.c_category_id,
-        cat_name: sortedArray[0]?.c_category_english_name,
-      });
-      setCategoryArr(sortedArray);
-      setSecondaryCategoryArr(sortedArray[0]?.c_sub_categories);
+      if (sortedArray && sortedArray.length > 0) {
+        setInputs({
+          ...inputs,
+          main_category: sortedArray[0]?.c_category_id,
+          secondary_category: sortedArray[0]?.c_sub_categories[0]?.c_category_id ? sortedArray[0]?.c_sub_categories[0]?.c_category_id : "",
+          cat_name: sortedArray[0]?.c_category_english_name,
+        });
+        setCategoryArr(sortedArray);
+        setSecondaryCategoryArr(sortedArray[0]?.c_sub_categories || []);
+      }
     }
   };
 
