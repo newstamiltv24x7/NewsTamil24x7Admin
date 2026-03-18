@@ -69,17 +69,11 @@ export const UserForm = () => {
         localStorage.setItem("user_email", "");
         localStorage.setItem("user_password", "");
       }
-      
-     
-
-      window.location.reload();
-      let dummyArray:any =[];
-      results?.payloadJson?.privileges.map((data:any) => 
+      let dummyArray:any = [];
+      results?.payloadJson?.privileges.map((data:any) =>
         dummyArray.push(data?.role_privileage)
-      )
+      );
 
-
-     
       Cookies.set("riho_token", JSON.stringify(true));
       Cookies.set("_token", results?.payloadJson?.tokenAccess);
       Cookies.set("_token_expiry", results?.payloadJson?.tokenExpiry);
@@ -88,8 +82,8 @@ export const UserForm = () => {
       Cookies.set("role_name", results?.payloadJson?.role);
       Cookies.set("user_name", results?.payloadJson?.user_name);
       Cookies.set("privileges", JSON.stringify(dummyArray));
-      router.push(`/en/story`);
       toast.success("login successful");
+      await router.push(`/${i18LangStatus}/story`);
     } else {
       setLoader(false);
       toast.error("Something Went wrong, Please try after some time");

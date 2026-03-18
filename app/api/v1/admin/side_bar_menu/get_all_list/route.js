@@ -78,11 +78,16 @@ function createMenus(menus, c_parentId = null) {
 }
 
 export async function POST(request) {
-  const { c_search_term } = await request.json();
+  let c_search_term = "";
+  try {
+    const body = await request.json();
+    c_search_term = body.c_search_term || "";
+  } catch (err) {
+    // Handle cases where request body is empty or not JSON
+    c_search_term = "";
+  }
 
-  let searchTerm = c_search_term ? c_search_term : "";
-
-  if (searchTerm !== "") {
+  if (c_search_term !== "") {
     let _search = {};
 
     _search["$and"] = [
@@ -90,7 +95,7 @@ export async function POST(request) {
         $and: [
           { n_status: 1 },
           { n_published: 1 },
-          { title: { $regex: searchTerm, $options: "i" } },
+          { title: { $regex: c_search_term, $options: "i" } },
         ],
       },
     ];

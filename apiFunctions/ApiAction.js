@@ -1,3 +1,4 @@
+import Cookies from "js-cookie";
 import axios from "axios";
 import { AppHeader, OpenAIHeaders, imgeUploadHeaders } from "./AppHeader";
 const SOCIAL_TOKEN = process.env.NEXT_PUBLIC_SOCIAL_POST_TOKEN;
@@ -1233,8 +1234,14 @@ export const addSeoCategoryApi = async (body) => {
 };
 
 export const getSideBarMenu = async () => {
+  const token = Cookies.get("_token");
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${token}`,
+  };
+
   return await axios
-    .get(`/api/v1/admin/side_bar_menu/list`, { headers: AppHeader })
+    .get(`/api/v1/admin/side_bar_menu/list`, { headers })
     .then((res) => {
       return res.data;
     })
@@ -1244,8 +1251,14 @@ export const getSideBarMenu = async () => {
 };
 
 export const getSideBarMenus = async () => {
+  const token = Cookies.get("_token");
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${token}`,
+  };
+
   return await axios
-    .get(`/api/v1/admin/side_bar_menu/lists`, { headers: AppHeader })
+    .get(`/api/v1/admin/side_bar_menu/lists`, { headers })
     .then((res) => {
       return res.data;
     })
@@ -1256,8 +1269,14 @@ export const getSideBarMenus = async () => {
 
 
 export const getAllSideBarMenu = async () => {
+  const token = Cookies.get("_token");
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${token}`,
+  };
+
   return await axios
-    .get(`/api/v1/admin/side_bar_menu/get_all_list`, { headers: AppHeader })
+    .get(`/api/v1/admin/side_bar_menu/get_all_list`, { headers })
     .then((res) => {
       return res.data;
     })

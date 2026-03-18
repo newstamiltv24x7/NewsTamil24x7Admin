@@ -74,14 +74,12 @@ export async function POST(request) {
   } = await request.json();
 
   const verified = verifyAccessToken();
-  
 
-  const userRole = await UserRole.findOne({
-    c_role_id: verified.data.c_role_id,
-  });
-  
   try {
     if (verified.success) {
+      const userRole = await UserRole.findOne({
+        c_role_id: verified.data.c_role_id,
+      });
       let _search = {};
       let n_limitTerm = n_limit;
       let n_pageTerm = n_page === 1 ? 0 : (n_page - 1) * n_limit;
