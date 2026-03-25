@@ -72,7 +72,7 @@ export const changePasswordApi = async (body, token) => {
 
 export const userChangePassword = async (body) => {
   return await axios
-    .post(`/api/v1/admin/change_password`, body, { headers: AppHeader })
+    .post(`/api/v1/admin/change_password`, body, { headers: AppHeader() })
     .then((res) => {
       return res.data;
     })
@@ -98,7 +98,7 @@ export const getTranslateApi = async (body) => {
 
 export const getCategoryListApi = async (body) => {
   return await axios
-    .post(`/api/v1/admin/master/categories/list`, body, { headers: AppHeader })
+    .post(`/api/v1/admin/master/categories/list`, body, { headers: AppHeader() })
     .then((res) => {
       return res.data;
     })
@@ -107,11 +107,12 @@ export const getCategoryListApi = async (body) => {
     });
 };
 
+
 export const getAllCategoryListApi = async (body) => {
 
   if(body){
     return await axios
-    .get(`/api/v1/admin/master/categories/list?c_category_id=${body}`, { headers: AppHeader })
+    .get(`/api/v1/admin/master/categories/list?c_category_id=${body}`, { headers: AppHeader() })
     .then((res) => {
       return res.data;
     })
@@ -120,7 +121,7 @@ export const getAllCategoryListApi = async (body) => {
     });
   }else{
     return await axios
-    .get(`/api/v1/admin/master/categories/list`, { headers: AppHeader })
+    .get(`/api/v1/admin/master/categories/list`, { headers: AppHeader() })
     .then((res) => {
       return res.data;
     })
@@ -135,7 +136,7 @@ export const getAllCategoryListApi = async (body) => {
 
 export const getAllCountryListApi = async () => {
   return await axios
-    .get(`/api/v1/admin/master/countries`, { headers: AppHeader })
+    .get(`/api/v1/admin/master/countries`, { headers: AppHeader() })
     .then((res) => {
       return res.data;
     })
@@ -146,7 +147,7 @@ export const getAllCountryListApi = async () => {
 
 export const getPublishOptionApi = async () => {
   return await axios
-    .get(`/api/v1/admin/master/publish_options`, { headers: AppHeader })
+    .get(`/api/v1/admin/master/publish_options`, { headers: AppHeader() })
     .then((res) => {
       return res.data;
     })
@@ -157,7 +158,7 @@ export const getPublishOptionApi = async () => {
 
 export const getHruleData = async () => {
   return await axios
-    .get(`/api/v1/admin/h_rules/list`, { headers: AppHeader })
+    .get(`/api/v1/admin/h_rules/list`, { headers: AppHeader() })
     .then((res) => {
       return res.data;
     })
@@ -168,7 +169,7 @@ export const getHruleData = async () => {
 
 export const getAllStateListApi = async (body) => {
   return await axios
-    .post(`/api/v1/admin/master/states`, body, { headers: AppHeader })
+    .post(`/api/v1/admin/master/states`, body, { headers: AppHeader() })
     .then((res) => {
       return res.data;
     })
@@ -179,7 +180,7 @@ export const getAllStateListApi = async (body) => {
 
 export const getAllCityListApi = async (body) => {
   return await axios
-    .post(`/api/v1/admin/master/city`, body, { headers: AppHeader })
+    .post(`/api/v1/admin/master/city`, body, { headers: AppHeader() })
     .then((res) => {
       return res.data;
     })
@@ -191,7 +192,7 @@ export const getAllCityListApi = async (body) => {
 export const allUserListApi = async (body) => {
   return await axios
     .post(`/api/v1/admin/list_user`, body, {
-      headers: AppHeader,
+      headers: AppHeader(),
     })
     .then((res) => {
       return res.data;
@@ -203,7 +204,7 @@ export const allUserListApi = async (body) => {
 
 export const getAllUserListApi = async (body) => {
   return await axios
-    .post(`/api/v1/admin/list_user`, body, { headers: AppHeader })
+    .post(`/api/v1/admin/list_user`, body, { headers: AppHeader() })
     .then((res) => {
       return res.data;
     })
@@ -214,7 +215,7 @@ export const getAllUserListApi = async (body) => {
 
 export const getMethodAllUserListApi = async () => {
   return await axios
-    .get(`/api/v1/admin/list_user`, { headers: AppHeader })
+    .get(`/api/v1/admin/list_user`, { headers: AppHeader() })
     .then((res) => {
       return res.data;
     })
@@ -225,7 +226,7 @@ export const getMethodAllUserListApi = async () => {
 
 export const addCategoryListApi = async (body) => {
   return await axios
-    .post(`/api/v1/admin/master/categories/add`, body, { headers: AppHeader })
+    .post(`/api/v1/admin/master/categories/add`, body, { headers: AppHeader() })
     .then((res) => {
       return res.data;
     })
@@ -237,7 +238,7 @@ export const addCategoryListApi = async (body) => {
 export const deleteCategoryListApi = async (body) => {
   return await axios
     .delete(`/api/v1/admin/master/categories?id=${body}`, {
-      headers: AppHeader,
+      headers: AppHeader(),
     })
     .then((res) => {
       return res.data;
@@ -250,7 +251,7 @@ export const deleteCategoryListApi = async (body) => {
 export const categoryOrderApi = async (body) => {
   return await axios
     .post(`/api/v1/admin/master/menu_order_change`, body, {
-      headers: AppHeader,
+      headers: AppHeader(),
     })
     .then((res) => {
       return res.data;
@@ -263,7 +264,7 @@ export const categoryOrderApi = async (body) => {
 export const getAllyoutubeLinkApi = async (body) => {
   return await axios
     .post(`/api/v1/admin/urls/list`, body, {
-      headers: AppHeader,
+      headers: AppHeader(),
     })
     .then((res) => {
       return res.data;
@@ -276,7 +277,7 @@ export const getAllyoutubeLinkApi = async (body) => {
 export const deleteYoutubeThumbApi = async (body) => {
   return await axios
     .delete(`/api/v1/admin/urls/delete?id=${body}`, {
-      headers: AppHeader,
+      headers: AppHeader(),
     })
     .then((res) => {
       return res.data;
@@ -289,7 +290,7 @@ export const deleteYoutubeThumbApi = async (body) => {
 export const addYouTubeLinkApi = async (body) => {
   return await axios
     .post(`/api/v1/admin/urls/add`, body, {
-      headers: AppHeader,
+      headers: AppHeader(),
     })
     .then((res) => {
       return res.data;
@@ -302,7 +303,7 @@ export const addYouTubeLinkApi = async (body) => {
 export const youtubeStreamOrderApi = async (body) => {
   return await axios
     .post(`/api/v1/admin/urls/update_by_order`, body, {
-      headers: AppHeader,
+      headers: AppHeader(),
     })
     .then((res) => {
       return res.data;
@@ -315,7 +316,7 @@ export const youtubeStreamOrderApi = async (body) => {
 export const getLiveStreamCategoryApi = async () => {
   return await axios
     .get(`/api/v1/admin/live_stream_category/list`, {
-      headers: AppHeader,
+      headers: AppHeader(),
     })
     .then((res) => {
       return res.data;
@@ -329,7 +330,7 @@ export const getLiveStreamCategoryApi = async () => {
 
 export const getAllStoriesListApi = async (body) => {
   return await axios
-    .post(`/api/v1/admin/story/list`, body, { headers: AppHeader })
+    .post(`/api/v1/admin/story/list`, body, { headers: AppHeader() })
     .then((res) => {
       return res.data;
     })
@@ -340,7 +341,7 @@ export const getAllStoriesListApi = async (body) => {
 
 export const createNewStoryApi = async (body) => {
   return await axios
-    .post(`/api/v1/admin/story/add`, body, { headers: AppHeader })
+    .post(`/api/v1/admin/story/add`, body, { headers: AppHeader() })
     .then((res) => {
       return res.data;
     })
@@ -351,7 +352,7 @@ export const createNewStoryApi = async (body) => {
 
 export const deleteStoryApi = async (body) => {
   return await axios
-    .delete(`/api/v1/admin/story/delete?id=${body}`, { headers: AppHeader })
+    .delete(`/api/v1/admin/story/delete?id=${body}`, { headers: AppHeader() })
     .then((res) => {
       return res.data;
     })
@@ -362,7 +363,7 @@ export const deleteStoryApi = async (body) => {
 
 export const deletePermanentStoryApi = async (body) => {
   return await axios
-    .delete(`/api/v1/admin/story/deleted?id=${body}`, { headers: AppHeader })
+    .delete(`/api/v1/admin/story/deleted?id=${body}`, { headers: AppHeader() })
     .then((res) => {
       return res.data;
     })
@@ -373,7 +374,7 @@ export const deletePermanentStoryApi = async (body) => {
 
 export const getParticularStoryApi = async (body) => {
   return await axios
-    .get(`/api/v1/admin/story/list?Id=${body}`, { headers: AppHeader })
+    .get(`/api/v1/admin/story/list?Id=${body}`, { headers: AppHeader() })
     .then((res) => {
       return res.data;
     })
@@ -384,7 +385,7 @@ export const getParticularStoryApi = async (body) => {
 
 export const imageUploadApi = async (body) => {
   return await axios
-    .post(`/api/v1/admin/file_upload`, body, { headers: imgeUploadHeaders })
+    .post(`/api/v1/admin/file_upload`, body, { headers: imgeUploadHeaders() })
     .then((res) => {
       return res.data;
     })
@@ -395,7 +396,7 @@ export const imageUploadApi = async (body) => {
 
 export const imageDeleteApi = async (body) => {
   return await axios
-    .post(`/api/v1/admin/file_delete`, body, { headers: AppHeader })
+    .post(`/api/v1/admin/file_delete`, body, { headers: AppHeader() })
     .then((res) => {
       return res.data;
     })
@@ -408,7 +409,7 @@ export const imageDeleteApi = async (body) => {
 
 export const getAllAdsListApi = async (body) => {
   return await axios
-    .post(`/api/v1/admin/advertisement/list`, body, { headers: AppHeader })
+    .post(`/api/v1/admin/advertisement/list`, body, { headers: AppHeader() })
     .then((res) => {
       return res.data;
     })
@@ -419,7 +420,7 @@ export const getAllAdsListApi = async (body) => {
 
 export const createAdvertisementApi = async (body) => {
   return await axios
-    .post(`/api/v1/admin/advertisement/add`, body, { headers: AppHeader })
+    .post(`/api/v1/admin/advertisement/add`, body, { headers: AppHeader() })
     .then((res) => {
       return res.data;
     })
@@ -430,7 +431,7 @@ export const createAdvertisementApi = async (body) => {
 
 export const editAdvertisementApi = async (body) => {
   return await axios
-    .get(`/api/v1/admin/advertisement/list?id=${body}`, { headers: AppHeader })
+    .get(`/api/v1/admin/advertisement/list?id=${body}`, { headers: AppHeader() })
     .then((res) => {
       return res.data;
     })
@@ -442,7 +443,7 @@ export const editAdvertisementApi = async (body) => {
 export const deleteAdvertisementApi = async (body) => {
   return await axios
     .delete(`/api/v1/admin/advertisement/delete?id=${body}`, {
-      headers: AppHeader,
+      headers: AppHeader(),
     })
     .then((res) => {
       return res.data;
@@ -456,7 +457,7 @@ export const deleteAdvertisementApi = async (body) => {
 
 export const getAllWebSToriesApi = async (body) => {
   return await axios
-    .post(`/api/v1/admin/web_stories/list`, body, { headers: AppHeader })
+    .post(`/api/v1/admin/web_stories/list`, body, { headers: AppHeader() })
     .then((res) => {
       return res.data;
     })
@@ -467,7 +468,7 @@ export const getAllWebSToriesApi = async (body) => {
 
 export const addWebStoryApi = async (body) => {
   return await axios
-    .post(`/api/v1/admin/web_stories/add`, body, { headers: AppHeader })
+    .post(`/api/v1/admin/web_stories/add`, body, { headers: AppHeader() })
     .then((res) => {
       return res.data;
     })
@@ -479,7 +480,7 @@ export const addWebStoryApi = async (body) => {
 export const deleteWebStoryApi = async (body) => {
   return await axios
     .delete(`/api/v1/admin/web_stories/delete?id=${body}`, {
-      headers: AppHeader,
+      headers: AppHeader(),
     })
     .then((res) => {
       return res.data;
@@ -493,7 +494,7 @@ export const deleteWebStoryApi = async (body) => {
 
 export const getAllListiclesListApi = async (body) => {
   return await axios
-    .post(`/api/v1/admin/listicles/list`, body, { headers: AppHeader })
+    .post(`/api/v1/admin/listicles/list`, body, { headers: AppHeader() })
     .then((res) => {
       return res.data;
     })
@@ -504,7 +505,7 @@ export const getAllListiclesListApi = async (body) => {
 
 export const createListiclesApi = async (body) => {
   return await axios
-    .post(`/api/v1/admin/listicles/add`, body, { headers: AppHeader })
+    .post(`/api/v1/admin/listicles/add`, body, { headers: AppHeader() })
     .then((res) => {
       return res.data;
     })
@@ -515,7 +516,7 @@ export const createListiclesApi = async (body) => {
 
 export const getParticularListiclesApi = async (body) => {
   return await axios
-    .get(`/api/v1/admin/listicles/list?id=${body}`, { headers: AppHeader })
+    .get(`/api/v1/admin/listicles/list?id=${body}`, { headers: AppHeader() })
     .then((res) => {
       return res.data;
     })
@@ -527,7 +528,7 @@ export const getParticularListiclesApi = async (body) => {
 export const deleteListicleApi = async (body) => {
   return await axios
     .delete(`/api/v1/admin/listicles/delete?id=${body}`, {
-      headers: AppHeader,
+      headers: AppHeader(),
     })
     .then((res) => {
       return res.data;
@@ -541,7 +542,7 @@ export const deleteListicleApi = async (body) => {
 
 export const getAllLiveBlogListApi = async (body) => {
   return await axios
-    .post(`/api/v1/admin/live_blog/list`, body, { headers: AppHeader })
+    .post(`/api/v1/admin/live_blog/list`, body, { headers: AppHeader() })
     .then((res) => {
       return res.data;
     })
@@ -552,7 +553,7 @@ export const getAllLiveBlogListApi = async (body) => {
 
 export const addLiveBlogApi = async (body) => {
   return await axios
-    .post(`/api/v1/admin/live_blog/add`, body, { headers: AppHeader })
+    .post(`/api/v1/admin/live_blog/add`, body, { headers: AppHeader() })
     .then((res) => {
       return res.data;
     })
@@ -563,7 +564,7 @@ export const addLiveBlogApi = async (body) => {
 
 export const getParticularBlogApi = async (body) => {
   return await axios
-    .get(`/api/v1/admin/live_blog/list?id=${body}`, { headers: AppHeader })
+    .get(`/api/v1/admin/live_blog/list?id=${body}`, { headers: AppHeader() })
     .then((res) => {
       return res.data;
     })
@@ -575,7 +576,7 @@ export const getParticularBlogApi = async (body) => {
 export const deleteLiveBlogApi = async (body) => {
   return await axios
     .delete(`/api/v1/admin/live_blog/delete?id=${body}`, {
-      headers: AppHeader,
+      headers: AppHeader(),
     })
     .then((res) => {
       return res.data;
@@ -588,7 +589,7 @@ export const deleteLiveBlogApi = async (body) => {
 export const userPrivilegeApi = async (body) => {
   return await axios
     .get(`/api/v1/admin/role/list`, {
-      headers: AppHeader,
+      headers: AppHeader(),
     })
     .then((res) => {
       return res.data;
@@ -601,7 +602,7 @@ export const userPrivilegeApi = async (body) => {
 export const userPrivilegeUserListApi = async () => {
   return await axios
     .get(`/api/v1/admin/user_privileges/list`, {
-      headers: AppHeader,
+      headers: AppHeader(),
     })
     .then((res) => {
       return res.data;
@@ -617,7 +618,7 @@ export const userRoleMenuAPi = async () => {
       `/api/v1/admin/menus/list`,
       { c_search_term: "" },
       {
-        headers: AppHeader,
+        headers: AppHeader(),
       }
     )
     .then((res) => {
@@ -631,7 +632,7 @@ export const userRoleMenuAPi = async () => {
 export const addUserPrivilegeAPi = async (body) => {
   return await axios
     .post(`/api/v1/admin/user_privileges/add`, body, {
-      headers: AppHeader,
+      headers: AppHeader(),
     })
     .then((res) => {
       return res.data;
@@ -644,7 +645,7 @@ export const addUserPrivilegeAPi = async (body) => {
 export const deleteUserRoleAPI = async (body) => {
   return await axios
     .delete(`/api/v1/admin/user_privileges/delete?id=${body}`, {
-      headers: AppHeader,
+      headers: AppHeader(),
     })
     .then((res) => {
       return res.data;
@@ -657,7 +658,7 @@ export const deleteUserRoleAPI = async (body) => {
 export const deleteUserAPI = async (body) => {
   return await axios
     .delete(`/api/v1/admin/user/delete?id=${body}`, {
-      headers: AppHeader,
+      headers: AppHeader(),
     })
     .then((res) => {
       return res.data;
@@ -669,7 +670,7 @@ export const deleteUserAPI = async (body) => {
 export const deleteWebConfigTagsAPI = async (body) => {
   return await axios
     .delete(`/api/v1/admin/tags/delete?id=${body}`, {
-      headers: AppHeader,
+      headers: AppHeader(),
     })
     .then((res) => {
       return res.data;
@@ -682,7 +683,7 @@ export const deleteWebConfigTagsAPI = async (body) => {
 export const craeteUserApi = async (body) => {
   return await axios
     .post(`/api/v1/admin/create_user`, body, {
-      headers: AppHeader,
+      headers: AppHeader(),
     })
     .then((res) => {
       return res.data;
@@ -695,7 +696,7 @@ export const craeteUserApi = async (body) => {
 export const craeteAddTxtApi = async (body) => {
   return await axios
     .post(`/api/v1/admin/ads_txt/add`, body, {
-      headers: AppHeader,
+      headers: AppHeader(),
     })
     .then((res) => {
       return res.data;

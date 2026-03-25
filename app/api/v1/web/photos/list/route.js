@@ -91,7 +91,7 @@ export async function POST(request) {
             c_photos_img: 1,
             c_photos_content: 1,
             c_photos_id: 1,
-            c_photos_continue_item: 1,
+            // c_photos_continue_item: 1, // Excluded from list to save payload size
             createdAt: 1,
             updatedAt: 1,
             c_createdBy: 1,

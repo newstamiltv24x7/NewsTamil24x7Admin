@@ -70,10 +70,9 @@ export const UserForm = () => {
         localStorage.setItem("user_password", "");
       }
       
-     
-
-      window.location.reload();
-      let dummyArray:any =[];
+      
+      
+    let dummyArray:any =[];
       results?.payloadJson?.privileges.map((data:any) => 
         dummyArray.push(data?.role_privileage)
       )

@@ -27,28 +27,14 @@ const seprateArrayData = (data) => {
       _id: list._id,
       story_subject_name: list.story_subject_name,
       story_title_name: list.story_title_name,
-      story_sub_title_name: list.story_sub_title_name,
       story_id: list.story_id,
       main_category_id: list.main_category_id,
       story_cover_image_url: list.story_cover_image_url,
-      story_desk_created_name: list.story_desk_created_name,
-      seo_tag: list.seo_tag,
-      seo_keywords: list.seo_keywords,
       createdAt: list.createdAt,
       updatedAt: list.updatedAt,
-  n_status: list.n_status,
-      n_published: list.n_published,
-      n_story_order: list.n_story_order,
-      post_status: list.post_status,
-      pin_status: list.pin_status,
       youtube_embed_id: list.youtube_embed_id,
-      c_createdName: list.c_createdName,
-      c_slugName: list.c_slugName,
-      c_userImg: list.c_userImg,
-      c_about_user: list.c_about_user,
       c_category_slug_english_name: list.c_category_slug_english_name,
       c_category_name: list.c_category_name,
-      c_sub_category_name: list.c_sub_category_name,
       view_count: list.view_count,
       view_control:list.view_control
     });
@@ -130,8 +116,9 @@ export async function POST(request) {
   try {
     await connectMongoDB();
     let _search = {};
-    let n_limitTerm = n_limit;
-    let n_pageTerm = n_page === 1 ? 0 : (n_page - 1) * n_limit;
+    // clamp n_limit to a safe maximum to prevent large responses
+    let n_limitTerm = Math.min(Math.max(Number(n_limit) || 20, 1), 20);
+    let n_pageTerm = n_page === 1 ? 0 : (n_page - 1) * n_limitTerm;
     let searchTerm = c_search_term ? c_search_term : "";
 
     if (main_category_id !== "" && main_category_id !== undefined) {

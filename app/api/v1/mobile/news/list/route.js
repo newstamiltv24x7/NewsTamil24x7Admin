@@ -173,8 +173,9 @@ export async function POST(request) {
   try {
     await connectMongoDB();
     let _search = {};
-    let n_limitTerm = n_limit;
-    let n_pageTerm = n_page === 1 ? 0 : (n_page - 1) * n_limit;
+    // clamp n_limit to a safe maximum to prevent large responses
+    let n_limitTerm = Math.min(Math.max(Number(n_limit) || 20, 1), 20);
+    let n_pageTerm = n_page === 1 ? 0 : (n_page - 1) * n_limitTerm;
     let searchTerm = c_search_term ? c_search_term : "";
 
     if (main_category_id !== "" && main_category_id !== undefined) {

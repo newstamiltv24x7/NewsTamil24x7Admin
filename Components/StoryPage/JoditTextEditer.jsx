@@ -1,4 +1,4 @@
-import React, { useRef, useMemo, useEffect, useState } from "react";
+import React, { useMemo, useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import {
   Box,
@@ -30,7 +30,7 @@ function JoditTextEditer(props) {
     contentPage,
   } = props;
 
-  const editor = useRef(null);
+  // editor ref removed — use the `editor` parameter provided by Jodit callbacks
 
   const config = useMemo(
     () => ({
@@ -145,7 +145,6 @@ function JoditTextEditer(props) {
       <div>
         <div>
           <JoditEditor
-            ref={editor}
             value={content}
             config={config}
             tabIndex={1} // tabIndex of textarea

@@ -25,30 +25,14 @@ const seprateData = (data) => {
     datas.push({
       _id: list?._id,
       story_title_name: list?.story_title_name,
-      story_sub_title_name: list?.story_sub_title_name,
-      story_desk_created_name: list?.story_desk_created_name,
-      seo_tag: list?.seo_tag,
-      seo_keywords: list?.seo_keywords,
       story_id: list?.story_id,
       main_category_id: list?.main_category_id,
       story_subject_name: list?.story_subject_name,
-      story_asked_title: list?.story_asked_title,
       news_image_caption: list?.news_image_caption,
-      story_summary_snippet: list?.story_summary_snippet,
-      story_asked_quotes_content: list?.story_asked_quotes_content,
-      story_asked_quotes_author: list?.story_asked_quotes_author,
-      story_asked_question: list?.story_asked_question,
-      blurb_title: list?.blurb_title,
-      blurb_content: list?.blurb_content,
       youtube_embed_id: list?.youtube_embed_id,
       story_cover_image_url: list?.story_cover_image_url,
       createdAt: list?.createdAt,
       updatedAt: list?.updatedAt,
-      n_story_order: list?.n_story_order,
-      post_status: list?.post_status,
-      pin_status: list?.pin_status,
-      c_about_user: list?.c_about_user,
-      c_category_name: list?.c_category_name,
       view_count: list?.view_count,
     });
   });
@@ -61,7 +45,8 @@ export async function POST(request) {
   const { n_page, n_limit, main_category_id } = await request.json();
   await connectMongoDB();
   var page = Number(n_page);
-  var limit = Number(n_limit);
+  // clamp limit to prevent excessively large page sizes
+  var limit = Math.min(Math.max(Number(n_limit) || 20, 1), 20);
 
   const options = {
     page: page,

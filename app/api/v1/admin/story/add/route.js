@@ -6,6 +6,7 @@ import { create_UUID, transporter } from "../../../../../../helper/helper";
 import path from "path"
 import { GoogleAuth } from "google-auth-library";
 import axios from "axios";
+import AWS from "aws-sdk";
 
 let sendResponse = {
   appStatusCode: "",
@@ -13,7 +14,49 @@ let sendResponse = {
   payloadJson: [],
   error: "",
 };
+AWS.config.update({
+  accessKeyId: process.env.AWS_ACCESS_KEY,
+  secretAccessKey: process.env.AWS_SECRET_KEY,
+});
+const s3 = new AWS.S3();
 
+// Extracts base64 images from HTML, uploads to S3, returns clean HTML
+async function replaceBase64ImagesWithS3(htmlContent) {
+  if (!htmlContent) return htmlContent;
+  
+  const base64Regex = /<img[^>]+src="(data:image\/([^;]+);base64,([^"]+))"[^>]*>/g;
+  const matches = [...htmlContent.matchAll(base64Regex)];
+  
+  if (matches.length === 0) return htmlContent; // no base64 images, return as-is
+  
+  let cleanedHtml = htmlContent;
+  
+  for (const match of matches) {
+    try {
+      const [fullTag, dataUrl, imageType, base64Data] = match;
+      const buffer = Buffer.from(base64Data, "base64");
+      const fileName = `story-inline-${Date.now()}-${Math.random().toString(36).slice(2)}.${imageType}`;
+      
+      const params = {
+        Bucket: process.env.AWS_BUCKET_NAME,
+        Key: fileName,
+        Body: buffer,
+        ContentType: `image/${imageType}`,
+      };
+      
+      const result = await s3.upload(params).promise();
+      
+      // Replace base64 src with S3 URL
+      cleanedHtml = cleanedHtml.replace(dataUrl, result.Location);
+      console.log(`Uploaded inline image to S3: ${result.Location}`);
+    } catch (err) {
+      console.error("Failed to upload inline image to S3:", err);
+      // Keep original if upload fails — don't crash the save
+    }
+  }
+  
+  return cleanedHtml;
+}
 
 const keyFile = path.join(process.cwd(), 'news-tamil-434706-p6-e3998b8efde6.json');
 
@@ -165,7 +208,7 @@ export async function POST(request) {
             seo_keywords: seo_keywords,
             story_author_block: story_author_block,
             story_credit_name: story_credit_name,
-            story_details: story_details,
+            story_details: await replaceBase64ImagesWithS3(story_details),
             blurb_title: blurb_title,
             blurb_content: blurb_content,
             story_asked_title: story_asked_title,
@@ -313,7 +356,7 @@ export async function POST(request) {
             story_live_article,
             story_paid_content,
             story_credit_name,
-            story_details,
+            story_details: await replaceBase64ImagesWithS3(story_details),
             blurb_title,
             blurb_content,
             story_asked_title,

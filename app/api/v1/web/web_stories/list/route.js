@@ -82,7 +82,7 @@ export async function POST(request) {
               c_web_story_slug_name: 1,
               c_web_story_cover_img: 1,
               c_web_story_id: 1,
-              c_web_story_images: 1,
+              // c_web_story_images: 1, // Excluded from list to save payload size
               n_status: 1,
               n_published: 1,
               createdAt: 1,

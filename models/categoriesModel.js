@@ -119,6 +119,10 @@ const CategoriesSchema = new Schema(
   { strict: false, versionKey: false, timestamps: true }
 );
 
+// Optimize category lookups for menu and story joins
+CategoriesSchema.index({ c_category_id: 1, n_status: 1, n_published: 1 });
+CategoriesSchema.index({ c_parentId: 1 });
+
 const Categories = mongoose.models.Categories || mongoose.model("Categories", CategoriesSchema);
 
 module.exports = { Categories };
