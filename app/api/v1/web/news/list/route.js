@@ -9,14 +9,16 @@ import {
   decrypCryptoRequest,
 } from "../../../../../../helper/helper";
 
-let sendResponse = {
-  appStatusCode: "",
-  message: "",
-  n_page: 0,
-  n_limit: 0,
-  payloadJson: [],
-  error: "",
-};
+function createResponse() {
+  return {
+    appStatusCode: "",
+    message: "",
+    n_page: 0,
+    n_limit: 0,
+    payloadJson: [],
+    error: "",
+  };
+}
 
 
 const seprateArrayData = (data) => {
@@ -27,14 +29,28 @@ const seprateArrayData = (data) => {
       _id: list._id,
       story_subject_name: list.story_subject_name,
       story_title_name: list.story_title_name,
+      story_sub_title_name: list.story_sub_title_name,
       story_id: list.story_id,
       main_category_id: list.main_category_id,
       story_cover_image_url: list.story_cover_image_url,
+      story_desk_created_name: list.story_desk_created_name,
+      seo_tag: list.seo_tag,
+      seo_keywords: list.seo_keywords,
       createdAt: list.createdAt,
       updatedAt: list.updatedAt,
+  n_status: list.n_status,
+      n_published: list.n_published,
+      n_story_order: list.n_story_order,
+      post_status: list.post_status,
+      pin_status: list.pin_status,
       youtube_embed_id: list.youtube_embed_id,
+      c_createdName: list.c_createdName,
+      c_slugName: list.c_slugName,
+      c_userImg: list.c_userImg,
+      c_about_user: list.c_about_user,
       c_category_slug_english_name: list.c_category_slug_english_name,
       c_category_name: list.c_category_name,
+      c_sub_category_name: list.c_sub_category_name,
       view_count: list.view_count,
       view_control:list.view_control
     });
@@ -110,15 +126,15 @@ export async function POST(request) {
     url,
   } = await request.json();
 
+  const sendResponse = createResponse();
   let fromDate = "";
   let toDate = "";
 
   try {
     await connectMongoDB();
     let _search = {};
-    // clamp n_limit to a safe maximum to prevent large responses
-    let n_limitTerm = Math.min(Math.max(Number(n_limit) || 20, 1), 20);
-    let n_pageTerm = n_page === 1 ? 0 : (n_page - 1) * n_limitTerm;
+    let n_limitTerm = n_limit;
+    let n_pageTerm = n_page === 1 ? 0 : (n_page - 1) * n_limit;
     let searchTerm = c_search_term ? c_search_term : "";
 
     if (main_category_id !== "" && main_category_id !== undefined) {
@@ -325,9 +341,13 @@ fromDate = new Date(c_from_date);
 
 
 
+      const matchStage = {
+        ...(_search),
+        story_desk_created_name: { $nin: [null, ""] }
+      };
       await Story.aggregate([
-        { $match: _search },
- { $unwind: "$main_category_id" },
+        { $match: matchStage },
+        { $unwind: "$main_category_id" },
         {
           $group: {
             _id: "$_id",
@@ -477,9 +497,10 @@ fromDate = new Date(c_from_date);
 }
 
 export async function GET(request) {
+  const sendResponse = createResponse();
   const id = request.nextUrl.searchParams.get("id");
   const url = request.nextUrl.searchParams.get("url");
-const main_category_id = request.nextUrl.searchParams.get("category");
+  const main_category_id = request.nextUrl.searchParams.get("category");
   if (id) {
     const checkId = await Story.findOne({ story_id: id });
     if (checkId) {
@@ -638,16 +659,23 @@ sendResponse["n_page"] = 0;
       return NextResponse.json(sendResponse, { status: 400 });
     }
   } else if (url) {
-    const checkUrl = await Story.findOne({ story_desk_created_name: url });
+    let checkUrl = await Story.findOne({ story_desk_created_name: url });
+    // Fallback: try looking up by _id if slug lookup fails
+    let lookupField = "story_desk_created_name";
+    if (!checkUrl && /^[0-9a-fA-F]{24}$/.test(url)) {
+      checkUrl = await Story.findOne({ _id: url });
+      lookupField = "_id";
+    }
 
     if (checkUrl) {
       let _search = {};
+      const lookupCondition = lookupField === "_id" ? { _id: checkUrl._id } : { story_desk_created_name: url };
       _search["$and"] = [
         {
           $and: [
             { n_status: 1 },
             { n_published: 1 },
-            { story_desk_created_name: url },
+            lookupCondition,
             { c_save_type: "published" },
           ],
         },
