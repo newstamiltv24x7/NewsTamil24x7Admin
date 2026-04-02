@@ -57,6 +57,7 @@ export const MenuList: MenuItem[] | undefined = [
           { path: "/web-stories", type: "link", title: "Web Stories" },
           { path: "/listicles", type: "link", title: "Listicles" },
           { path: "/live-blog", type: "link", title: "Live Blog" },
+          { path: "/cards", type: "link", title: "Cards" },
         ],
       },
 

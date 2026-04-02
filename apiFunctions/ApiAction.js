@@ -1362,7 +1362,7 @@ export const sharePostOnFb = async (text, postUrl) => {
 
 export const getAllCardsApi = async (body) => {
   return await axios
-    .post(`/api/v1/admin/cards/list`, body, { headers: AppHeader })
+    .post(`/api/v1/admin/cards/list`, body, { headers: AppHeader() })
     .then((res) => {
       return res.data;
     })
@@ -1373,7 +1373,7 @@ export const getAllCardsApi = async (body) => {
 
 export const addCardsApi = async (body) => {
   return await axios
-    .post(`/api/v1/admin/cards/add`, body, { headers: AppHeader })
+    .post(`/api/v1/admin/cards/add`, body, { headers: AppHeader() })
     .then((res) => {
       return res.data;
     })
@@ -1385,7 +1385,7 @@ export const addCardsApi = async (body) => {
 export const deleteCardsApi = async (body) => {
   return await axios
     .delete(`/api/v1/admin/cards/delete?id=${body}`, {
-      headers: AppHeader,
+      headers: AppHeader(),
     })
     .then((res) => {
       return res.data;
