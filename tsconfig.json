@@ -23,6 +23,7 @@
         "name": "next"
       }
     ],
+    "baseUrl": ".",
     "typeRoots": ["./Types", "./node_modules/@types"],
     "paths": {
       "@/*": ["./*"]
