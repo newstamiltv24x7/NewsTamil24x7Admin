@@ -709,7 +709,7 @@ export const craeteAddTxtApi = async (body) => {
 export const craeteRobotsTxtApi = async (body) => {
   return await axios
     .post(`/api/v1/admin/robots_txt/add`, body, {
-      headers: AppHeader,
+      headers: AppHeader(),
     })
     .then((res) => {
       return res.data;
@@ -722,7 +722,7 @@ export const craeteRobotsTxtApi = async (body) => {
 export const getAddTxtWebApi = async (body) => {
   return await axios
     .post(`/api/v1/admin/ads_txt/list`, body, {
-      headers: AppHeader,
+      headers: AppHeader(),
     })
     .then((res) => {
       return res.data;
@@ -735,7 +735,7 @@ export const getAddTxtWebApi = async (body) => {
 export const createWebConfigTagsApi = async (body) => {
   return await axios
     .post(`/api/v1/admin/tags/add`, body, {
-      headers: AppHeader,
+      headers: AppHeader(),
     })
     .then((res) => {
       return res.data;
@@ -748,7 +748,7 @@ export const createWebConfigTagsApi = async (body) => {
 export const getRobotsTxtWebApi = async () => {
   return await axios
     .get(`/api/v1/admin/robots_txt/list`, {
-      headers: AppHeader,
+      headers: AppHeader(),
     })
     .then((res) => {
       return res.data;
@@ -761,7 +761,7 @@ export const getRobotsTxtWebApi = async () => {
 export const getWebAppConfigTags = async (body) => {
   return await axios
     .post(`/api/v1/admin/tags/list`, body, {
-      headers: AppHeader,
+      headers: AppHeader(),
     })
     .then((res) => {
       return res.data;
@@ -774,7 +774,7 @@ export const getWebAppConfigTags = async (body) => {
 export const getAllTagsList = async () => {
   return await axios
     .get(`/api/v1/admin/tags/list`, {
-      headers: AppHeader,
+      headers: AppHeader(),
     })
     .then((res) => {
       return res.data;
@@ -787,7 +787,7 @@ export const getAllTagsList = async () => {
 export const getRedirectUrlList = async (body) => {
   return await axios
     .post(`/api/v1/admin/redirect_url/list`, body, {
-      headers: AppHeader,
+      headers: AppHeader(),
     })
     .then((res) => {
       return res.data;
@@ -800,7 +800,7 @@ export const getRedirectUrlList = async (body) => {
 export const createRedirectUrl = async (body) => {
   return await axios
     .post(`/api/v1/admin/redirect_url/add`, body, {
-      headers: AppHeader,
+      headers: AppHeader(),
     })
     .then((res) => {
       return res.data;
@@ -813,7 +813,7 @@ export const createRedirectUrl = async (body) => {
 export const createNewForm = async (body) => {
   return await axios
     .post(`/api/v1/admin/form/add`, body, {
-      headers: AppHeader,
+      headers: AppHeader(),
     })
     .then((res) => {
       return res.data;
@@ -826,7 +826,7 @@ export const createNewForm = async (body) => {
 export const getSeoSetupListApi = async (body) => {
   return await axios
     .post(`/api/v1/admin/seo_category/list`, body, {
-      headers: AppHeader,
+      headers: AppHeader(),
     })
     .then((res) => {
       return res.data;
@@ -839,7 +839,7 @@ export const getSeoSetupListApi = async (body) => {
 export const deleteRedirectUrl = async (body) => {
   return await axios
     .delete(`/api/v1/admin/redirect_url/delete?id=${body}`, {
-      headers: AppHeader,
+      headers: AppHeader(),
     })
     .then((res) => {
       return res.data;
@@ -852,7 +852,7 @@ export const deleteRedirectUrl = async (body) => {
 export const getSeoListApi = async (body) => {
   return await axios
     .post(`/api/v1/admin/seo_setup/list`, body, {
-      headers: AppHeader,
+      headers: AppHeader(),
     })
     .then((res) => {
       return res.data;
@@ -865,7 +865,7 @@ export const getSeoListApi = async (body) => {
 export const getAllSeoListApi = async () => {
   return await axios
     .get(`/api/v1/admin/seo_setup/list`, {
-      headers: AppHeader,
+      headers: AppHeader(),
     })
     .then((res) => {
       return res.data;
@@ -878,7 +878,7 @@ export const getAllSeoListApi = async () => {
 export const createSeoSetupApi = async (body) => {
   return await axios
     .post(`/api/v1/admin/seo_setup/add`, body, {
-      headers: AppHeader,
+      headers: AppHeader(),
     })
     .then((res) => {
       return res.data;
@@ -891,7 +891,7 @@ export const createSeoSetupApi = async (body) => {
 export const getStaticPageList = async (body) => {
   return await axios
     .post(`/api/v1/admin/static_page/list`, body, {
-      headers: AppHeader,
+      headers: AppHeader(),
     })
     .then((res) => {
       return res.data;
@@ -904,7 +904,7 @@ export const getStaticPageList = async (body) => {
 export const addStaticPageData = async (body) => {
   return await axios
     .post(`/api/v1/admin/static_page/add`, body, {
-      headers: AppHeader,
+      headers: AppHeader(),
     })
     .then((res) => {
       return res.data;
@@ -917,7 +917,7 @@ export const addStaticPageData = async (body) => {
 export const deleteStaticListAPi = async (body) => {
   return await axios
     .delete(`/api/v1/admin/static_page/delete?id=${body}`, {
-      headers: AppHeader,
+      headers: AppHeader(),
     })
     .then((res) => {
       return res.data;
@@ -930,7 +930,7 @@ export const deleteStaticListAPi = async (body) => {
 export const deleteSeoListAPi = async (body) => {
   return await axios
     .delete(`/api/v1/admin/seo_category/delete?id=${body}`, {
-      headers: AppHeader,
+      headers: AppHeader(),
     })
     .then((res) => {
       return res.data;
@@ -943,7 +943,7 @@ export const deleteSeoListAPi = async (body) => {
 export const getTrendingTag = async () => {
   return await axios
     .get(`/api/v1/admin/trending_tags/list`, {
-      headers: AppHeader,
+      headers: AppHeader(),
     })
     .then((res) => {
       return res.data;
@@ -956,7 +956,7 @@ export const getTrendingTag = async () => {
 export const addTrendingTag = async (body) => {
   return await axios
     .post(`/api/v1/admin/trending_tags/add`, body, {
-      headers: AppHeader,
+      headers: AppHeader(),
     })
     .then((res) => {
       return res.data;
@@ -981,7 +981,7 @@ export const addTrendingTag = async (body) => {
 export const sendNotification = async (body) => {
   return await axios
     .post(`/api/v1/admin/send-notification`, body, {
-      headers: AppHeader,
+      headers: AppHeader(),
     })
     .then((res) => {
       return res.data;
@@ -994,7 +994,7 @@ export const sendNotification = async (body) => {
 export const getSocialHandlesList = async (body) => {
   return await axios
     .post(`/api/v1/admin/social_handle_page/list`, body, {
-      headers: AppHeader,
+      headers: AppHeader(),
     })
     .then((res) => {
       return res.data;
@@ -1007,7 +1007,7 @@ export const getSocialHandlesList = async (body) => {
 export const getAllSocialHandlesList = async () => {
   return await axios
     .get(`/api/v1/admin/social_handle_page/list`, {
-      headers: AppHeader,
+      headers: AppHeader(),
     })
     .then((res) => {
       return res.data;
@@ -1020,7 +1020,7 @@ export const getAllSocialHandlesList = async () => {
 export const addSocialHandlePost = async (body) => {
   return await axios
     .post(`/api/v1/admin/social_handle_page/add`, body, {
-      headers: AppHeader,
+      headers: AppHeader(),
     })
     .then((res) => {
       return res.data;
@@ -1033,7 +1033,7 @@ export const addSocialHandlePost = async (body) => {
 export const createSocialCategory = async (body) => {
   return await axios
     .post(`/api/v1/admin/social_handle_category/add`, body, {
-      headers: AppHeader,
+      headers: AppHeader(),
     })
     .then((res) => {
       return res.data;
@@ -1046,7 +1046,7 @@ export const createSocialCategory = async (body) => {
 export const createHrules = async (body) => {
   return await axios
     .post(`/api/v1/admin/h_rules/add`, body, {
-      headers: AppHeader,
+      headers: AppHeader(),
     })
     .then((res) => {
       return res.data;
@@ -1059,7 +1059,7 @@ export const createHrules = async (body) => {
 export const getFormPageList = async (body) => {
   return await axios
     .post(`/api/v1/admin/form/list`, body, {
-      headers: AppHeader,
+      headers: AppHeader(),
     })
     .then((res) => {
       return res.data;
@@ -1072,7 +1072,7 @@ export const getFormPageList = async (body) => {
 export const getEmailTemplateList = async (body) => {
   return await axios
     .post(`/api/v1/admin/email_template/list`, body, {
-      headers: AppHeader,
+      headers: AppHeader(),
     })
     .then((res) => {
       return res.data;
@@ -1085,7 +1085,7 @@ export const getEmailTemplateList = async (body) => {
 export const createEmailTemplate = async (body) => {
   return await axios
     .post(`/api/v1/admin/email_template/add`, body, {
-      headers: AppHeader,
+      headers: AppHeader(),
     })
     .then((res) => {
       return res.data;
@@ -1098,7 +1098,7 @@ export const createEmailTemplate = async (body) => {
 export const getCollectionList = async (body) => {
   return await axios
     .post(`/api/v1/admin/collections/list`, body, {
-      headers: AppHeader,
+      headers: AppHeader(),
     })
     .then((res) => {
       return res.data;
@@ -1111,7 +1111,7 @@ export const getCollectionList = async (body) => {
 export const createCollectionList = async (body) => {
   return await axios
     .post(`/api/v1/admin/collections/add`, body, {
-      headers: AppHeader,
+      headers: AppHeader(),
     })
     .then((res) => {
       return res.data;
@@ -1124,7 +1124,7 @@ export const createCollectionList = async (body) => {
 export const getSocialMediaList = async () => {
   return await axios
     .get(`/api/v1/admin/social_handle_category/list`, {
-      headers: AppHeader,
+      headers: AppHeader(),
     })
     .then((res) => {
       return res.data;
@@ -1137,7 +1137,7 @@ export const getSocialMediaList = async () => {
 export const deleteSocialList = async (body) => {
   return await axios
     .delete(`/api/v1/admin/social_handle_page/delete?id=${body}`, {
-      headers: AppHeader,
+      headers: AppHeader(),
     })
     .then((res) => {
       return res.data;
@@ -1150,7 +1150,7 @@ export const deleteSocialList = async (body) => {
 export const deleteEmailTemplate = async (body) => {
   return await axios
     .delete(`/api/v1/admin/email_template/delete?id=${body}`, {
-      headers: AppHeader,
+      headers: AppHeader(),
     })
     .then((res) => {
       return res.data;
@@ -1163,7 +1163,7 @@ export const deleteEmailTemplate = async (body) => {
 export const deleteSocialMedia = async (body) => {
   return await axios
     .delete(`/api/v1/admin/social_handle_category/delete?id=${body}`, {
-      headers: AppHeader,
+      headers: AppHeader(),
     })
     .then((res) => {
       return res.data;
@@ -1176,7 +1176,7 @@ export const deleteSocialMedia = async (body) => {
 export const deleteForm = async (body) => {
   return await axios
     .delete(`/api/v1/admin/form/delete?id=${body}`, {
-      headers: AppHeader,
+      headers: AppHeader(),
     })
     .then((res) => {
       return res.data;
@@ -1189,7 +1189,7 @@ export const deleteForm = async (body) => {
 export const deleteCollection = async (body) => {
   return await axios
     .delete(`/api/v1/admin/collections/delete?id=${body}`, {
-      headers: AppHeader,
+      headers: AppHeader(),
     })
     .then((res) => {
       return res.data;
@@ -1201,7 +1201,7 @@ export const deleteCollection = async (body) => {
 
 export const getAllWebComponentsCategoryListApi = async () => {
   return await axios
-    .get(`/api/v1/admin/web_component_category/list`, { headers: AppHeader })
+    .get(`/api/v1/admin/web_component_category/list`, { headers: AppHeader() })
     .then((res) => {
       return res.data;
     })
@@ -1213,7 +1213,7 @@ export const getAllWebComponentsCategoryListApi = async () => {
 export const newsroomOrderApi = async (body) => {
   return await axios
     .post(`/api/v1/admin/story/story_order_change`, body, {
-      headers: AppHeader,
+      headers: AppHeader(),
     })
     .then((res) => {
       return res.data;
@@ -1225,7 +1225,7 @@ export const newsroomOrderApi = async (body) => {
 
 export const addSeoCategoryApi = async (body) => {
   return await axios
-    .post(`/api/v1/admin/seo_category/add`, body, { headers: AppHeader })
+    .post(`/api/v1/admin/seo_category/add`, body, { headers: AppHeader() })
     .then((res) => {
       return res.data;
     })
@@ -1287,7 +1287,7 @@ export const getAllSideBarMenu = async () => {
 };
 export const imageGalleryList = async (body) => {
   return await axios
-    .post(`/api/v1/admin/media_galary/list`, body, { headers: AppHeader })
+    .post(`/api/v1/admin/media_galary/list`, body, { headers: AppHeader() })
     .then((res) => {
       return res.data;
     })
@@ -1299,7 +1299,7 @@ export const imageGalleryList = async (body) => {
 export const deleteImageGalleryImg = async (id, name) => {
   return await axios
     .delete(`/api/v1/admin/media_galary/delete?id=${id}&c_file=${name}`, {
-      headers: AppHeader,
+      headers: AppHeader(),
     })
     .then((res) => {
       return res.data;
@@ -1311,7 +1311,7 @@ export const deleteImageGalleryImg = async (id, name) => {
 
 export const GetSubscibersList = async () => {
   return await axios
-    .get(`/api/v1/admin/subscriber/list`, { headers: AppHeader })
+    .get(`/api/v1/admin/subscriber/list`, { headers: AppHeader() })
     .then((res) => {
       return res.data;
     })
@@ -1322,7 +1322,7 @@ export const GetSubscibersList = async () => {
 
 export const GetStaticPagesListMenu = async () => {
   return await axios
-    .get(`/api/v1/admin/static_menu_page/list`, { headers: AppHeader })
+    .get(`/api/v1/admin/static_menu_page/list`, { headers: AppHeader() })
     .then((res) => {
       return res.data;
     })
@@ -1348,7 +1348,7 @@ export const sharePostOnFb = async (text, postUrl) => {
   return await axios
     .post(
       `https://graph.facebook.com/v20.0/${PAGE_ID}/feed?message=${text}&access_token=${SOCIAL_TOKEN}&link=${postUrl}`,
-      { headers: AppHeader }
+      { headers: AppHeader() }
     )
     .then((res) => {
       return res.data;
@@ -1400,7 +1400,7 @@ export const deleteCardsApi = async (body) => {
 
 export const getAllPollsApi = async (body) => {
   return await axios
-    .post(`/api/v1/admin/poll/list`, body, { headers: AppHeader })
+    .post(`/api/v1/admin/poll/list`, body, { headers: AppHeader() })
     .then((res) => {
       return res.data;
     })
@@ -1411,7 +1411,7 @@ export const getAllPollsApi = async (body) => {
 
 export const addPollsApi = async (body) => {
   return await axios
-    .post(`/api/v1/admin/poll/add`, body, { headers: AppHeader })
+    .post(`/api/v1/admin/poll/add`, body, { headers: AppHeader() })
     .then((res) => {
       return res.data;
     })
@@ -1423,7 +1423,7 @@ export const addPollsApi = async (body) => {
 export const deletePollsApi = async (body) => {
   return await axios
     .delete(`/api/v1/admin/poll/delete?id=${body}`, {
-      headers: AppHeader,
+      headers: AppHeader(),
     })
     .then((res) => {
       return res.data;
@@ -1435,7 +1435,7 @@ export const deletePollsApi = async (body) => {
 export const craeteControlApi = async (body) => {
   return await axios
     .post(`/api/v1/admin/control/add`, body, {
-      headers: AppHeader,
+      headers: AppHeader(),
     })
     .then((res) => {
       return res.data;
@@ -1448,7 +1448,7 @@ export const craeteControlApi = async (body) => {
 export const getControlListApi = async (body) => {
   return await axios
     .post(`/api/v1/admin/control/list`, body, {
-      headers: AppHeader,
+      headers: AppHeader(),
     })
     .then((res) => {
       return res.data;
@@ -1462,7 +1462,7 @@ export const getControlListApi = async (body) => {
 
 export const getAllPhotosListApi = async (body) => {
   return await axios
-    .post(`/api/v1/admin/photos/list`, body, { headers: AppHeader })
+    .post(`/api/v1/admin/photos/list`, body, { headers: AppHeader() })
     .then((res) => {
       return res.data;
     })
@@ -1473,7 +1473,7 @@ export const getAllPhotosListApi = async (body) => {
 
 export const createPhotosApi = async (body) => {
   return await axios
-    .post(`/api/v1/admin/photos/add`, body, { headers: AppHeader })
+    .post(`/api/v1/admin/photos/add`, body, { headers: AppHeader() })
     .then((res) => {
       return res.data;
     })
@@ -1484,7 +1484,7 @@ export const createPhotosApi = async (body) => {
 
 export const getParticularPhotosApi = async (body) => {
   return await axios
-    .get(`/api/v1/admin/photos/list?id=${body}`, { headers: AppHeader })
+    .get(`/api/v1/admin/photos/list?id=${body}`, { headers: AppHeader() })
     .then((res) => {
       return res.data;
     })
@@ -1496,7 +1496,7 @@ export const getParticularPhotosApi = async (body) => {
 export const deletePhotosApi = async (body) => {
   return await axios
     .delete(`/api/v1/admin/photos/delete?id=${body}`, {
-      headers: AppHeader,
+      headers: AppHeader(),
     })
     .then((res) => {
       return res.data;
@@ -1510,7 +1510,7 @@ export const deletePhotosApi = async (body) => {
 
 export const getAllCommentsApi = async (body) => {
   return await axios
-    .post(`/api/v1/admin/user_comments/list`, body, { headers: AppHeader })
+    .post(`/api/v1/admin/user_comments/list`, body, { headers: AppHeader() })
     .then((res) => {
       return res.data;
     })
@@ -1522,7 +1522,7 @@ export const getAllCommentsApi = async (body) => {
 
 export const getAllCommentsApiList = async (body) => {
   return await axios
-    .get(`/api/v1/admin/user_comments/list?id=${body}`, { headers: AppHeader })
+    .get(`/api/v1/admin/user_comments/list?id=${body}`, { headers: AppHeader() })
     .then((res) => {
       return res.data;
     })
@@ -1533,7 +1533,7 @@ export const getAllCommentsApiList = async (body) => {
 
 export const addCommentsApi = async (body) => {
   return await axios
-    .post(`/api/v1/admin/user_comments/add`, body, { headers: AppHeader })
+    .post(`/api/v1/admin/user_comments/add`, body, { headers: AppHeader() })
     .then((res) => {
       return res.data;
     })
@@ -1545,7 +1545,7 @@ export const addCommentsApi = async (body) => {
 export const deleteCommentsApi = async (body) => {
   return await axios
     .delete(`/api/v1/admin/user_comments/delete?id=${body}`, {
-      headers: AppHeader,
+      headers: AppHeader(),
     })
     .then((res) => {
       return res.data;

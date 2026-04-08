@@ -1010,6 +1010,18 @@ const CreateStoryPageContainer = () => {
     GetcategoriesList();
     // GetGalleryImages();
     GetSubscibersListFn();
+
+    // listen for category changes made elsewhere and re-fetch
+    const onCategoriesUpdated = () => {
+      try {
+        GetcategoriesList();
+      } catch (e) {
+        console.error("Failed to refresh categories on update", e);
+      }
+    };
+
+    window.addEventListener("categoriesUpdated", onCategoriesUpdated);
+    return () => window.removeEventListener("categoriesUpdated", onCategoriesUpdated);
   }, []);
 
   const handleChangeTag = (newValue) => {

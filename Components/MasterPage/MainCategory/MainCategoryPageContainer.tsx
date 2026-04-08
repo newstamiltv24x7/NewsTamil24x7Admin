@@ -198,12 +198,16 @@ const MainCategoryPageContainer = () => {
 
   const GetWebComponentsCategoryList = async () => {
     const results = await getAllWebComponentsCategoryListApi();
+    console.log("GetWebComponentsCategoryList results:", results);
     if (results?.appStatusCode !== 0) {
       setComCategory([]);
     } else {
       setComCategory(results?.payloadJson);
     }
   };
+  useEffect(() => {
+    console.log("com", comCategory);
+  }, [comCategory]);
 
   const DeleteItem = (val: any) => {
     setDeletePop(true);

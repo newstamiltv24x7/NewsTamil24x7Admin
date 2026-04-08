@@ -168,6 +168,12 @@ function MainCategoryPage(props) {
     } else {
       GetCategoryList();
       setAddOpen(false);
+      // notify other parts of the app (e.g., story form) that categories changed
+      try {
+        window.dispatchEvent(new CustomEvent("categoriesUpdated"));
+      } catch (e) {
+        // ignore in non-browser or if dispatch fails
+      }
       toast.success(results?.message);
     }
   };
@@ -242,86 +248,88 @@ function MainCategoryPage(props) {
                     <th style={{ color: "#fff", textAlign: "left" }}>Action</th>
                   </tr>
                 </thead>
-                {loader ? (
-                  <tbody>
-                    {[1, 2, 3, 4, 5]?.map((list) => (
-                      <tr key={list}>
-                        {[1, 2, 3, 4, 5]?.map((item) => (
-                          <td>
-                            <Skeleton
-                              animation="wave"
-                              variant="rectangular"
-                              width={"100%"}
-                              height={"7vh"}
-                            />
-                          </td>
-                        ))}
-                      </tr>
-                    ))}
-                  </tbody>
-                ) : (
-                  <tbody {...provided.droppableProps} ref={provided.innerRef}>
-                    {categoryArr?.map((item, index) => (
-                      <Draggable
-                        key={item._id}
-                        draggableId={item._id}
-                        index={index}
-                      >
-                        {(provided) => (
-                          <tr
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                          >
-                            {/* <th scope="row">{index + 1}</th> */}
-                            <td scope="row">{index + 1 + (page * rowsPerPage)}</td>
-                            <td>{item.c_category_name}</td>
-                            <td>{item.c_category_english_name}</td>
-                            <td>{converDayJsDate(item.createdAt)}</td>
-                            <td>
-                              <Box display={"flex"} gap={2}>
-                                {item?.n_status === 1 ? (
-                                  <Box
-                                    p={1}
-                                    bgcolor={"#00ac47"}
-                                    borderRadius={"50%"}
-                                    width={10}
-                                    height={10}
-                                  ></Box>
-                                ) : (
-                                  <Box
-                                    p={1}
-                                    borderRadius={"50%"}
-                                    width={10}
-                                    height={10}
-                                    bgcolor={"#ff3131"}
-                                  ></Box>
-                                )}
-                                <BiSolidMessageAltEdit
-                                  style={{
-                                    fontSize: "20px",
-                                    cursor: "pointer",
-                                    color: "#000",
-                                  }}
-                                  onClick={() => handleEditClick(item)}
-                                />
-                                <RiDeleteBin5Line
-                                  onClick={() => handleDelete(item?._id)}
-                                  style={{
-                                    fontSize: "20px",
-                                    color: "red",
-                                    cursor: "pointer",
-                                  }}
-                                />
-                              </Box>
+                <tbody {...provided.droppableProps} ref={provided.innerRef}>
+                  {loader ? (
+                    <>
+                      {[1, 2, 3, 4, 5]?.map((list) => (
+                        <tr key={`skeleton-row-${list}`}>
+                          {[1, 2, 3, 4, 5]?.map((item) => (
+                            <td key={`skeleton-cell-${list}-${item}`}>
+                              <Skeleton
+                                animation="wave"
+                                variant="rectangular"
+                                width={"100%"}
+                                height={"7vh"}
+                              />
                             </td>
-                          </tr>
-                        )}
-                      </Draggable>
-                    ))}
-                    {provided.placeholder}
-                  </tbody>
-                )}
+                          ))}
+                        </tr>
+                      ))}
+                    </>
+                  ) : (
+                    <>
+                      {categoryArr?.map((item, index) => (
+                        <Draggable
+                          key={item._id}
+                          draggableId={String(item._id)}
+                          index={index}
+                        >
+                          {(provided) => (
+                            <tr
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                              key={`cat-row-${item._id}`}
+                            >
+                              <td scope="row">{index + 1 + (page * rowsPerPage)}</td>
+                              <td>{item.c_category_name}</td>
+                              <td>{item.c_category_english_name}</td>
+                              <td>{converDayJsDate(item.createdAt)}</td>
+                              <td>
+                                <Box display={"flex"} gap={2}>
+                                  {item?.n_status === 1 ? (
+                                    <Box
+                                      p={1}
+                                      bgcolor={"#00ac47"}
+                                      borderRadius={"50%"}
+                                      width={10}
+                                      height={10}
+                                    ></Box>
+                                  ) : (
+                                    <Box
+                                      p={1}
+                                      borderRadius={"50%"}
+                                      width={10}
+                                      height={10}
+                                      bgcolor={"#ff3131"}
+                                    ></Box>
+                                  )}
+                                  <BiSolidMessageAltEdit
+                                    style={{
+                                      fontSize: "20px",
+                                      cursor: "pointer",
+                                      color: "#000",
+                                    }}
+                                    onClick={() => handleEditClick(item)}
+                                  />
+                                  <RiDeleteBin5Line
+                                    onClick={() => handleDelete(item?._id)}
+                                    style={{
+                                      fontSize: "20px",
+                                      color: "red",
+                                      cursor: "pointer",
+                                    }}
+                                  />
+                                </Box>
+                              </td>
+                            </tr>
+                          )}
+                        </Draggable>
+                      ))}
+                      {provided.placeholder}
+                    </>
+                  )}
+                </tbody>
               </Table>
             )}
           </Droppable>
