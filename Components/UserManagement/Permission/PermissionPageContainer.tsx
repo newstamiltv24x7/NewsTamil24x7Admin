@@ -17,7 +17,6 @@ import {
 } from "@/apiFunctions/ApiAction";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
-import "./userStyles.css";
 import DeletePop from "@/Components/DeletePopup/DeletePop";
 import { IoMdClose } from "react-icons/io";
 
