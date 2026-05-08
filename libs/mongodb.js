@@ -13,6 +13,15 @@ let sendResponse = {
 
 const connectMongoDB = async () => {
   try {
+    // Skip attempting a DB connection during Next.js production build
+    // This avoids Mongoose buffering timeouts when Next pre-renders pages at build-time
+    if (process.env.NEXT_PHASE === 'phase-production-build' || process.env.SKIP_DB_DURING_BUILD === 'true') {
+      sendResponse["appStatusCode"] = 0;
+      sendResponse["message"] = "skipped MongoDB connect during build";
+      sendResponse["payloadJson"] = [];
+      sendResponse["error"] = "";
+      return NextResponse.json(sendResponse, { status: 200 });
+    }
 
     await mongoose.set("strictQuery", false);
     await mongoose.connect(connectionURL);
@@ -22,13 +31,11 @@ const connectMongoDB = async () => {
     sendResponse["error"] = "";
     return NextResponse.json(sendResponse, { status: 200 });
   } catch (error) {
-    sendResponse["appStatusCode"] = 0;
-    sendResponse["message"] = "cannot connected to MongoDB";
+    sendResponse["appStatusCode"] = 1;
+    sendResponse["message"] = "cannot connect to MongoDB";
     sendResponse["payloadJson"] = [];
-    sendResponse["error"] = error;
-    throw new Error(error);
-
-    return NextResponse.json(sendResponse, { status: 400 });
+    sendResponse["error"] = String(error);
+    return NextResponse.json(sendResponse, { status: 500 });
   }
 };
 export default connectMongoDB;
