@@ -19,6 +19,11 @@ const nextConfig = {
         hostname: "xdsoft.net",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "**.r2.dev",
+        pathname: "/**",
+      },
     ],
     domains: [
       "dev-news-image.s3.amazonaws.com",
