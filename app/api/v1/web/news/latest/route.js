@@ -323,6 +323,7 @@ export async function GET(request) {
               threads_embed_id: 1,
               author_desk: 1,
               story_cover_image_url: 1,
+              story_desk_created_name: 1,
               createdAt: 1,
               updatedAt: 1,
               c_category_name: "$categories.c_category_name",
@@ -715,7 +716,7 @@ export async function POST(request) {
     //   c_control_name:"Control Views Count"
     // }
     // const controlResult = await Control.find(data);
-    await Story.paginate({n_status: 1, n_published: 1, c_save_type: "published"}, options, function (err, result) {
+    await Story.paginate({n_status: 1, n_published: 1, c_save_type: "published"}, { forceCountFn: true }, function (err, result) {
       if (err) {
         sendResponse["appStatusCode"] = 4;
         sendResponse["message"] = "";

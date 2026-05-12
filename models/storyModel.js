@@ -409,5 +409,5 @@ storySchema.index({ pin_status: -1, n_story_order: -1, createdAt: -1 });
 
 storySchema.plugin(mongoosePaginate);
 const Story = mongoose.models.Story || mongoose.model("Story", storySchema);
-Story.paginate().then({});
+Story.paginate({}, { forceCountFn: true }).then({});
 module.exports = { Story };
