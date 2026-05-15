@@ -7,18 +7,21 @@ import {
     decrypCryptoRequest,
   } from "../../../../../../helper/helper";
 
-let sendResponse = {
-  appStatusCode: "",
-  message: "",
-  payloadJson: [],
-  error: "",
-};
+function createResponse() {
+  return {
+    appStatusCode: "",
+    message: "",
+    payloadJson: [],
+    error: "",
+  };
+}
 
 function getUniqueListBy(arr, key) {
   return [...new Map(arr.map((item) => [item[key], item])).values()];
 }
 
 export async function POST(request) {
+  const sendResponse = createResponse();
   const { n_page, n_limit, c_search_term } = await request.json();
 
 
@@ -127,10 +130,20 @@ export async function POST(request) {
 }
 
 export async function GET(request) {
+  const sendResponse = createResponse();
   const id = request.nextUrl.searchParams.get("id");
   const url = request.nextUrl.searchParams.get("url");
   const sub = request.nextUrl.searchParams.get("sub");
 
+  try {
+    await connectMongoDB();
+  } catch (err) {
+    sendResponse["appStatusCode"] = 4;
+    sendResponse["message"] = "";
+    sendResponse["payloadJson"] = [];
+    sendResponse["error"] = "Database connection failed";
+    return NextResponse.json(sendResponse, { status: 500 });
+  }
 
   if (id) {
     const checkId = await Story.findOne({ story_id: id });
