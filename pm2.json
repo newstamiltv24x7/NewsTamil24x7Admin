@@ -2,8 +2,11 @@
     "apps": [
       {
         "name": "newstamil_admin",
-        "script": "node_modules/next/dist/bin/next",
-        "args": "start --port 3001",
+        "script": "server.js",
+        "env": {
+          "PORT": "3001",
+          "NODE_ENV": "production"
+        },
         "exec_mode": "cluster_mode",
         "instances": 4,
         "log_file": "server.log",
