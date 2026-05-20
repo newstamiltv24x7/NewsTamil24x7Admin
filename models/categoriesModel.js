@@ -119,9 +119,15 @@ const CategoriesSchema = new Schema(
   { strict: false, versionKey: false, timestamps: true }
 );
 
-// Optimize category lookups for menu and story joins
-CategoriesSchema.index({ c_category_id: 1, n_status: 1, n_published: 1 });
-CategoriesSchema.index({ c_parentId: 1 });
+// Primary filter used by every menu/category list query
+CategoriesSchema.index({ n_status: 1, n_published: 1, c_category_order: 1 });
+// Special-category queries (spl_category filter + sort)
+CategoriesSchema.index({ n_status: 1, n_published: 1, c_spl_category: 1, c_spl_category_order: 1 });
+// $lookup from other collections on c_category_id (c_category_id has unique:true but
+// a standalone index ensures fast foreign-key lookups even after $group stages)
+CategoriesSchema.index({ c_category_id: 1 });
+// Parent-child traversal
+CategoriesSchema.index({ c_parentId: 1, n_status: 1, n_published: 1 });
 
 const Categories = mongoose.models.Categories || mongoose.model("Categories", CategoriesSchema);
 

@@ -8,6 +8,21 @@ import {
   decrypCryptoRequest,
 } from "../../../../../../helper/helper";
 
+// ── In-memory cache for the two public GET variants ────────────────────────
+// Categories change rarely; caching for 60 s eliminates the COLLSCAN that
+// was being fired on every single page request.
+const MENU_CACHE_TTL_MS = 60_000;
+const menuCache = new Map(); // key → { data, expiresAt }
+function getCached(key) {
+  const entry = menuCache.get(key);
+  if (entry && entry.expiresAt > Date.now()) return entry.data;
+  menuCache.delete(key);
+  return null;
+}
+function setCache(key, data) {
+  menuCache.set(key, { data, expiresAt: Date.now() + MENU_CACHE_TTL_MS });
+}
+
 let sendResponse = {
   appStatusCode: "",
   message: "",
@@ -138,31 +153,19 @@ export async function POST(request) {
     let searchTerm = c_search_term ? c_search_term : "";
 
     if (searchTerm !== "") {
-      _search["$and"] = [
-        {
-          $and: [{ c_category_name: { $regex: searchTerm, $options: "i" } }],
-          $and: [{ n_status: 1 }, { n_published: 1 }],
-        },
-      ];
+      _search = {
+        $and: [
+          { c_category_name: { $regex: searchTerm, $options: "i" } },
+          { n_status: 1 },
+          { n_published: 1 },
+        ],
+      };
     } else {
       if (spl_category) {
         
-        _search["$and"] = [
-          {
-            $and: [
-              { n_status: 1 },
-              { n_published: 1 },
-              { c_spl_category: parseInt(spl_category) },
-            ],
-          },
-        ];
+        _search = { n_status: 1, n_published: 1, c_spl_category: parseInt(spl_category) };
       } else {
-        
-        _search["$and"] = [
-          {
-            $and: [{ n_status: 1 }, { n_published: 1 }],
-          },
-        ];
+        _search = { n_status: 1, n_published: 1 };
       }
     }
 
@@ -455,18 +458,12 @@ export async function GET(request) {
       try {
         await connectMongoDB();
         let _search = {};
-        _search["$and"] = [
-          {
-            $and: [
-              { n_status: 1 },
-              { n_published: 1 },
-              {
-                c_parentId: { $exists: c_cate_type === "main" ? false : true },
-              },
-              { c_spl_category: parseInt(splCategory) },
-            ],
-          },
-        ];
+        _search = {
+          n_status: 1,
+          n_published: 1,
+          c_parentId: { $exists: c_cate_type === "main" ? false : true },
+          c_spl_category: parseInt(splCategory),
+        };
 
         await Categories.aggregate([
           { $match: _search },
@@ -612,17 +609,15 @@ export async function GET(request) {
       try {
         await connectMongoDB();
         let _search = {};
-        _search["$or"] = [
-          {
-            $and: [
-              { n_status: 1 },
-              { n_published: 1 },
-              // {
-              //   c_parentId: { $exists: c_cate_type === "main" ? false : true },
-              // },
-            ],
-          },
-        ];
+        _search = { n_status: 1, n_published: 1 };
+
+        // Serve from cache on cache hit
+        const cacheKey = "GET_all";
+        const cached = getCached(cacheKey);
+        if (cached) {
+          return NextResponse.json(cached, { status: 200 });
+        }
+
         await Categories.aggregate([
           { $match: _search },
           {
@@ -721,14 +716,8 @@ export async function GET(request) {
           },
         ])
           .then((data) => {
-
-          
-           
-
-
             const categoryData = createCategories(data);
             const encryptRes = encryptCryptoResponse(categoryData);
-            // const decryptRes = decrypCryptoRequest(encryptRes);
 
             if (data.length > 0) {
               sendResponse["appStatusCode"] = 0;
@@ -745,12 +734,14 @@ export async function GET(request) {
               sendResponse["payloadJson"] = [];
               sendResponse["error"] = [];
             }
+            // Cache the successful full-list response
+            setCache("GET_all", { ...sendResponse });
           })
           .catch((err) => {
             sendResponse["appStatusCode"] = 4;
             sendResponse["message"] = "";
             sendResponse["n_page"] = 0;
-              sendResponse["n_limit"] = 0;
+            sendResponse["n_limit"] = 0;
             sendResponse["payloadJson"] = [];
             sendResponse["error"] = err;
           });
