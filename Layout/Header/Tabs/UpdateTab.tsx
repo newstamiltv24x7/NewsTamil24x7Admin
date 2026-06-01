@@ -12,7 +12,7 @@ export const UpdateTab = () => {
             <li className="notification d-flex w-100 justify-content-between align-items-center" key={i}>
               <div className="d-flex w-100 notification-data justify-content-center align-items-center gap-2">
                 <div className="user-alerts flex-shrink-0">
-                  <img className="rounded-circle img-fluid img-40" src={`${ImagePath}/dashboard/user/${data.image}`} alt="user" />
+                  <img className="rounded-circle img-fluid img-40" src={`${ImagePath}/dashboard/user/${data.image}`} alt="user" width={40} height={40} style={{ width: '40px', height: '40px' }} />
                 </div>
                 <div className="flex-grow-1">
                   <div className="common-space user-id w-100">

@@ -397,9 +397,9 @@ function CardsPageContainer() {
                 {loader ? (
                   <tbody>
                     {[1, 2, 3, 4, 5]?.map((list) => (
-                      <tr key={list}>
+                      <tr key={`skeleton-row-${list}`}>
                         {[1, 2, 3, 4, 5, 6, 7, 8]?.map((item) => (
-                          <td key={item}>
+                          <td key={`skeleton-cell-${list}-${item}`}>
                             <Skeleton
                               animation="wave"
                               variant="rectangular"

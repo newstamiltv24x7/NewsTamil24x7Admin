@@ -31,8 +31,8 @@ export const MobileView = () => {
       <div className="header-logo-wrapper col-auto p-0">
         <div className="logo-wrapper">
           <Link href={`/${i18LangStatus}/story`}>
-            <img className="img-fluid for-light" src={`${ImagePath}/logo/logo_dark.png`} alt="logo-light" />
-            <img className="img-fluid for-dark" src={`${ImagePath}/logo/logo.png`} alt="logo-dark" />
+            <img className="img-fluid for-light" src={`${ImagePath}/logo/logo_dark.png`} alt="logo-light" width={120} height={50} style={{ width: '120px', height: 'auto' }} />
+            <img className="img-fluid for-dark" src={`${ImagePath}/logo/logo.png`} alt="logo-dark" width={120} height={50} style={{ width: '120px', height: 'auto' }} />
           </Link>
         </div>
         <div className="toggle-sidebar">

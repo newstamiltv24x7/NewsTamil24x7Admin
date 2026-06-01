@@ -25,7 +25,7 @@ export const SideBar = () => {
             <SimpleBar style={{ width: "80px", height: "350px" }}>
               <li className="back-btn">
                 <Link href={`/${i18LangStatus}/story`}>
-                  <img className="img-fluid" src={`${ImagePath}/logo/logo-icon.png`} alt="" />
+                  <img className="img-fluid" src={`${ImagePath}/logo/logo-icon.png`} alt="" width={80} height={80} style={{ width: '80px', height: '80px' }} />
                 </Link>
                 <div className="mobile-back text-end ">
                   <span>Back </span>

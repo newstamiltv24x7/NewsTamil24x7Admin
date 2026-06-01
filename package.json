@@ -24,6 +24,7 @@
     "cloudinary": "^2.2.0",
     "crypto-js": "^4.2.0",
     "dayjs": "^1.11.10",
+    "dompurify": "^3.0.6",
     "draft-js": "^0.11.7",
     "draftjs-to-html": "^0.9.1",
     "encryptdecrypt-everytime": "^1.1.4",
