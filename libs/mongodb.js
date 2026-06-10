@@ -16,7 +16,13 @@ const connectMongoDB = async () => {
   }
 
   await mongoose.set("strictQuery", false);
-  await mongoose.connect(connectionURL);
+  await mongoose.connect(connectionURL, {
+  maxPoolSize: 10,
+  minPoolSize: 2,
+  serverSelectionTimeoutMS: 5000,
+  socketTimeoutMS: 45000,
+  heartbeatFrequencyMS: 30000,
+});
 };
 
 export default connectMongoDB;
