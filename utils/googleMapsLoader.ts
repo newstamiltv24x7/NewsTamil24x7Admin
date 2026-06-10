@@ -24,7 +24,7 @@ export const useGoogleMapsLoader = () => {
       pathname.toLowerCase().includes(page)
     );
 
-    if (needsMaps && !window.google?.maps) {
+    if (needsMaps && !(window as any).google?.maps) {
       // Dynamically load Google Maps only when needed
       const script = document.createElement('script');
       script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`;
