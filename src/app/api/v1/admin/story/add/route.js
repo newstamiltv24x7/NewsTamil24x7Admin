@@ -33,26 +33,28 @@ async function getAccessToken() {
   return accessToken.token;
 }
 
+// REMOVE this old function and replace with:
 async function publishUrlNotification(url, type) {
   try {
-    const accessToken = await getAccessToken();
-  
-    const response = await axios.post(apiUrl, {
-      url: url,
-      type: type,
-    }, {
+    const auth = new GoogleAuth({ keyFile: keyFile, scopes: scopes });
+    const client = await auth.getClient();
+    const tokenResponse = await client.getAccessToken();
+
+    const response = await fetch(apiUrl, {
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${accessToken}`,
+        'Authorization': `Bearer ${tokenResponse.token}`,
       },
+      body: JSON.stringify({ url, type }),
     });
-  
-  
-    
+
+    const data = await response.json();
+    console.log('URL notification published:', data);
   } catch (error) {
-    console.error('Error publishing URL notification:', error.response ? error.response.data : error.message);
+    console.error('Error publishing URL notification:', error.message);
   }
-  }
+}
 
 function emailSend(mailData) {
   return new Promise(async (resolve, reject) => {
