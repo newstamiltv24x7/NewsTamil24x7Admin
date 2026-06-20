@@ -16,6 +16,12 @@ let sendResponse = {
 
 
 export async function GET(request) {
+  const sendResponse = {
+    appStatusCode: "",
+    message: "",
+    payloadJson: [],
+    error: "",
+  };
   const id = request.nextUrl.searchParams.get("id");
 
    

@@ -3,16 +3,15 @@ import { WebStories } from "../../../../../../models/webStoriesModel";
 import connectMongoDB from "../../../../../../libs/mongodb";
 import { mobilePaginations } from "@/helper/helper";
 
-let sendResponse = {
-  appStatusCode: "",
-  message: "",
-  n_page: 0,
-  n_limit: 0,
-  payloadJson: [],
-  error: "",
-};
-
 export async function POST(request) {
+  const sendResponse = {
+    appStatusCode: "",
+    message: "",
+    n_page: 0,
+    n_limit: 0,
+    payloadJson: [],
+    error: "",
+  };
   const { n_page, n_limit, c_search_term } = await request.json();
 
   try {
@@ -152,6 +151,14 @@ export async function POST(request) {
 }
 
 export async function GET(request) {
+  const sendResponse = {
+    appStatusCode: "",
+    message: "",
+    n_page: 0,
+    n_limit: 0,
+    payloadJson: [],
+    error: "",
+  };
   const id = request.nextUrl.searchParams.get("id");
   const url = request.nextUrl.searchParams.get("url");
 

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import connectMongoDB from "../../../../../../libs/mongodb";
 import { VisitCountToken } from "../../../../../../models/visitCountModel";
 import { create_UUID } from "../../../../../../helper/helper";
+import { parseBody } from "../../../../../../app/api/v1/utils/parseBody";
 
 let sendResponse = {
   appStatusCode: "",
@@ -11,7 +12,14 @@ let sendResponse = {
 };
 
 export async function POST(request) {
-  const { c_story_id, c_visit_url, c_visit_all_count } = await request.json();
+  const sendResponse = {
+    appStatusCode: "",
+    message: "",
+    payloadJson: [],
+    error: "",
+  };
+  const body = await parseBody(request);
+  const { c_story_id, c_visit_url, c_visit_all_count } = body;
   try {
     await connectMongoDB();
     if (c_story_id) {

@@ -6,12 +6,6 @@ import {
     decrypCryptoRequest,
   } from "../../../../../../helper/helper";
 
-let sendResponse = {
-  appStatusCode: "",
-  message: "",
-  payloadJson: [],
-  error: "",
-};
 
 
 function createComments(comments, c_parent_comments_id = null) {

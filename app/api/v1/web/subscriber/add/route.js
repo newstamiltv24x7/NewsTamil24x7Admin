@@ -8,14 +8,8 @@ import {
 } from "../../../../../../helper/helper";
 // import { urlEncoder } from "encryptdecrypt-everytime/src";
 const { urlEncoder } = require("encryptdecrypt-everytime/src");
-
-let sendResponse = {
-  appStatusCode: "",
-  message: "",
-  payloadJson: [],
-  error: "",
-};
-
+import { parseBody } from "../../../utils/parseBody";
+ 
 function emailSend(mailData) {
   return new Promise(async (resolve, reject) => {
     await transporter.sendMail(mailData, function async(err, data) {
@@ -29,14 +23,14 @@ function emailSend(mailData) {
 }
 
 export async function POST(request) {
-  const {
-    c_subscriber_email,
-    c_subscriber_activate,
-    Id,
-    n_status,
-    n_published,
-    c_redirect,
-  } = await request.json();
+  const sendResponse = {
+    appStatusCode: "",
+    message: "",
+    payloadJson: [],
+    error: "",
+  };
+  const body = await parseBody(request);
+  const { c_subscriber_email, c_subscriber_activate, Id, n_status, n_published, c_redirect } = body;
 
   try {
     await connectMongoDB();

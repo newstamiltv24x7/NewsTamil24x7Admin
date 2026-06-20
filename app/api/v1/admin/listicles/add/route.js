@@ -5,6 +5,7 @@ import {
   verifyAccessToken,
 } from "../../../../../../helper/helper";
 import { Listicles } from "../../../../../../models/listiclesModel";
+import { parseBody } from "../../../utils/parseBody";
 
 let sendResponse = {
   appStatusCode: "",
@@ -14,8 +15,8 @@ let sendResponse = {
 };
 
 export async function POST(request) {
-  const { c_category_id,c_listicles_short_name,c_listicles_title,c_listicles_slug_title,c_listicles_sub_title,c_listicles_content,c_listicles_img, c_listicles_continue_item, Id, n_status, n_published} =
-    await request.json();
+  const body = await parseBody(request);
+  const { c_category_id,c_listicles_short_name,c_listicles_title,c_listicles_slug_title,c_listicles_sub_title,c_listicles_content,c_listicles_img, c_listicles_continue_item, Id, n_status, n_published} = body;
 
   const verified = verifyAccessToken();
 

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { UserRole } from "../../../../../../models/userRoleModel";
 import connectMongoDB from "../../../../../../libs/mongodb";
 import { create_UUID } from "../../../../../../helper/helper";
+import { parseBody } from "../../../utils/parseBody";
 
 let sendResponse = {
   appStatusCode: "",
@@ -11,7 +12,8 @@ let sendResponse = {
 };
 
 export async function POST(request) {
-  const { c_role_name, Id, n_status } = await request.json();
+  const body = await parseBody(request);
+  const { c_role_name, Id, n_status } = body;
 
   try {
     await connectMongoDB();

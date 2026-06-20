@@ -6,15 +6,8 @@ import {
   encryptCryptoResponse,
   decrypCryptoRequest,
 } from "../../../../../../helper/helper";
+import { parseBody } from "../../../utils/parseBody";
 
-let sendResponse = {
-  appStatusCode: "",
-  message: "",
-  n_page: 0,
-  n_limit: 0,
-  payloadJson: [],
-  error: "",
-};
 
 function getUniqueListBy(arr, key) {
   return [...new Map(arr.map((item) => [item[key], item])).values()];
@@ -57,7 +50,16 @@ function createVideos(categorieses, c_parentId = null) {
 }
 
 export async function POST(request) {
-  const { n_page, n_limit, c_search_term } = await request.json();
+  const sendResponse = {
+    appStatusCode: "",
+    message: "",
+    n_page: 0,
+    n_limit: 0,
+    payloadJson: [],
+    error: "",
+  };
+  const body = await parseBody(request);
+  const { n_page, n_limit, c_search_term } = body;
 
   let fromDate = "";
   let toDate = "";

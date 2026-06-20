@@ -19,6 +19,12 @@ let sendResponse = {
 };
 
 export async function POST(request) {
+  const sendResponse = {
+    appStatusCode: "",
+    message: "",
+    payloadJson: [],
+    error: "",
+  };
   const { email, password } = await request.json();
 
   try {
@@ -131,6 +137,12 @@ export async function POST(request) {
 }
 
 export async function GET(request) {
+  const sendResponse = {
+    appStatusCode: "",
+    message: "",
+    payloadJson: [],
+    error: "",
+  };
   const id = request.nextUrl.searchParams.get("id");
 
   if (id) {

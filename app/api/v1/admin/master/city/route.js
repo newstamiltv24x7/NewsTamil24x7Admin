@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 // import connectMongoDB from "../../../../../../libs/mongodb";
 import { City } from "../../../../../../models/cityModel";
 import connectMongoDB from "../../../../../../libs/mongodb";
+import { parseBody } from "../../../utils/parseBody";
 
 let sendResponse = {
   appStatusCode: "",
@@ -12,7 +13,8 @@ let sendResponse = {
 
 
 export async function POST(request) {
-    const { country_id,state_id,city_id, Id, n_status } = await request.json();
+  const body = await parseBody(request);
+    const { country_id,state_id,city_id, Id, n_status } = body;
     
     let data = {
         country_id: country_id,

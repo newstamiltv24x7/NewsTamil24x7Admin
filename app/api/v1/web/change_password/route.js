@@ -23,7 +23,12 @@ export async function POST(request) {
     if (verified.success) {
       if (c_old_pass) {
         if (c_old_pass === verified.data.password) {
-          if (c_new_pass === c_confirm_pass) {
+// let sendResponse = {
+//   appStatusCode: "",
+//   message: "",
+//   payloadJson: [],
+//   error: "",
+// };
             const hashPass = await bcrypt.hash(c_new_pass, 10);
             await EndUser.findOneAndUpdate(
               { email: verified.data.email },

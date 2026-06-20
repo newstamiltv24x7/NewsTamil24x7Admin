@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { RobotsTxt } from "../../../../../../models/robotsTxtModel";
 import connectMongoDB from "../../../../../../libs/mongodb";
 import { verifyAccessToken } from "../../../../../../helper/helper";
+import { parseBody } from "../../../utils/parseBody";
 
 let sendResponse = {
   appStatusCode: "",
@@ -11,8 +12,9 @@ let sendResponse = {
 };
 
 export async function POST(request) {
+  const body = await parseBody(request);
   const { n_page, n_limit, c_search_term, c_type } =
-    await request.json();
+    body;
 
   const verified = verifyAccessToken();
 

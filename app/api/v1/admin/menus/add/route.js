@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import connectMongoDB from "@/libs/mongodb";
 import { create_UUID, verifyAccessToken } from "@/helper/helper";
 import { Menus } from "../../../../../../models/menuModel";
+import { parseBody } from "../../../utils/parseBody";
 
 let sendResponse = {
   appStatusCode: "",
@@ -11,13 +12,14 @@ let sendResponse = {
 };
 
 export async function POST(request) {
+  const body = await parseBody(request);
   const {
     c_menu_name,
     c_menu_url_link,
     c_parentId,
     Id,
     n_status,
-  } = await request.json();
+  } = body;
 
   try {
     await connectMongoDB();

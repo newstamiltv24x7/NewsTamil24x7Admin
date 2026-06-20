@@ -13,6 +13,14 @@ let sendResponse = {
 };
 
 export async function GET(request) {
+  const sendResponse = {
+    appStatusCode: "",
+    message: "",
+    n_page: 0,
+    n_limit: 0,
+    payloadJson: [],
+    error: "",
+  };
   try {
     const name = request.nextUrl.searchParams.get("name");
     const url = request.nextUrl.searchParams.get("url");

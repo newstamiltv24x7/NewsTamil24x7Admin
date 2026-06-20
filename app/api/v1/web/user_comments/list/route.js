@@ -5,14 +5,8 @@ import {
   encryptCryptoResponse,
   decrypCryptoRequest,
 } from "../../../../../../helper/helper";
-
-let sendResponse = {
-  appStatusCode: "",
-  message: "",
-  payloadJson: [],
-  error: "",
-};
-
+import { parseBody } from "../../../utils/parseBody";
+ 
 function createComments(comments, c_parent_comments_id = null) {
   const commentsList = [];
   let category;
@@ -51,7 +45,14 @@ function createComments(comments, c_parent_comments_id = null) {
 }
 
 export async function POST(request) {
-  const { n_page, n_limit, c_search_term, story_id } = await request.json();
+  const sendResponse = {
+    appStatusCode: "",
+    message: "",
+    payloadJson: [],
+    error: "",
+  };
+  const body = await parseBody(request);
+  const { n_page, n_limit, c_search_term, story_id } = body;
 
   try {
     let _search = {};
@@ -188,6 +189,12 @@ export async function POST(request) {
 }
 
 export async function GET(request) {
+  const sendResponse = {
+    appStatusCode: "",
+    message: "",
+    payloadJson: [],
+    error: "",
+  };
   const id = request.nextUrl.searchParams.get("id");
   const story_id = request.nextUrl.searchParams.get("story_id");
 

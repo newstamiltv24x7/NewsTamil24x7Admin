@@ -31,6 +31,12 @@ function  emailSend( mailData) {
 
 
 export async function POST(request) {
+  const sendResponse = {
+    appStatusCode: "",
+    message: "",
+    payloadJson: [],
+    error: "",
+  };
   const { email } = await request.json();
   try{
     await connectMongoDB();

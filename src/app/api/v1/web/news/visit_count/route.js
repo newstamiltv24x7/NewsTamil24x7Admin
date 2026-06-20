@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { Story } from "../../../../../../models/storyModel";
 import connectMongoDB from "../../../../../../libs/mongodb";
+import { parseBody } from "../../../../../../app/api/v1/utils/parseBody";
 
 let sendResponse = {
   appStatusCode: "",
@@ -10,7 +11,8 @@ let sendResponse = {
 };
 
 export async function POST(request) {
-  const { c_story_id } = await request.json();
+  const body = await parseBody(request);
+  const { c_story_id } = body;
 
   try {
    

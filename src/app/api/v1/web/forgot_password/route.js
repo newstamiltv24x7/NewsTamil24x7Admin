@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { EndUser } from "../../../../../models/endUserModel";
 const { urlEncoder } = require("encryptdecrypt-everytime/src");
 import connectMongoDB from "../../../../../libs/mongodb";
+import { parseBody } from "../../../../../app/api/v1/utils/parseBody";
 
 import {
   generateAccessTokenForget,
@@ -32,7 +33,8 @@ function  emailSend( mailData) {
 
 
 export async function POST(request) {
-  const { email, c_redirect } = await request.json();
+  const body = await parseBody(request);
+  const { email, c_redirect } = body;
 
   try {
     await connectMongoDB();

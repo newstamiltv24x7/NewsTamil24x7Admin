@@ -7,6 +7,7 @@ import {
   encryptCryptoResponse,
   decrypCryptoRequest,
 } from "../../../../../../helper/helper";
+import { parseBody } from "../../../utils/parseBody";
 
 let sendResponse = {
   appStatusCode: "",
@@ -120,7 +121,8 @@ function createCategories(categorieses, c_parentId = null) {
 }
 
 export async function POST(request) {
-  const { n_page, n_limit, c_search_term, spl_category } = await request.json();
+  const body = await parseBody(request);
+  const { n_page, n_limit, c_search_term, spl_category } = body;
 
   let typeView = {};
 

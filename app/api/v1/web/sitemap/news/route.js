@@ -8,7 +8,7 @@
 
 import { NextResponse } from "next/server";
 import connectMongoDB from "../../../../../../libs/mongodb";
-import { Stories } from "../../../../../../models/storiesModel";
+import { Story } from "../../../../../../models/storyModel";
 
 const SITE_URL = process.env.NEXT_PUBLIC_BASE_URL
   ? process.env.NEXT_PUBLIC_BASE_URL.replace(/\/$/, "")
@@ -20,7 +20,7 @@ export async function GET() {
 
     const cutoff = new Date(Date.now() - 48 * 60 * 60 * 1000);
 
-    const articles = await Stories.find(
+    const articles = await Story.find(
       {
         n_status: 1,
         n_published: 1,

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { Memes } from "../../../../../../models/memesModel";
 import connectMongoDB from "../../../../../../libs/mongodb";
 import { verifyAccessToken } from "@/helper/helper";
+import { parseBody } from "../../../utils/parseBody";
 
 let sendResponse = {
   appStatusCode: "",
@@ -11,8 +12,9 @@ let sendResponse = {
 };
 
 export async function POST(request) {
+    const body = await parseBody(request);
   const { n_page, n_limit, c_search_term} =
-    await request.json();
+    body;
 
   const verified = verifyAccessToken();
   try {

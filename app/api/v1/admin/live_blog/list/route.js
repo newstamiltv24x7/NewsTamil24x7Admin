@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { LiveBlog } from "../../../../../../models/liveBlogModel";
 import connectMongoDB from "../../../../../../libs/mongodb";
 import { verifyAccessToken } from "@/helper/helper";
+import { parseBody } from "../../../utils/parseBody";
 
 let sendResponse = {
   appStatusCode: "",
@@ -42,8 +43,8 @@ const sortByArray = (data) => {
 
 
 export async function POST(request) {
-  const { n_page, n_limit, c_search_term} =
-    await request.json();
+  const body = await parseBody(request);
+  const { n_page, n_limit, c_search_term} = body;
 
   const verified = verifyAccessToken();
   try {

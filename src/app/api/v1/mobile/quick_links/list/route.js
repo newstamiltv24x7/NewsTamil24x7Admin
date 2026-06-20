@@ -7,14 +7,7 @@ import {
   encryptCryptoResponse,
   decrypCryptoRequest,
 } from "../../../../../../helper/helper";
-
-let sendResponse = {
-  appStatusCode: "",
-  message: "",
-  payloadJson: [],
-  error: "",
-};
-
+ 
 const sortedArray = (obj) =>{
   return obj.sort((a,b) =>  b.c_live_sub_blog_create_date- a.c_live_sub_blog_create_date);
   }
@@ -85,6 +78,13 @@ function createList(data,typeData) {
 
 export async function POST(request) {
   const { n_page, n_limit, c_search_term } = await request.json();
+
+  const sendResponse = {
+    appStatusCode: "",
+    message: "",
+    payloadJson: [],
+    error: "",
+  };
 
   try {
     let _search = {};

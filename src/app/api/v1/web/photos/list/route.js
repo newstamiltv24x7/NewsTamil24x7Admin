@@ -5,6 +5,7 @@ import {
     encryptCryptoResponse,
     decrypCryptoRequest,
   } from "../../../../../../helper/helper";
+import { parseBody } from "../../../../../../app/api/v1/utils/parseBody";
 
 let sendResponse = {
   appStatusCode: "",
@@ -14,7 +15,8 @@ let sendResponse = {
 };
 
 export async function POST(request) {
-  const { n_page, n_limit, c_search_term } = await request.json();
+  const body = await parseBody(request);
+  const { n_page, n_limit, c_search_term } = body;
   try {
     await connectMongoDB();
     

@@ -3,6 +3,7 @@ import connectMongoDB from "@/libs/mongodb";
 import { create_UUID, verifyAccessToken } from "@/helper/helper";
 import { Categories } from "@/models/categoriesModel";
 import slugify from "slugify";
+import { parseBody } from "../../../../utils/parseBody";
 
 let sendResponse = {
   appStatusCode: "",
@@ -12,6 +13,7 @@ let sendResponse = {
 };
 
 export async function POST(request) {
+  const body = await parseBody(request);
   const {
     c_web_component_category_id,
     c_category_name,
@@ -26,7 +28,7 @@ export async function POST(request) {
     Id,
     n_status,
     c_spl_category,
-  } = await request.json();
+  } = body;
 
   try {
     await connectMongoDB();

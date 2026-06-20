@@ -64,6 +64,12 @@ function createCategories(categorieses, c_parentId = null) {
 }
 
 export async function POST(request) {
+  const sendResponse = {
+    appStatusCode: "",
+    message: "",
+    payloadJson: [],
+    error: "",
+  };
   const { n_page, n_limit, c_search_term } = await request.json();
 
   try {
@@ -180,6 +186,12 @@ export async function POST(request) {
 }
 
 export async function GET(request) {
+  const sendResponse = {
+    appStatusCode: "",
+    message: "",
+    payloadJson: [],
+    error: "",
+  };
   const id = request.nextUrl.searchParams.get("id");
   const url = request.nextUrl.searchParams.get("url");
   // const c_cate_type = "main";

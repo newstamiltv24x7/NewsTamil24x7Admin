@@ -8,6 +8,7 @@ import {
   generateAccessToken,
   transporter,
 } from "../../../../../helper/helper";
+import { parseBody } from "../../../utils/parseBody";
 
 let sendResponse = {
   appStatusCode: "",
@@ -32,7 +33,8 @@ function  emailSend( mailData) {
 
 
 export async function POST(request) {
-  const { email, c_redirect } = await request.json();
+  const body = await parseBody(request);
+  const { email, c_redirect } = body;
 
   try {
     await connectMongoDB();

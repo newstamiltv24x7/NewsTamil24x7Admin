@@ -7,6 +7,7 @@ import {
   encryptCryptoResponse,
   decrypCryptoRequest,
 } from "../../../../../../helper/helper";
+import { parseBody } from "../../../utils/parseBody";
 
 let sendResponse = {
   appStatusCode: "",
@@ -112,7 +113,14 @@ function createCategories(categorieses) {
 }
 
 export async function POST(request) {
-  const { n_page, n_limit, c_search_term } = await request.json();
+  const sendResponse = {
+    appStatusCode: "",
+    message: "",
+    payloadJson: [],
+    error: "",
+  };
+  const body = await parseBody(request);
+  const { n_page, n_limit, c_search_term } = body;
 
   try {
     await connectMongoDB();
@@ -228,6 +236,12 @@ export async function POST(request) {
 }
 
 export async function GET(request) {
+  const sendResponse = {
+    appStatusCode: "",
+    message: "",
+    payloadJson: [],
+    error: "",
+  };
   const id = request.nextUrl.searchParams.get("id");
   const yearMonth = request.nextUrl.searchParams.get("yearMonth");
   

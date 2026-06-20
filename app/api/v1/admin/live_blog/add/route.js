@@ -3,6 +3,7 @@ import { LiveBlog } from "../../../../../../models/liveBlogModel";
 import connectMongoDB from "../../../../../../libs/mongodb";
 import { verifyAccessToken } from "@/helper/helper";
 import { create_UUID } from "../../../../../../helper/helper";
+import { parseBody } from "../../../utils/parseBody";
 
 let sendResponse = {
   appStatusCode: "",
@@ -12,6 +13,7 @@ let sendResponse = {
 };
 
 export async function POST(request) {
+  const body = await parseBody(request);
   const {
     c_live_blog_title,
     c_live_blog_english_title,
@@ -23,7 +25,7 @@ export async function POST(request) {
     Id,
     n_status,
     live_status,
-  } = await request.json();
+  } = body;
 
   try {
     await connectMongoDB();

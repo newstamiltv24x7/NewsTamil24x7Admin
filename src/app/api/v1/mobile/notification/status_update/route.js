@@ -1,14 +1,7 @@
 import { NextResponse } from "next/server";
 import connectMongoDB from "../../../../../../libs/mongodb";
 import { Notification } from "../../../../../../models/notificationModel";
-
-let sendResponse = {
-  appStatusCode: "",
-  message: "",
-  payloadJson: [],
-  error: "",
-};
-
+ 
 export async function POST(request) {
   const { Id, c_device_id } = await request.json();
 

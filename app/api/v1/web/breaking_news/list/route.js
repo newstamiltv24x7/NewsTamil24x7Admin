@@ -52,6 +52,13 @@ export async function POST(request) {
     await connectMongoDB();
     const controlData = await Control.findOne();
     const { n_page, n_limit, c_search_term } = await request.json();
+    const sendResponse = {
+      appStatusCode: "",
+      message: "",
+      type: "",
+      payloadJson: [],
+      error: "",
+    };
     sendResponse["appStatusCode"] = 0;
     sendResponse["message"] = "";
     sendResponse["type"] = controlData.c_control_type;
@@ -70,6 +77,14 @@ export async function POST(request) {
 export async function GET() {
   await connectMongoDB();
   const controlData = await Control.find();
+
+  const sendResponse = {
+    appStatusCode: "",
+    message: "",
+    type: "",
+    payloadJson: [],
+    error: "",
+  };
 
   
 

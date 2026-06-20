@@ -2,19 +2,19 @@ import { NextResponse } from "next/server";
 import { Story } from "../../../../../../models/storyModel";
 import connectMongoDB from "../../../../../../libs/mongodb";
 import { mobilePaginations } from "@/helper/helper";
-
-let sendResponse = {
-  appStatusCode: "",
-  message: "",
-  n_page: 0,
-  n_limit: 0,
-  payloadJson: [],
-  error: "",
-};
-
+ 
 export async function POST(request) {
   const { n_page, n_limit, c_search_term, c_from_date, c_to_date } =
     await request.json();
+
+  const sendResponse = {
+    appStatusCode: "",
+    message: "",
+    n_page: 0,
+    n_limit: 0,
+    payloadJson: [],
+    error: "",
+  };
 
   try {
     await connectMongoDB();
@@ -211,6 +211,14 @@ export async function POST(request) {
 
 export async function GET(request) {
   const id = request.nextUrl.searchParams.get("id");
+  const sendResponse = {
+    appStatusCode: "",
+    message: "",
+    n_page: 0,
+    n_limit: 0,
+    payloadJson: [],
+    error: "",
+  };
   if (id) {
     const checkId = await Story.findOne({ story_id: id });
     if (checkId) {

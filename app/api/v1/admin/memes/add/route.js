@@ -3,6 +3,7 @@ import { Memes } from "../../../../../../models/memesModel";
 import connectMongoDB from "../../../../../../libs/mongodb";
 import { verifyAccessToken } from "@/helper/helper";
 import { create_UUID } from "../../../../../../helper/helper";
+import { parseBody } from "../../../utils/parseBody";
 
 let sendResponse = {
   appStatusCode: "",
@@ -12,7 +13,8 @@ let sendResponse = {
 };
 
 export async function POST(request) {
-  const { c_memes_title, c_memes_img_link, Id, n_status } = await request.json();
+    const body = await parseBody(request);
+  const { c_memes_title, c_memes_img_link, Id, n_status } = body
 
   try {
     await connectMongoDB();

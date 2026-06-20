@@ -3,6 +3,7 @@ import connectMongoDB from "../../../../../../libs/mongodb";
 import { verifyAccessToken } from "@/helper/helper";
 import { create_UUID } from "../../../../../../helper/helper";
 import { Comment } from "../../../../../../models/commentsModel";
+import { parseBody } from "../../../../../../app/api/v1/utils/parseBody";
 // import {
 //     encryptCryptoResponse,
 //     decrypCryptoRequest,
@@ -17,15 +18,14 @@ let sendResponse = {
 
 
 export async function POST(request) {
-  const {
-    story_id,
-    c_comment_id,
-    c_user_comment,
-    c_comment_like,
-    c_comment_dislike,
-    c_parent_comments_id,
-    Id,
-  } = await request.json();
+  const sendResponse = {
+    appStatusCode: "",
+    message: "",
+    payloadJson: [],
+    error: "",
+  };
+  const body = await parseBody(request);
+  const { story_id, c_comment_id, c_user_comment, c_comment_like, c_comment_dislike, c_parent_comments_id, Id } = body;
 
   const verified = verifyAccessToken();
   if (verified.success) {
@@ -135,6 +135,12 @@ export async function POST(request) {
 }
 
 export async function GET(request) {
+  const sendResponse = {
+    appStatusCode: "",
+    message: "",
+    payloadJson: [],
+    error: "",
+  };
   const id = request.nextUrl.searchParams.get("id");
 
   if(id){

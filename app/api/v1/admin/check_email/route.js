@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { User } from "../../../../../models/userModel";
 import connectMongoDB from "@/libs/mongodb";
+import { parseBody } from "../../utils/parseBody";
 
 let sendResponse = {
   appStatusCode: "",
@@ -10,7 +11,8 @@ let sendResponse = {
 };
 
 export async function POST(request) {
-  const {email} = await request.json();
+  const body = await parseBody(request);
+  const {email} = body;
 
 try {
   await connectMongoDB();

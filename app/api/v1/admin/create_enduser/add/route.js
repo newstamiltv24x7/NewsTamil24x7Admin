@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { EndUser } from "../../../../../../models/endUserModel";
 import connectMongoDB from "../../../../../../libs/mongodb";
 import {create_UUID} from "../../../../../../helper/helper"
+import { parseBody } from "../../../utils/parseBody";
 const bcrypt = require("bcryptjs");
 
 let sendResponse = {
@@ -12,8 +13,8 @@ let sendResponse = {
 };
 
 export async function POST(request) {
-  const { first_name, last_name, d_o_b, email, mobile, password, c_password, c_user_img_url,c_about_user } =
-    await request.json();
+  const body = await parseBody(request);
+  const { first_name, last_name, d_o_b, email, mobile, password, c_password, c_user_img_url,c_about_user } = body;
 
  const role = "user"
   try {

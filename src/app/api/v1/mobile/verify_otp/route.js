@@ -1,16 +1,6 @@
 import { NextResponse } from "next/server";
 import { OTP } from "../../../../../models/otpModel";
 import connectMongoDB from "../../../../../libs/mongodb";
-
-
-let sendResponse = {
-  appStatusCode: "",
-  message: "",
-  payloadJson: [],
-  error: "",
-};
-
-
 export async function POST(request) {
   const { email,otp } = await request.json();
   try{

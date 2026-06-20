@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import connectMongoDB from "../../../../../../libs/mongodb";
 import { create_UUID } from "../../../../../../helper/helper";
 import { PollOptions } from "../../../../../../models/pollModel";
+import { parseBody } from "../../../utils/parseBody";
 
 let sendResponse = {
   appStatusCode: "",
@@ -11,7 +12,8 @@ let sendResponse = {
 };
 
 export async function POST(request) {
-  const {c_poll_id,c_poll_answer_id } = await request.json();
+  const body = await parseBody(request);
+  const { c_poll_id, c_poll_answer_id } = body;
     try {
       await connectMongoDB();
 

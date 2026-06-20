@@ -76,12 +76,7 @@ export async function POST(request) {
       _search["$and"] = [
         {
           $and: [{ c_category_name: { $regex: searchTerm, $options: "i" } }],
-          $and: [{ n_status: 1 }, { n_published: 1 }],
-        },
-      ];
-    } else {
-      _search["$and"] = [
-        {
+
           $and: [{ n_status: 1 }, { n_published: 1 }],
         },
       ];

@@ -11,6 +11,12 @@ let sendResponse = {
 };
 
 export async function GET() {
+  const sendResponse = {
+    appStatusCode: "",
+    message: "",
+    payloadJson: [],
+    error: "",
+  };
   const verified = verifyAccessToken();
 
   

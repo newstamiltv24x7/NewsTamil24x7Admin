@@ -9,6 +9,7 @@ import {
   getBase64,
   imageCloudUpload,
 } from "../../../../../helper/helper";
+import { parseBody } from "../../utils/parseBody";
 
 let sendResponse = {
   appStatusCode: "",
@@ -31,7 +32,8 @@ const convertBase64 = (file) => {
 };
 
 export async function POST(request) {
-  const { c_file } = await request.json();
+  const body = await parseBody(request);
+  const { c_file } = body;
   try {
     // const formData = await request.formData();
     // const file = formData.get("c_file");

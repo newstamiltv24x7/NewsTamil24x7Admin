@@ -2,15 +2,14 @@ import { Subscriber } from "../../../../../../models/subscriberModel";
 import { NextResponse } from "next/server";
 import connectMongoDB from "../../../../../../libs/mongodb";
 import { verifyAccessToken } from "../../../../../../helper/helper";
-
-let sendResponse = {
-  appStatusCode: "",
-  message: "",
-  payloadJson: [],
-  error: "",
-};
-
+ 
 export async function GET() {
+  const sendResponse = {
+    appStatusCode: "",
+    message: "",
+    payloadJson: [],
+    error: "",
+  };
   const verified = verifyAccessToken();
 
   

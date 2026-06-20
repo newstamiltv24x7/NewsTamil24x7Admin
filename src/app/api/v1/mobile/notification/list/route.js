@@ -2,16 +2,7 @@ import { NextResponse } from "next/server";
 import { Notification } from "../../../../../../models/notificationModel";
 import connectMongoDB from "../../../../../../libs/mongodb";
 import { mobilePaginations } from "@/helper/helper";
-
-let sendResponse = {
-  appStatusCode: "",
-  message: "",
-  n_page: 0,
-  n_limit: 0,
-  payloadJson: [],
-  error: "",
-};
-
+ 
 export async function POST(request) {
   const { n_page, n_limit, c_device_id } = await request.json();
 

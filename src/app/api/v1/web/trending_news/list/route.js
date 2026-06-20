@@ -14,6 +14,12 @@ let sendResponse = {
 };
 
 export async function POST(request) {
+  const sendResponse = {
+    appStatusCode: "",
+    message: "",
+    payloadJson: [],
+    error: "",
+  };
   const { n_page, n_limit, c_search_term, c_from_date, c_to_date } =
     await request.json();
 
@@ -203,6 +209,12 @@ export async function POST(request) {
 }
 
 export async function GET(request) {
+  const sendResponse = {
+    appStatusCode: "",
+    message: "",
+    payloadJson: [],
+    error: "",
+  };
   const id = request.nextUrl.searchParams.get("id");
   if (id) {
     const checkId = await Story.findOne({ story_id: id });

@@ -1,16 +1,19 @@
 import { NextResponse } from "next/server";
 import { Story } from "../../../../../../models/storyModel";
 import connectMongoDB from "../../../../../../libs/mongodb";
+import { parseBody } from "../../../utils/parseBody";
 
-let sendResponse = {
-  appStatusCode: "",
-  message: "",
-  payloadJson: [],
-  error: "",
-};
 
 export async function POST(request) {
-  const { c_story_id } = await request.json();
+  const body = await parseBody(request);
+  const { c_story_id } = body;
+
+  const sendResponse = {
+    appStatusCode: "",
+    message: "",
+    payloadJson: [],
+    error: "",
+  };
 
   try {
    
@@ -60,9 +63,15 @@ export async function POST(request) {
 }
 
 export async function GET(){
-    sendResponse["appStatusCode"] = 0;
-    sendResponse["message"] = "";
-    sendResponse["payloadJson"] = [];
-    sendResponse["error"] = "testing";
-    return NextResponse.json(sendResponse, { status: 200 });
+  const sendResponse = {
+    appStatusCode: "",
+    message: "",
+    payloadJson: [],
+    error: "",
+  };
+  sendResponse["appStatusCode"] = 0;
+  sendResponse["message"] = "";
+  sendResponse["payloadJson"] = [];
+  sendResponse["error"] = "testing";
+  return NextResponse.json(sendResponse, { status: 200 });
 }

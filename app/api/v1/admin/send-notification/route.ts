@@ -3,6 +3,7 @@ import { Message } from "firebase-admin/messaging";
 import { NextRequest, NextResponse } from "next/server";
 import connectMongoDB from "../../../../../libs/mongodb";
 import { FcmDeviceToken } from "@/models/fcmDeviceTokenModel";
+import { parseBody } from "../../utils/parseBody";
 
 // Initialize Firebase Admin SDK
 if (!admin.apps.length) {
@@ -29,7 +30,8 @@ let sendResponse: any = {
 
 
 export async function POST(request: NextRequest) {
-  const { tokens, title, message, link, icon, c_type} = await request.json();
+  const body = await parseBody(request);
+  const { tokens, title, message, link, icon, c_type} = body;
 
   const messages = {
     notification: {

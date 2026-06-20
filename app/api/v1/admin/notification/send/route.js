@@ -4,6 +4,7 @@ import { FcmDeviceToken } from "../../../../../../models/fcmDeviceTokenModel";
 import { Notification } from "../../../../../../models/notificationModel";
 import connectMongoDB from "@/libs/mongodb";
 import { create_UUID, verifyAccessToken } from "@/helper/helper";
+import { parseBody } from "../../../utils/parseBody";
 
 
 let sendResponse = {
@@ -72,6 +73,7 @@ function saveNotification(
 }
 
 export async function POST(request) {
+  const body = await parseBody(request);
   const {
     c_title,
     c_content,
@@ -79,7 +81,7 @@ export async function POST(request) {
     c_redirect_id,
     story_desk_created_name,
     c_type,
-  } = await request.json();
+  } = body;
 
   try {
     const message = new gcm.Message({

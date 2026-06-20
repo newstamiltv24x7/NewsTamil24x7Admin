@@ -50,6 +50,9 @@ const VisitCountSchema = new Schema(
   { strict: false, versionKey: false, timestamps: true }
 );
 
+VisitCountSchema.index({ c_story_id: 1 });
+VisitCountSchema.index({ "c_visit_all_count.c_visit_device_id": 1 });
+
 const VisitCountToken =mongoose.models.VisitCountToken || mongoose.model("VisitCountToken", VisitCountSchema);
 
 module.exports = { VisitCountToken };

@@ -6,6 +6,7 @@ import {
   create_UUID,
   verifyAccessToken,
 } from "../../../../../../helper/helper";
+import { parseBody } from "../../../utils/parseBody";
 
 let sendResponse = {
   appStatusCode: "",
@@ -15,6 +16,7 @@ let sendResponse = {
 };
 
 export async function POST(request) {
+  const body = await parseBody(request);
   const {
     c_h_rules_name,
     c_h_rules_description,
@@ -23,10 +25,7 @@ export async function POST(request) {
     c_h_rules_other_category,
     c_h_rules_autor,
     c_h_rules_handle_page,
-  } = await request.json();
-
-
-
+  } = body;
 
   c_h_rules_handle_page.map(async(data) =>{
 

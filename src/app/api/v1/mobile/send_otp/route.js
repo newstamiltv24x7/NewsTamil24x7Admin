@@ -7,14 +7,6 @@ import connectMongoDB from "../../../../../libs/mongodb";
 import {
   transporter,
 } from "../../../../../helper/helper";
-
-let sendResponse = {
-  appStatusCode: "",
-  message: "",
-  payloadJson: [],
-  error: "",
-};
-
 function  emailSend( mailData) {
   return new Promise(async (resolve, reject) => {
     await transporter.sendMail(mailData, function async(err, data) {
@@ -32,6 +24,12 @@ function  emailSend( mailData) {
 
 export async function POST(request) {
   const { email } = await request.json();
+  const sendResponse = {
+    appStatusCode: "",
+    message: "",
+    payloadJson: [],
+    error: "",
+  };
   try{
     await connectMongoDB();
 

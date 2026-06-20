@@ -5,6 +5,7 @@ import { NextResponse } from "next/server";
 import { verifyAccessToken } from "../../../../../helper/helper";
 import connectMongoDB from "@/libs/mongodb";
 import { User } from "@/models/userModel";
+import { parseBody } from "../../utils/parseBody";
 const bcrypt = require("bcryptjs");
 
 let sendResponse = {
@@ -16,7 +17,8 @@ let sendResponse = {
 
 export async function POST(request) {
   const verified = verifyAccessToken();
-  const { c_old_pass, c_new_pass, c_confirm_pass } = await request.json();
+  const body = await parseBody(request);
+  const { c_old_pass, c_new_pass, c_confirm_pass } = body;
 
   try {
     await connectMongoDB();

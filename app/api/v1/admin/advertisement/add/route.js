@@ -5,6 +5,7 @@ import {
   create_UUID,
   verifyAccessToken,
 } from "../../../../../../helper/helper";
+import { parseBody } from "../../../utils/parseBody";
 
 let sendResponse = {
   appStatusCode: "",
@@ -14,6 +15,7 @@ let sendResponse = {
 };
 
 export async function POST(request) {
+  const body = await parseBody(request);
   const {
     c_advt_title,
     c_advt_type,
@@ -35,7 +37,7 @@ export async function POST(request) {
     c_advt_google_script,
     n_status,
     n_published,
-  } = await request.json();
+  } = body;
 
   const verified = verifyAccessToken();
 

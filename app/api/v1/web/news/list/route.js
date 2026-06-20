@@ -8,6 +8,7 @@ import {
   encryptCryptoResponse,
   decrypCryptoRequest,
 } from "../../../../../../helper/helper";
+import { parseBody } from "../../../utils/parseBody";
 
 function createResponse() {
   return {
@@ -111,20 +112,8 @@ function getUniqueListBy(arr, key) {
 }
 
 export async function POST(request) {
-  const {
-    n_page,
-    n_limit,
- c_search_term,
-    main_category_id,
-    trending_news,
-    flash_news,
-    c_from_date,
-    c_to_date,
-    tags,
-    main_category_name,
-    sub_category_name,
-    url,
-  } = await request.json();
+  const body = await parseBody(request);
+  const { n_page, n_limit, c_search_term, main_category_id, trending_news, flash_news, c_from_date, c_to_date, tags, main_category_name, sub_category_name, url } = body;
 
   const sendResponse = createResponse();
   let fromDate = "";

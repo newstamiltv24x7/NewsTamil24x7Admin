@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { Consolelog } from "../../../../../models/consoleModel";
 import connectMongoDB from "../../../../../libs/mongodb";
+import { parseBody } from "../../utils/parseBody";
 
 let sendResponse = {
   appStatusCode: "",
@@ -10,8 +11,8 @@ let sendResponse = {
 };
 
 export async function POST(request) {
-  const { n_limit, n_page, c_search_term } = await request.json();
-
+  const body = await parseBody(request);
+  const { n_limit, n_page, c_search_term } = body;
 
     try {
       await connectMongoDB();

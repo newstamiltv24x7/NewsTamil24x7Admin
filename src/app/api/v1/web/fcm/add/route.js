@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { FcmDeviceToken } from "../../../../../../models/fcmDeviceTokenModel";
 import connectMongoDB from "../../../../../../libs/mongodb";
 import { create_UUID } from "../../../../../../helper/helper";
+import { parseBody } from "../../../../../../app/api/v1/utils/parseBody";
 
 let sendResponse = {
   appStatusCode: "",
@@ -11,13 +12,8 @@ let sendResponse = {
 };
 
 export async function POST(request) {
-  const {
-    c_fcm_device_id,
-    c_fcm_device_type,
-    c_fcm_device_token,
-    Id,
-    n_status,
-  } = await request.json();
+  const body = await parseBody(request);
+  const { c_fcm_device_id, c_fcm_device_type, c_fcm_device_token, Id, n_status } = body;
 
   try {
     await connectMongoDB();

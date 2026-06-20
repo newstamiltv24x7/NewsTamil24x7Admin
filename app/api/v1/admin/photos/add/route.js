@@ -5,6 +5,7 @@ import {
   verifyAccessToken,
 } from "../../../../../../helper/helper";
 import { Photos } from "../../../../../../models/photosModel";
+import { parseBody } from "../../../utils/parseBody";
 
 let sendResponse = {
   appStatusCode: "",
@@ -14,8 +15,9 @@ let sendResponse = {
 };
 
 export async function POST(request) {
+  const body = await parseBody(request);
   const {c_photos_short_name,c_photos_title,c_photos_slug_title,c_photos_sub_title,c_photos_content,c_photos_img, c_photos_continue_item, Id, n_status, n_published} =
-    await request.json();
+    body;
 
   const verified = verifyAccessToken();
 

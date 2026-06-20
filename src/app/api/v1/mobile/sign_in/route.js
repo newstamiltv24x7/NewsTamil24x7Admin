@@ -10,16 +10,16 @@ import {
   encryptCryptoResponse,
   decrypCryptoRequest,
 } from "../../../../../helper/helper";
-
-let sendResponse = {
-  appStatusCode: "",
-  message: "",
-  payloadJson: [],
-  error: "",
-};
-
+ 
 export async function POST(request) {
   const { email, password } = await request.json();
+
+  const sendResponse = {
+    appStatusCode: "",
+    message: "",
+    payloadJson: [],
+    error: "",
+  };
 
   try {
     await connectMongoDB();

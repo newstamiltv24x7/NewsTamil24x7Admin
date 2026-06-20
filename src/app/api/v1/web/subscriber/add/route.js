@@ -29,6 +29,12 @@ function emailSend(mailData) {
 }
 
 export async function POST(request) {
+  const sendResponse = {
+    appStatusCode: "",
+    message: "",
+    payloadJson: [],
+    error: "",
+  };
   const {
     c_subscriber_email,
     c_subscriber_activate,

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import Topic from "@/models/topic";
 import connectMongoDB from "@/libs/mongodb";
+import { parseBody } from "../v1/utils/parseBody";
 
 let sendResponse = {
   appStatusCode: "",
@@ -10,7 +11,8 @@ let sendResponse = {
 };
 
 export async function POST(request) {
-  const { title, description } = await request.json();
+  const body = await parseBody(request);
+  const { title, description } = body;
   await connectMongoDB();
   const topicdata = new Topic({
     title,

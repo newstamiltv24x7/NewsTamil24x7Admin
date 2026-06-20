@@ -5,6 +5,7 @@ import {
   create_UUID,
   verifyAccessToken,
 } from "../../../../../../helper/helper";
+import { parseBody } from "../../../utils/parseBody";
 
 let sendResponse = {
   appStatusCode: "",
@@ -14,13 +15,14 @@ let sendResponse = {
 };
 
 export async function POST(request) {
+  const body = await parseBody(request);
   const {
     c_redirect_from_url,
     c_redirect_to_url,
     Id,
     n_status,
     n_published,
-  } = await request.json();
+  } = body;
 
   const verified = verifyAccessToken();
 

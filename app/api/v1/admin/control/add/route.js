@@ -5,6 +5,7 @@ import {
   verifyAccessToken,
 } from "../../../../../../helper/helper";
 import { Control } from "../../../../../../models/controlModel";
+import { parseBody } from "../../../utils/parseBody";
 
 let sendResponse = {
   appStatusCode: "",
@@ -15,6 +16,7 @@ let sendResponse = {
 
 
 export async function POST(request) {
+  const body = await parseBody(request);
   const {
     c_control_name,
     c_control_type,
@@ -22,7 +24,7 @@ export async function POST(request) {
     Id,
     n_status,
     n_published,
-  } = await request.json();
+  } = body;
 
   const verified = verifyAccessToken();
 

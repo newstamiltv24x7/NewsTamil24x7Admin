@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { EndUser } from "../../../../../models/endUserModel";
 import connectMongoDB from "../../../../../libs/mongodb";
+import { parseBody } from "../../../../../app/api/v1/utils/parseBody";
 import {create_UUID, generateAccessToken, getDateTime, encryptCryptoResponse,decrypCryptoRequest} from "../../../../../helper/helper";
 const bcrypt = require("bcryptjs");
 const { urlEncoder } = require("encryptdecrypt-everytime/src");
@@ -13,7 +14,8 @@ let sendResponse = {
 };
 
 export async function POST(request) {
-  const { first_name, last_name,google_id, email, password, c_password, c_user_img_url } = await request.json();
+  const body = await parseBody(request);
+  const { first_name, last_name, google_id, email, password, c_password, c_user_img_url } = body;
 
   
 

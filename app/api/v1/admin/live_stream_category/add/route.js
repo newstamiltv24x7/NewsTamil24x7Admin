@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import connectMongoDB from "@/libs/mongodb";
 import { create_UUID, verifyAccessToken } from "@/helper/helper";
 import { LiveStreamCategory } from "@/models/liveStreamCategoryModel";
+import { parseBody } from "../../../utils/parseBody";
 // import { LiveStreamCategory } from "../../../../../../models/liveStreamCategoryModel";
 
 let sendResponse = {
@@ -12,11 +13,12 @@ let sendResponse = {
 };
 
 export async function POST(request) {
+  const body = await parseBody(request);
   const {
     c_live_stream_category_name,
     Id,
     n_status,
-  } = await request.json();
+  } = body;
 
   try {
     await connectMongoDB();

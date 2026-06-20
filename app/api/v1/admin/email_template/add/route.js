@@ -5,6 +5,7 @@ import {
   create_UUID,
   verifyAccessToken,
 } from "../../../../../../helper/helper";
+import { parseBody } from "../../../utils/parseBody";
 
 let sendResponse = {
   appStatusCode: "",
@@ -14,6 +15,7 @@ let sendResponse = {
 };
 
 export async function POST(request) {
+  const body = await parseBody(request);
   const {
     c_email_template_name,
     c_email_template_subject,
@@ -25,7 +27,7 @@ export async function POST(request) {
     Id,
     n_status,
     n_published,
-  } = await request.json();
+  } = body;
 
   const verified = verifyAccessToken();
 

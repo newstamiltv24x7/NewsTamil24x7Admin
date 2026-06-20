@@ -3,6 +3,7 @@ import { User } from "../../../../../models/userModel";
 import connectMongoDB from "../../../../../libs/mongodb";
 import { create_UUID,transporter } from "../../../../../helper/helper";
 import slugify from "slugify";
+import { parseBody } from "../../../utils/parseBody";
 const bcrypt = require("bcryptjs");
 
 let sendResponse = {
@@ -27,9 +28,9 @@ function  emailSend( mailData) {
 }
 
 export async function POST(request) {
+  const body = await parseBody(request);
   const { first_name, last_name, email, role, c_role_id, c_user_img_url,c_about_user,Id,password
-  } =
-    await request.json();
+  } = body;
 
   let passwordCheck = password ? password : "Password@123";
 

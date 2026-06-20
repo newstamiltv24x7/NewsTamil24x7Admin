@@ -5,15 +5,9 @@ import {
   encryptCryptoResponse,
   decrypCryptoRequest,
 } from "../../../../../../helper/helper";
+import { parseBody } from "../../../utils/parseBody";
 
-let sendResponse = {
-  appStatusCode: "",
-  message: "",
-  payloadJson: [],
-  error: "",
-};
-
-
+let sendResponse = {};
 const seprateData = (data) => {
   const datas = [];
 
@@ -55,7 +49,8 @@ const seprateData = (data) => {
 
 
 export async function POST(request) {
-  const { n_page, n_limit, main_category_id } = await request.json();
+  const body = await parseBody(request);
+  const { n_page, n_limit, main_category_id } = body;
   await connectMongoDB();
   var page = Number(n_page);
   var limit = Number(n_limit);
@@ -83,7 +78,7 @@ export async function POST(request) {
       view_count: 1
     },
   };
-  
+  let sendResponse = {};
   try {
     await connectMongoDB();
     // const data = {

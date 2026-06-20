@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import connectMongoDB from "@/libs/mongodb";
 import { create_UUID, verifyAccessToken } from "@/helper/helper";
 import { Categories } from "@/models/categoriesModel";
+import { parseBody } from "../../../../utils/parseBody";
 
 const getSendResponse = () => ({
   appStatusCode: "",
@@ -86,8 +87,9 @@ function createCategories(categorieses, c_parentId = null) {
 }
 
 export async function POST(request) {
+  const body = await parseBody(request);
   const { n_page, n_limit, c_search_term, c_type, c_cate_type,spl_cate } =
-    await request.json();
+    body;
 
   const verified = verifyAccessToken();
   const sendResponse = getSendResponse();

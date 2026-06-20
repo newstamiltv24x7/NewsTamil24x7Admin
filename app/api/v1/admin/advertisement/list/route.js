@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { Advertisement } from "../../../../../../models/advertisementModel";
 import connectMongoDB from "../../../../../../libs/mongodb";
 import { verifyAccessToken } from "../../../../../../helper/helper";
+import { parseBody } from "../../../utils/parseBody";
 
 let sendResponse = {
   appStatusCode: "",
@@ -11,8 +12,8 @@ let sendResponse = {
 };
 
 export async function POST(request) {
-  const { n_page, n_limit, c_search_term, c_from_date, c_to_date } =
-    await request.json();
+  const body = await parseBody(request);
+  const { n_page, n_limit, c_search_term, c_from_date, c_to_date } = body;
 
   const verified = verifyAccessToken();
 

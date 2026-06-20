@@ -8,15 +8,14 @@ import { Comment } from "../../../../../../models/commentsModel";
 //     decrypCryptoRequest,
 //   } from "../../../../../../helper/helper";
 
-let sendResponse = {
-  appStatusCode: "",
-  message: "",
-  payloadJson: [],
-  error: "",
-};
-
 
 export async function POST(request) {
+  const sendResponse = {
+    appStatusCode: "",
+    message: "",
+    payloadJson: [],
+    error: "",
+  };
   const {
     story_id,
     c_comment_id,
@@ -135,6 +134,12 @@ export async function POST(request) {
 }
 
 export async function GET(request) {
+  const sendResponse = {
+    appStatusCode: "",
+    message: "",
+    payloadJson: [],
+    error: "",
+  };
   const id = request.nextUrl.searchParams.get("id");
 
   if(id){

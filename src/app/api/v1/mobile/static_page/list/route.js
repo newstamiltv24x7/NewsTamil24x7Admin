@@ -6,16 +6,16 @@ import {
   encryptCryptoResponse,
   decrypCryptoRequest,
 } from "../../../../../../helper/helper";
-
-let sendResponse = {
-  appStatusCode: "",
-  message: "",
-  payloadJson: [],
-  error: "",
-};
-
+ 
 export async function POST(request) {
   const { n_page, n_limit, c_search_term } = await request.json();
+
+  const sendResponse = {
+    appStatusCode: "",
+    message: "",
+    payloadJson: [],
+    error: "",
+  };
 
   try {
     await connectMongoDB();
@@ -156,6 +156,13 @@ export async function GET(request) {
   const id = request.nextUrl.searchParams.get("id");
   const menuid = request.nextUrl.searchParams.get("menu_id");
   const menuname = request.nextUrl.searchParams.get("menu_name");
+
+  const sendResponse = {
+    appStatusCode: "",
+    message: "",
+    payloadJson: [],
+    error: "",
+  };
 
   if (id) {
     const checkId = await StaticPage.findOne({ c_static_page_id: id });

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { PublishOptions } from "../../../../../../../models/publishOptionsModel";
 import connectMongoDB from "../../../../../../../libs/mongodb";
 import { create_UUID } from "../../../../../../../helper/helper"
+import { parseBody } from "../../../../utils/parseBody";
 
 let sendResponse = {
   appStatusCode: "",
@@ -11,7 +12,8 @@ let sendResponse = {
 };
 
 export async function POST(request) {
-  const { opt_title, opt_sub_title, Id, n_status } = await request.json();
+    const body = await parseBody(request);
+  const { opt_title, opt_sub_title, Id, n_status } = body;
 
   try {
     await connectMongoDB();

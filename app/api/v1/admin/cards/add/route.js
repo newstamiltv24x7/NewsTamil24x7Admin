@@ -5,6 +5,7 @@ import {
   verifyAccessToken,
 } from "../../../../../../helper/helper";
 import { Cards } from "../../../../../../models/cardsModel";
+import { parseBody } from "../../../utils/parseBody";
 
 let sendResponse = {
   appStatusCode: "",
@@ -15,6 +16,7 @@ let sendResponse = {
 
 
 export async function POST(request) {
+  const body = await parseBody(request);
   const {
     c_cards_title,
     c_cards_embed_code,
@@ -27,7 +29,7 @@ export async function POST(request) {
     Id,
     n_status,
     n_published,
-  } = await request.json();
+  } = body;
 
   const verified = verifyAccessToken();
 

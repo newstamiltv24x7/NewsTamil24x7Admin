@@ -125,6 +125,18 @@ export async function POST(request) {
   }
 }
 export async function GET(request) {
+  try {
+    await connectMongoDB();
+  } catch (dbErr) {
+    const errorResponse = {
+      appStatusCode: 4,
+      message: "",
+      payloadJson: [],
+      error: "Database connection failed",
+    };
+    return NextResponse.json(errorResponse, { status: 500 });
+  }
+
   const id = request.nextUrl.searchParams.get("id");
   const url = request.nextUrl.searchParams.get("url");
   const main_category_id = request.nextUrl.searchParams.get("category");

@@ -13,9 +13,29 @@ let sendResponse = {
   payloadJson: [],
   error: "",
 };
-
+ 
 export async function POST(request) {
-  const { n_page, n_limit, c_search_term, c_video_type,c_youtube_type,n_url } = await request.json();
+const sendResponse = {
+    appStatusCode: "",
+    message: "",
+    payloadJson: [],
+    error: "",
+  };
+
+  // Read body ONCE
+  let body = {};
+  try {
+    const text = await request.text();
+    if (text) body = JSON.parse(text);
+  } catch (e) {
+    sendResponse["appStatusCode"] = 3;
+    sendResponse["message"] = "Invalid request body";
+    sendResponse["error"] = e.message;
+    return NextResponse.json(sendResponse, { status: 400 });
+  }
+
+  // Destructure from the already-parsed body object
+  const { n_page, n_limit, c_search_term, c_video_type, c_youtube_type, n_url } = body;
 
   try {
     let _search = {};
@@ -198,6 +218,12 @@ export async function POST(request) {
 }
 
 export async function GET(request) {
+  const sendResponse = {
+    appStatusCode: "",
+    message: "",
+    payloadJson: [],
+    error: "",
+  };
   const id = request.nextUrl.searchParams.get("id");
   const url = request.nextUrl.searchParams.get("url");
 

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { Categories } from "../../../../../../models/categoriesModel";
 import connectMongoDB from "@/libs/mongodb";
+import { parseBody } from "../../../utils/parseBody";
 
 let sendResponse = {
   appStatusCode: "",
@@ -10,7 +11,8 @@ let sendResponse = {
 };
 
 export async function POST(request) {
-  const {Id, c_category_order,c_spl_category_order } =await request.json();
+  const body = await parseBody(request);
+  const {Id, c_category_order,c_spl_category_order } =body;
 
   try {
     await connectMongoDB();

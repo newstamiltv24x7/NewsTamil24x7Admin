@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import connectMongoDB from "@/libs/mongodb";
 import { verifyAccessToken } from "@/helper/helper";
 import { Menus } from "../../../../../../models/menuModel";
+import { parseBody } from "../../../utils/parseBody";
 
 let sendResponse = {
   appStatusCode: "",
@@ -40,7 +41,8 @@ function createMenus(menus, c_parentId = null) {
 
 
 export async function POST(request){
-  const { c_search_term } = await request.json();
+  const body = await parseBody(request);
+  const { c_search_term } = body;
 
   let searchTerm = c_search_term ? c_search_term : "";
 

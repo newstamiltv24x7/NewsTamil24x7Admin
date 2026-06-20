@@ -7,6 +7,7 @@ import connectMongoDB from "../../../../../libs/mongodb";
 import {
   transporter,
 } from "../../../../../helper/helper";
+import { parseBody } from "../../../utils/parseBody";
 
 let sendResponse = {
   appStatusCode: "",
@@ -31,7 +32,14 @@ function  emailSend( mailData) {
 
 
 export async function POST(request) {
-  const { email } = await request.json();
+  const sendResponse = {
+    appStatusCode: "",
+    message: "",
+    payloadJson: [],
+    error: "",
+  };
+  const body = await parseBody(request);
+  const { email } = body;
   try{
     await connectMongoDB();
 

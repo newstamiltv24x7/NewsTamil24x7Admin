@@ -20,14 +20,6 @@ export async function POST(request) {
     c_user_comment,
     c_comment_like,
     c_parent_comments_id,
-    Id,
-  } = await request.json();
-
-
-    await connectMongoDB();
-    const verified = verifyAccessToken();
-
-
     if (verified.success) {
 
       try{

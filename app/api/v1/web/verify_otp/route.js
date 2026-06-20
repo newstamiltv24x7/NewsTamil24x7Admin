@@ -1,18 +1,17 @@
 import { NextResponse } from "next/server";
 import { OTP } from "../../../../../models/otpModel";
 import connectMongoDB from "../../../../../libs/mongodb";
-
-
-let sendResponse = {
-  appStatusCode: "",
-  message: "",
-  payloadJson: [],
-  error: "",
-};
-
-
+import { parseBody } from "../../../utils/parseBody";
+ 
 export async function POST(request) {
-  const { email,otp } = await request.json();
+  const sendResponse = {
+    appStatusCode: "",
+    message: "",
+    payloadJson: [],
+    error: "",
+  };
+  const body = await parseBody(request);
+  const { email, otp } = body;
   try{
     await connectMongoDB();
 
