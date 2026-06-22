@@ -9,7 +9,7 @@
 import { NextResponse } from "next/server";
 import connectMongoDB from "../../../../../../libs/mongodb";
 import { Story } from "../../../../../../models/storyModel";
-
+export const dynamic = 'force-dynamic';
 const SITE_URL = process.env.NEXT_PUBLIC_BASE_URL
   ? process.env.NEXT_PUBLIC_BASE_URL.replace(/\/$/, "")
   : "https://newstamil.tv";
