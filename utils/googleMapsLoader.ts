@@ -21,8 +21,8 @@ export const useGoogleMapsLoader = () => {
   useEffect(() => {
     // Check if current page needs Google Maps
     const needsMaps = MAP_PAGES.some((page) => 
-      pathname.toLowerCase().includes(page)
-    );
+  (pathname ?? '').toLowerCase().includes(page)
+);
 
     if (needsMaps && !(window as any).google?.maps) {
       // Dynamically load Google Maps only when needed
