@@ -34,7 +34,8 @@ const nextConfig = {
       "newsmalayalam.s3.amazonaws.com",
       "newstamil-tv.s3.amazonaws.com",
       "newstamil-tv.s3.ap-south-1.amazonaws.com",
-      "instagram.com"
+      "instagram.com",
+      "www.socialbureau.in" 
     ],
   },
 

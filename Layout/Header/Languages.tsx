@@ -9,7 +9,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 const Languages = () => {
-  const { i18LangStatus } = useAppSelector((state) => state.langSlice);
+  const { i18LangStatus } = useAppSelector((state: any) => state.langSlice);
   const { i18n } = useTranslation(i18LangStatus);
   const pathname = usePathname();
   const router = useRouter();
@@ -20,12 +20,12 @@ const Languages = () => {
     i18n.changeLanguage(item.language);
     dispatch(setLanguage(item.data));
     const languageCodeRegex = /^\/[a-z]{2}(\/|$)/;
-    const updatedPath = pathname.replace(languageCodeRegex, `/${item.data}$1`);
+    const updatedPath = (pathname ?? '/').replace(languageCodeRegex, `/${item.data}$1`);
     router.push(updatedPath);
   };
 
   useEffect(() => {
-    const pathSegments = pathname.split("/").filter(Boolean);
+    const pathSegments = (pathname ?? '/').split("/").filter(Boolean);
     if (pathSegments.length > 0) {
       const language = pathSegments[0];
       if (language !== i18LangStatus) {
