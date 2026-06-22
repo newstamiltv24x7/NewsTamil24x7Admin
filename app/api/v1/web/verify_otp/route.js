@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { OTP } from "../../../../../models/otpModel";
 import connectMongoDB from "../../../../../libs/mongodb";
-import { parseBody } from "../../../utils/parseBody";
+import { parseBody } from "../../utils/parseBody";
  
 export async function POST(request) {
   const sendResponse = {

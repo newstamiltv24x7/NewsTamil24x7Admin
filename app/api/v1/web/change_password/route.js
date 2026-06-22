@@ -94,15 +94,6 @@ export async function POST(request) {
           }
         }
       }
-    } else {
-      sendResponse["appStatusCode"] = 4;
-      sendResponse["message"] = "";
-      sendResponse["payloadJson"] = [];
-      sendResponse["error"] = "token expired!";
-      if (sendResponse.appStatusCode !== "") {
-        return NextResponse.json(sendResponse, { status: 200 });
-      }
-    }
   } catch (err) {
     sendResponse["appStatusCode"] = 4;
     sendResponse["message"] = "";
