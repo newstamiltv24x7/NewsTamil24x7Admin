@@ -3,7 +3,7 @@ import { revalidatePath } from "next/cache";
 import { File } from "../../../../../models/fileModel";
 import { verifyAccessToken } from "../../../../../helper/helper";
 import { S3Client,DeleteObjectCommand  } from "@aws-sdk/client-s3";
-import { parseBody } from "../../../utils/parseBody";
+import { parseBody } from "../../utils/parseBody";
 
 // import { readFileSync } from 'fs'
 

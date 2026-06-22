@@ -3,7 +3,7 @@ import { User } from "../../../../../models/userModel";
 import connectMongoDB from "../../../../../libs/mongodb";
 import { create_UUID,transporter } from "../../../../../helper/helper";
 import slugify from "slugify";
-import { parseBody } from "../../../utils/parseBody";
+import { parseBody } from "../../utils/parseBody";
 const bcrypt = require("bcryptjs");
 
 let sendResponse = {

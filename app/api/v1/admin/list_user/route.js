@@ -3,7 +3,7 @@ import { User } from "../../../../../models/userModel";
 import { UserRole } from "../../../../../models/userRoleModel";
 import connectMongoDB from "../../../../../libs/mongodb";
 import { verifyAccessToken } from "@/helper/helper";
-import { parseBody } from "../../../utils/parseBody";
+import { parseBody } from "../../utils/parseBody";
 
 let sendResponse = {
   appStatusCode: "",
