@@ -20,23 +20,23 @@ const Menulist: React.FC<MenuListType> = ({ menu, setActiveMenu, activeMenu, lev
   const dispatch = useAppDispatch();
   const { sidebarIconType } = useAppSelector((state) => state.themeCustomizer)
 
- const ActiveNavLinkUrl = (path?: string, active?: boolean) => {
-  return pathname.split(`${i18LangStatus}`)[1] === path ? (active ? active : true) : "";
+const ActiveNavLinkUrl = (path?: string, active?: boolean) => {
+  return (pathname ?? '/').split(`${i18LangStatus}`)[1] === path ? (active ? active : true) : "";
 };
 
-  const shouldSetActive = ({ item }: SidebarItemTypes) => {
-    var returnValue = false;
-    if (item?.path === pathname.split(`${i18LangStatus}`)[1]) {
-      returnValue = true;
-    }
-    if (!returnValue && item?.children) {
-      item?.children.every((subItem) => {
-        returnValue = shouldSetActive({ item: subItem });
-        return !returnValue;
-      });
-    }
-    return returnValue;
-  };
+const shouldSetActive = ({ item }: SidebarItemTypes) => {
+  var returnValue = false;
+  if (item?.path === (pathname ?? '/').split(`${i18LangStatus}`)[1]) {
+    returnValue = true;
+  }
+  if (!returnValue && item?.children) {
+    item?.children.every((subItem) => {
+      returnValue = shouldSetActive({ item: subItem });
+      return !returnValue;
+    });
+  }
+  return returnValue;
+};
 
   useEffect(() => {
     menu?.forEach((item: any) => {
