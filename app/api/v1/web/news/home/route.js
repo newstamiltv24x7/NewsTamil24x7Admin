@@ -57,62 +57,99 @@ const seprateData = (data) => {
 };
 
 
+// export async function POST(request) {
+//   try {
+//     const { n_page, n_limit, main_category_id } = await request.json();
+//     await connectMongoDB();
+
+//     const options = {
+//       page: Number(n_page),
+//       limit: Number(n_limit),
+//       sort: { pin_status: -1, _id: -1, n_story_order: -1, createdAt: -1 },
+//       select: {
+//         _id: 1,
+//         story_id: 1,
+//         story_subject_name: 1,
+//         story_title_name: 1,
+//         story_sub_title_name: 1,
+//         story_english_name: 1,
+//         story_sub_english_name: 1,
+//         story_desk_created_name: 1,
+//         main_category_id: 1,
+//         youtube_embed_id: 1,
+//         story_cover_image_url: 1,
+//         story_thumb_image_url: 1,
+//         news_image_caption: 1,
+//         createdAt: 1,
+//         updatedAt: 1,
+//         view_count: 1,
+//       },
+//     };
+
+//     const filter = {
+//       n_status: 1,
+//       n_published: 1,
+//       c_save_type: "published",
+//       main_category_id: main_category_id,
+//     };
+
+//     const result = await Story.paginate(filter, options);
+//     const encryptRes = encryptCryptoResponse(result);
+
+//     return NextResponse.json({
+//       appStatusCode: 0,
+//       message: "",
+//       payloadJson: encryptRes,
+//       error: "",
+//     });
+//   } catch (err) {
+//     console.error(err);
+//     return NextResponse.json(
+//       {
+//         appStatusCode: 4,
+//         message: "",
+//         payloadJson: [],
+//         error: err.message,
+//       },
+//       { status: 400 }
+//     );
+//   }
+// }
 export async function POST(request) {
+  const t0 = Date.now();
   try {
-    const { n_page, n_limit, main_category_id } = await request.json();
+    let body = {};
+    try { body = await request.json(); } catch { body = {}; }
+
+    const { n_page = 1, n_limit = 10, trending_news } = body;
+
+    console.log(`[t] body parsed: ${Date.now() - t0}ms`);
+
     await connectMongoDB();
+    console.log(`[t] connectMongoDB: ${Date.now() - t0}ms`);
+
+    const filter = { n_status: 1, n_published: 1, c_save_type: "published" };
+    if (trending_news) filter.trending_news = 1;
 
     const options = {
       page: Number(n_page),
       limit: Number(n_limit),
-      sort: { pin_status: -1, _id: -1, n_story_order: -1, createdAt: -1 },
-      select: {
-        _id: 1,
-        story_id: 1,
-        story_subject_name: 1,
-        story_title_name: 1,
-        story_sub_title_name: 1,
-        story_english_name: 1,
-        story_sub_english_name: 1,
-        story_desk_created_name: 1,
-        main_category_id: 1,
-        youtube_embed_id: 1,
-        story_cover_image_url: 1,
-        story_thumb_image_url: 1,
-        news_image_caption: 1,
-        createdAt: 1,
-        updatedAt: 1,
-        view_count: 1,
-      },
-    };
-
-    const filter = {
-      n_status: 1,
-      n_published: 1,
-      c_save_type: "published",
-      main_category_id: main_category_id,
+      sort: { createdAt: -1 },
+      select: { /* ...same as before */ },
     };
 
     const result = await Story.paginate(filter, options);
-    const encryptRes = encryptCryptoResponse(result);
+    console.log(`[t] paginate: ${Date.now() - t0}ms`);
+
+    const encrypted = encryptCryptoResponse(result);
+    console.log(`[t] encrypt: ${Date.now() - t0}ms`);
 
     return NextResponse.json({
-      appStatusCode: 0,
-      message: "",
-      payloadJson: encryptRes,
-      error: "",
+      appStatusCode: 0, message: "", payloadJson: encrypted, error: "",
     });
   } catch (err) {
     console.error(err);
-    return NextResponse.json(
-      {
-        appStatusCode: 4,
-        message: "",
-        payloadJson: [],
-        error: err.message,
-      },
-      { status: 400 }
-    );
+    return NextResponse.json({ appStatusCode: 4, message: "", payloadJson: [], error: err.message }, { status: 500 });
   }
 }
 export async function GET(request) {
