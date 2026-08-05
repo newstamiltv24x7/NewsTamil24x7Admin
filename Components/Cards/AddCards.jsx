@@ -17,7 +17,7 @@ import {
   Slide,
   TextField,
 } from "@mui/material";
-import JoditEditor from "jodit-react";
+// import JoditEditor from "jodit-react";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import { FaUpload } from "react-icons/fa6";
 import { Label, Spinner } from "reactstrap";
