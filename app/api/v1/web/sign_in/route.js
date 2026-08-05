@@ -10,7 +10,7 @@ import {
   encryptCryptoResponse,
   decrypCryptoRequest,
 } from "../../../../../helper/helper";
-import { parseBody } from "../../../utils/parseBody";
+import { parseBody } from "../../utils/parseBody";
 
 let sendResponse = {
   appStatusCode: "",
