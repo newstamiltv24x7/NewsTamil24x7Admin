@@ -16,7 +16,8 @@ import {
   Slide,
   TextField,
 } from "@mui/material";
-import JoditEditor from "jodit-react";
+import dynamic from 'next/dynamic';
+const JoditEditor = dynamic(() => import('jodit-react'), { ssr: false });
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {

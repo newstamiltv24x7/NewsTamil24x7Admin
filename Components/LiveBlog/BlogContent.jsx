@@ -12,7 +12,8 @@ import React, { useMemo, useRef } from "react";
 import { FaUpload } from "react-icons/fa6";
 import { Label } from "reactstrap";
 import { IoCloseCircle } from "react-icons/io5";
-import JoditEditor from "jodit-react";
+import dynamic from 'next/dynamic';
+const JoditEditor = dynamic(() => import('jodit-react'), { ssr: false });
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
