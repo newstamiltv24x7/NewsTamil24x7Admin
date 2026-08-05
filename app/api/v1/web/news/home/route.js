@@ -58,70 +58,61 @@ const seprateData = (data) => {
 
 
 export async function POST(request) {
-  const { n_page, n_limit, main_category_id } = await request.json();
-  await connectMongoDB();
-  var page = Number(n_page);
-  var limit = Number(n_limit);
-
-  const options = {
-    page: page,
-    limit: limit,
-    sort: {pin_status: -1, _id: -1,  n_story_order: -1, createdAt: -1 },
-    select: {
-      _id: 1,
-      story_id: 1,
-      story_subject_name: 1,
-      story_title_name: 1,
-      story_sub_title_name: 1,
-      story_english_name: 1,
-      story_sub_english_name: 1,
-      story_desk_created_name: 1,
-      main_category_id: 1,
-      youtube_embed_id: 1,
-      story_cover_image_url: 1,
-      story_thumb_image_url: 1,
-      news_image_caption: 1,
-      createdAt: 1,
-      updatedAt: 1,
-      view_count : 1
-    },
-  };
-  // if (main_category_id) {
-  //   options["main_category_id"] = main_category_id;
-  // }
   try {
+    const { n_page, n_limit, main_category_id } = await request.json();
     await connectMongoDB();
-    // const data = {
-    //   c_control_name:"Control Views Count"
-    // }
-    // const controlResult = await Control.find(data);
-    await Story.paginate(
-      {n_status: 1, n_published: 1,  c_save_type: "published", main_category_id : main_category_id },
-      options,
-      function (err, result) {
-        if (err) {
-          sendResponse["appStatusCode"] = 4;
-          sendResponse["message"] = "";
-          sendResponse["payloadJson"] = err;
-          sendResponse["error"] = "";
-        } else {
-          const encryptRes = encryptCryptoResponse(result);
-          // const decryptRes = decrypCryptoRequest(encryptRes);
-          sendResponse["appStatusCode"] = 0;
-          sendResponse["message"] = "";
-          sendResponse["payloadJson"] = encryptRes;
-          sendResponse["error"] = "";
-        }
-      }
-    );
-    return NextResponse.json(sendResponse, { status: 200 });
-  } catch (err) {
-    sendResponse["appStatusCode"] = 4;
-    sendResponse["message"] = [];
 
-    sendResponse["payloadJson"] = [];
-    sendResponse["error"] = "Something went wrong!";
-    return NextResponse.json(sendResponse, { status: 400 });
+    const options = {
+      page: Number(n_page),
+      limit: Number(n_limit),
+      sort: { pin_status: -1, _id: -1, n_story_order: -1, createdAt: -1 },
+      select: {
+        _id: 1,
+        story_id: 1,
+        story_subject_name: 1,
+        story_title_name: 1,
+        story_sub_title_name: 1,
+        story_english_name: 1,
+        story_sub_english_name: 1,
+        story_desk_created_name: 1,
+        main_category_id: 1,
+        youtube_embed_id: 1,
+        story_cover_image_url: 1,
+        story_thumb_image_url: 1,
+        news_image_caption: 1,
+        createdAt: 1,
+        updatedAt: 1,
+        view_count: 1,
+      },
+    };
+
+    const filter = {
+      n_status: 1,
+      n_published: 1,
+      c_save_type: "published",
+      main_category_id: main_category_id,
+    };
+
+    const result = await Story.paginate(filter, options);
+    const encryptRes = encryptCryptoResponse(result);
+
+    return NextResponse.json({
+      appStatusCode: 0,
+      message: "",
+      payloadJson: encryptRes,
+      error: "",
+    });
+  } catch (err) {
+    console.error(err);
+    return NextResponse.json(
+      {
+        appStatusCode: 4,
+        message: "",
+        payloadJson: [],
+        error: err.message,
+      },
+      { status: 400 }
+    );
   }
 }
 export async function GET(request) {
