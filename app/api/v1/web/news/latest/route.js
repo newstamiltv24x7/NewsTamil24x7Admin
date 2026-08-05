@@ -703,10 +703,12 @@ export async function POST(request) {
     if (trending_news) {
       filter.trending_news = 1;
     }
+const page = Math.max(1, Number(n_page) || 1);
+const limit = Math.min(50, Math.max(1, Number(n_limit) || 10));
 
     const options = {
-      page: Number(n_page),
-      limit: Number(n_limit),
+      page,
+      limit,
       sort: { createdAt: -1 },
       select: {
         _id: 1,
