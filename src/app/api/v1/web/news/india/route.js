@@ -57,13 +57,13 @@ const seprateData = (data) => {
 export async function POST(request) {
   const { n_page, n_limit, main_category_id } = await request.json();
   await connectMongoDB();
-  var page = Number(n_page);
-  var limit = Number(n_limit);
+  const page = Math.max(1, Number(n_page) || 1);
+  const limit = Math.min(50, Math.max(1, Number(n_limit) || 20));
 
   const options = {
     page: page,
     limit: limit,
-    sort: {pin_status: -1, _id: -1,  n_story_order: -1, createdAt: -1 },
+    sort: { createdAt: -1 },
     select: {
       _id: 1,
       story_id: 1,
