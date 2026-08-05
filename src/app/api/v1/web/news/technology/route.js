@@ -88,29 +88,24 @@ export async function POST(request) {
   
   try {
     await connectMongoDB();
-    // const data = {
-    //   c_control_name:"Control Views Count"
-    // }
+    // const data = { c_control_name: "Control Views Count" }
     // const controlResult = await Control.find(data);
-    await Story.paginate(
-      { n_status: 1, n_published: 1, c_save_type: "published", main_category_id : main_category_id },
-      options,
-      function (err, result) {
-        if (err) {
-          sendResponse["appStatusCode"] = 4;
-          sendResponse["message"] = "";
-          sendResponse["payloadJson"] = err;
-          sendResponse["error"] = "";
-        } else {
-          const encryptRes = encryptCryptoResponse(result);
-          // const decryptRes = decrypCryptoRequest(encryptRes);
-          sendResponse["appStatusCode"] = 0;
-          sendResponse["message"] = "";
-          sendResponse["payloadJson"] = encryptRes;
-          sendResponse["error"] = "";
-        }
-      }
+    const sendResponse = {
+      appStatusCode: "",
+      message: "",
+      payloadJson: [],
+      error: "",
+    };
+    const result = await Story.paginate(
+      { n_status: 1, n_published: 1, c_save_type: "published", main_category_id: main_category_id },
+      { ...options, lean: true }
     );
+
+    const encryptRes = encryptCryptoResponse(result);
+    sendResponse["appStatusCode"] = 0;
+    sendResponse["message"] = "";
+    sendResponse["payloadJson"] = encryptRes;
+    sendResponse["error"] = "";
     return NextResponse.json(sendResponse, { status: 200 });
   } catch (err) {
     sendResponse["appStatusCode"] = 4;

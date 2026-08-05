@@ -62,10 +62,17 @@ export async function POST(request) {
   var page = Number(n_page);
   var limit = Number(n_limit);
 
+  const sendResponse = {
+    appStatusCode: "",
+    message: "",
+    payloadJson: [],
+    error: "",
+  };
+
   const options = {
     page: page,
     limit: limit,
-    sort: {pin_status: -1, _id: -1,  n_story_order: -1, createdAt: -1 },
+    sort: { pin_status: -1, _id: -1, n_story_order: -1, createdAt: -1 },
     select: {
       _id: 1,
       story_id: 1,
@@ -82,52 +89,46 @@ export async function POST(request) {
       news_image_caption: 1,
       createdAt: 1,
       updatedAt: 1,
-      view_count: 1
+      view_count: 1,
     },
   };
-  
+
   try {
-    await connectMongoDB();
-    // const data = {
-    //   c_control_name:"Control Views Count"
-    // }
-    // const controlResult = await Control.find(data);
-    await Story.paginate(
-      { n_status: 1, n_published: 1, c_save_type: "published", main_category_id : main_category_id },
-      options,
-      function (err, result) {
-        if (err) {
-          sendResponse["appStatusCode"] = 4;
-          sendResponse["message"] = "";
-          sendResponse["payloadJson"] = err;
-          sendResponse["error"] = "";
-        } else {
-          const encryptRes = encryptCryptoResponse(result);
-          // const decryptRes = decrypCryptoRequest(encryptRes);
-          sendResponse["appStatusCode"] = 0;
-          sendResponse["message"] = "";
-          sendResponse["payloadJson"] = encryptRes;
-          sendResponse["error"] = "";
-        }
-      }
+    const result = await Story.paginate(
+      { n_status: 1, n_published: 1, c_save_type: "published", main_category_id: main_category_id },
+      { ...options, lean: true }
     );
+
+    const encryptRes = encryptCryptoResponse(result);
+    sendResponse["appStatusCode"] = 0;
+    sendResponse["message"] = "";
+    sendResponse["payloadJson"] = encryptRes;
+    sendResponse["error"] = "";
     return NextResponse.json(sendResponse, { status: 200 });
   } catch (err) {
-    sendResponse["appStatusCode"] = 4;
-    sendResponse["message"] = [];
-
-    sendResponse["payloadJson"] = [];
-    sendResponse["error"] = "Something went wrong!";
-    return NextResponse.json(sendResponse, { status: 400 });
+    const errorResponse = {
+      appStatusCode: 4,
+      message: "",
+      payloadJson: [],
+      error: "Something went wrong!",
+    };
+    return NextResponse.json(errorResponse, { status: 400 });
   }
 }
-export async function GET(request) {
-  const id = request.nextUrl.searchParams.get("id");
-  const url = request.nextUrl.searchParams.get("url");
-  const main_category_id = request.nextUrl.searchParams.get("category");
-  if (id) {
-    const checkId = await Story.findOne({ story_id: id });
-    if (checkId) {
+export async function POST(request) {
+  const { n_page, n_limit, main_category_id } = await request.json();
+  await connectMongoDB();
+  var page = Number(n_page);
+  var limit = Number(n_limit);
+
+  const sendResponse = {
+    appStatusCode: "",
+    message: "",
+    payloadJson: [],
+    error: "",
+  };
+
+  const options = {
       let _search = {};
       _search["$and"] = [
         {
@@ -148,40 +149,28 @@ export async function GET(request) {
           { $limit: 10 },
           {
             $group: {
-              _id: "$_id",
-              story_title_name: { $first: "$story_title_name" },
-              story_sub_title_name: { $first: "$story_sub_title_name" },
-              story_desk_created_name: { $first: "$story_desk_created_name" },
-              seo_tag: { $first: "$seo_tag" },
-              seo_keywords: { $first: "$seo_keywords" },
-              story_id: { $first: "$story_id" },
-              main_category_id: { $first: "$main_category_id" },
-              story_details: { $first: "$story_details" },
-              story_subject_name: { $first: "$story_subject_name" },
-              story_asked_title: { $first: "$story_asked_title" },
-              news_image_caption: { $first: "$news_image_caption" },
-              story_summary_snippet: { $first: "$story_summary_snippet" },
-              story_asked_quotes_content: {
-                $first: "$story_asked_quotes_content",
-              },
-              story_asked_quotes_author: {
-                $first: "$story_asked_quotes_author",
-              },
-              story_asked_question: { $first: "$story_asked_question" },
-              blurb_title: { $first: "$blurb_title" },
-              blurb_content: { $first: "$blurb_content" },
-              twitter_embed_id: { $first: "$twitter_embed_id" },
-              youtube_embed_id: { $first: "$youtube_embed_id" },
-              facebook_embed_id: { $first: "$facebook_embed_id" },
-              instagram_embed_id: { $first: "$instagram_embed_id" },
-              threads_embed_id: { $first: "$threads_embed_id" },
-              author_desk: { $first: "$author_desk" },
-              story_cover_image_url: { $first: "$story_cover_image_url" },
-              createdAt: { $first: "$createdAt" },
-              updatedAt: { $first: "$updatedAt" },
-              n_story_order: { $first: "$n_story_order" },
-              post_status: { $first: "$post_status" },
-              pin_status: { $first: "$pin_status" },
+              try {
+                const result = await Story.paginate(
+                  { n_status: 1, n_published: 1, c_save_type: "published", main_category_id: main_category_id },
+                  { ...options, lean: true }
+                );
+
+                const encryptRes = encryptCryptoResponse(result);
+                sendResponse["appStatusCode"] = 0;
+                sendResponse["message"] = "";
+                sendResponse["payloadJson"] = encryptRes;
+                sendResponse["error"] = "";
+
+                return NextResponse.json(sendResponse, { status: 200 });
+              } catch (err) {
+                const errorResponse = {
+                  appStatusCode: 4,
+                  message: "",
+                  payloadJson: [],
+                  error: "Something went wrong!",
+                };
+                return NextResponse.json(errorResponse, { status: 400 });
+              }
               view_count: { $first: "$view_count" },
             },
           },

@@ -167,24 +167,21 @@ export async function POST(request) {
     try {
       await connectMongoDB();
 
-      await Story.paginate(
-        { n_status: 1, n_published: 1, c_save_type: "published" },
-        options,
-        function (err, result) {
-          if (err) {
-            sendResponse["appStatusCode"] = 4;
-            sendResponse["message"] = "";
-            sendResponse["payloadJson"] = err;
-            sendResponse["error"] = "";
-          } else {
-            sendResponse["appStatusCode"] = 0;
-            sendResponse["message"] = "";
-            sendResponse["payloadJson"] = result;
-            sendResponse["error"] = "";
-          }
-        }
-      );
-      return NextResponse.json(sendResponse, { status: 200 });
+        const sendResponse = {
+          appStatusCode: "",
+          message: "",
+          n_page: 0,
+          n_limit: 0,
+          payloadJson: [],
+          error: "",
+        };
+
+        const result = await Story.paginate({ n_status: 1, n_published: 1, c_save_type: "published" }, { ...options, lean: true });
+        sendResponse["appStatusCode"] = 0;
+        sendResponse["message"] = "";
+        sendResponse["payloadJson"] = result;
+        sendResponse["error"] = "";
+        return NextResponse.json(sendResponse, { status: 200 });
     } catch (err) {
       sendResponse["appStatusCode"] = 4;
       sendResponse["message"] = [];
