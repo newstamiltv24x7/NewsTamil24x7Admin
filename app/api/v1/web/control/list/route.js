@@ -150,51 +150,48 @@ export async function GET(request) {
         try {
           
 
-          await Control.aggregate([
-            { $match: _search },
-            {
-              $group: {
-                _id: "$_id",
-                c_control_type: { $first: "$c_control_type" },
-                c_control_name: { $first: "$c_control_name" },                
-                c_control: { $first: "$c_control" },                
-                createdAt: { $first: "$createdAt" },
-                c_createdBy: { $first: "$c_createdBy" },
-                n_status: { $first: "$n_status" },
-                n_published: { $first: "$n_published" },
-              },
-            },
-            {
-              $lookup: {
-                from: "users",
-                localField: "c_createdBy",
-                foreignField: "user_id",
-                as: "users",
-              },
-            },
-            {
-              $unwind: "$users",
-            },
-            {
-              $project: {
-                _id: 1,
-                c_control_type: 1,
-                c_control_name: 1,
-                c_control: 1,
-                createdAt: 1,
-                c_createdBy: 1,
-                c_createdName: "$users.user_name",
-                n_status: 1,
-                n_published: 1,
-              },
-            },
-            {
-              $sort: { createdAt: 1 },
-            },
-          ])
-            .then((data) => {
-                const encryptRes = encryptCryptoResponse(data[0]);
-            const decryptRes = decrypCryptoRequest(encryptRes);
+          
+            try {
+              const data = await Control.aggregate([
+                { $match: _search },
+                {
+                  $group: {
+                    _id: "$_id",
+                    c_control_type: { $first: "$c_control_type" },
+                    c_control_name: { $first: "$c_control_name" },                
+                    c_control: { $first: "$c_control" },                
+                    createdAt: { $first: "$createdAt" },
+                    c_createdBy: { $first: "$c_createdBy" },
+                    n_status: { $first: "$n_status" },
+                    n_published: { $first: "$n_published" },
+                  },
+                },
+                {
+                  $lookup: {
+                    from: "users",
+                    localField: "c_createdBy",
+                    foreignField: "user_id",
+                    as: "users",
+                  },
+                },
+                { $unwind: "$users" },
+                {
+                  $project: {
+                    _id: 1,
+                    c_control_type: 1,
+                    c_control_name: 1,
+                    c_control: 1,
+                    createdAt: 1,
+                    c_createdBy: 1,
+                    c_createdName: "$users.user_name",
+                    n_status: 1,
+                    n_published: 1,
+                  },
+                },
+                { $sort: { createdAt: 1 } },
+              ]);
+              const encryptRes = encryptCryptoResponse(data[0]);
+              const decryptRes = decrypCryptoRequest(encryptRes);
               if (data.length > 0) {
                 sendResponse["appStatusCode"] = 0;
                 sendResponse["message"] = "";
@@ -206,13 +203,12 @@ export async function GET(request) {
                 sendResponse["payloadJson"] = [];
                 sendResponse["error"] = [];
               }
-            })
-            .catch((err) => {
+            } catch (err) {
               sendResponse["appStatusCode"] = 4;
               sendResponse["message"] = "";
               sendResponse["payloadJson"] = [];
               sendResponse["error"] = err;
-            });
+            }
 
           return NextResponse.json(sendResponse, { status: 200 });
         } catch (err) {
@@ -239,69 +235,64 @@ export async function GET(request) {
 
       try {
         await connectMongoDB();
-        await Control.aggregate([
-          { $match: _search },
-          {
-            $group: {
-              _id: "$_id",
-              c_control_type: { $first: "$c_control_type" },
-              c_control_name: { $first: "$c_control_name" },              
-              c_control: { $first: "$c_control" },              
-              createdAt: { $first: "$createdAt" },
-              c_createdBy: { $first: "$c_createdBy" },
-              n_status: { $first: "$n_status" },
-              n_published: { $first: "$n_published" },
+        try {
+          const data = await Control.aggregate([
+            { $match: _search },
+            {
+              $group: {
+                _id: "$_id",
+                c_control_type: { $first: "$c_control_type" },
+                c_control_name: { $first: "$c_control_name" },              
+                c_control: { $first: "$c_control" },              
+                createdAt: { $first: "$createdAt" },
+                c_createdBy: { $first: "$c_createdBy" },
+                n_status: { $first: "$n_status" },
+                n_published: { $first: "$n_published" },
+              },
             },
-          },
-          {
-            $lookup: {
-              from: "users",
-              localField: "c_createdBy",
-              foreignField: "user_id",
-              as: "users",
+            {
+              $lookup: {
+                from: "users",
+                localField: "c_createdBy",
+                foreignField: "user_id",
+                as: "users",
+              },
             },
-          },
-          {
-            $unwind: "$users",
-          },
-          {
-            $project: {
-              _id: 1,
-              c_control_type: 1,
-              c_control_name: 1,
-              c_control: 1,
-              createdAt: 1,
-              c_createdBy: 1,
-              c_createdName: "$users.user_name",
-              n_status: 1,
-              n_published: 1,
+            { $unwind: "$users" },
+            {
+              $project: {
+                _id: 1,
+                c_control_type: 1,
+                c_control_name: 1,
+                c_control: 1,
+                createdAt: 1,
+                c_createdBy: 1,
+                c_createdName: "$users.user_name",
+                n_status: 1,
+                n_published: 1,
+              },
             },
-          },
-          {
-            $sort: { createdAt: 1 },
-          },
-        ])
-          .then((data) => {
-            const encryptRes = encryptCryptoResponse(data);
-            const decryptRes = decrypCryptoRequest(encryptRes);
-            if (data.length > 0) {
-              sendResponse["appStatusCode"] = 0;
-              sendResponse["message"] = "";
-              sendResponse["payloadJson"] = encryptRes;
-              sendResponse["error"] = [];
-            } else {
-              sendResponse["appStatusCode"] = 0;
-              sendResponse["message"] = "Record not found!";
-              sendResponse["payloadJson"] = [];
-              sendResponse["error"] = [];
-            }
-          })
-          .catch((err) => {
-            sendResponse["appStatusCode"] = 4;
+            { $sort: { createdAt: 1 } },
+          ]);
+          const encryptRes = encryptCryptoResponse(data);
+          const decryptRes = decrypCryptoRequest(encryptRes);
+          if (data.length > 0) {
+            sendResponse["appStatusCode"] = 0;
             sendResponse["message"] = "";
+            sendResponse["payloadJson"] = encryptRes;
+            sendResponse["error"] = [];
+          } else {
+            sendResponse["appStatusCode"] = 0;
+            sendResponse["message"] = "Record not found!";
             sendResponse["payloadJson"] = [];
-            sendResponse["error"] = err;
-          });
+            sendResponse["error"] = [];
+          }
+        } catch (err) {
+          sendResponse["appStatusCode"] = 4;
+          sendResponse["message"] = "";
+          sendResponse["payloadJson"] = [];
+          sendResponse["error"] = err;
+        }
 
         return NextResponse.json(sendResponse, { status: 200 });
       } catch (err) {

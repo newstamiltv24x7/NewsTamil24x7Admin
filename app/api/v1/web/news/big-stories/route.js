@@ -125,7 +125,8 @@ export async function GET(request) {
       try {
         await connectMongoDB();
 
-        await Story.aggregate([
+        try {
+          const data = await Story.aggregate([
           { $match: _search },
           { $limit: 10 },
           {
@@ -217,31 +218,30 @@ export async function GET(request) {
           {
             $sort: { pin_status: -1, n_story_order: -1, createdAt: -1 },
           },
-        ])
-          .then((data) => {
-            const data1 = seprateData(data);
-            const encryptRes = encryptCryptoResponse(data1);
-            // const decryptRes = decrypCryptoRequest(encryptRes);
-            if (data.length > 0) {
-              sendResponse["appStatusCode"] = 0;
-              sendResponse["message"] = "";
+          ]);
 
-              sendResponse["payloadJson"] = encryptRes;
-              sendResponse["error"] = [];
-            } else {
-              sendResponse["appStatusCode"] = 0;
-              sendResponse["message"] = "Record not found!";
-              sendResponse["payloadJson"] = [];
-              sendResponse["error"] = [];
-            }
-          })
-          .catch((err) => {
-            sendResponse["appStatusCode"] = 4;
+          const data1 = seprateData(data);
+          const encryptRes = encryptCryptoResponse(data1);
+          // const decryptRes = decrypCryptoRequest(encryptRes);
+          if (data.length > 0) {
+            sendResponse["appStatusCode"] = 0;
             sendResponse["message"] = "";
 
+            sendResponse["payloadJson"] = encryptRes;
+            sendResponse["error"] = [];
+          } else {
+            sendResponse["appStatusCode"] = 0;
+            sendResponse["message"] = "Record not found!";
             sendResponse["payloadJson"] = [];
-            sendResponse["error"] = err;
-          });
+            sendResponse["error"] = [];
+          }
+        } catch (err) {
+          sendResponse["appStatusCode"] = 4;
+          sendResponse["message"] = "";
+
+          sendResponse["payloadJson"] = [];
+          sendResponse["error"] = err;
+        }
 
         return NextResponse.json(sendResponse, { status: 200 });
       } catch (err) {
@@ -279,7 +279,8 @@ export async function GET(request) {
       try {
         await connectMongoDB();
 
-        await Story.aggregate([
+        try {
+          const data = await Story.aggregate([
           { $match: _search },
           { $limit: 10 },
           {
@@ -371,31 +372,30 @@ export async function GET(request) {
           {
             $sort: { pin_status: -1, n_story_order: -1, createdAt: -1 },
           },
-        ])
-          .then((data) => {
-            const data1 = seprateData(data);
-            const encryptRes = encryptCryptoResponse(data1);
-            // const decryptRes = decrypCryptoRequest(encryptRes);
-            if (data.length > 0) {
-              sendResponse["appStatusCode"] = 0;
-              sendResponse["message"] = "";
+          ]);
 
-              sendResponse["payloadJson"] = encryptRes;
-              sendResponse["error"] = [];
-            } else {
-              sendResponse["appStatusCode"] = 0;
-              sendResponse["message"] = "Record not found!";
-              sendResponse["payloadJson"] = [];
-              sendResponse["error"] = [];
-            }
-          })
-          .catch((err) => {
-            sendResponse["appStatusCode"] = 4;
+          const data1 = seprateData(data);
+          const encryptRes = encryptCryptoResponse(data1);
+          // const decryptRes = decrypCryptoRequest(encryptRes);
+          if (data.length > 0) {
+            sendResponse["appStatusCode"] = 0;
             sendResponse["message"] = "";
 
+            sendResponse["payloadJson"] = encryptRes;
+            sendResponse["error"] = [];
+          } else {
+            sendResponse["appStatusCode"] = 0;
+            sendResponse["message"] = "Record not found!";
             sendResponse["payloadJson"] = [];
-            sendResponse["error"] = err;
-          });
+            sendResponse["error"] = [];
+          }
+        } catch (err) {
+          sendResponse["appStatusCode"] = 4;
+          sendResponse["message"] = "";
+
+          sendResponse["payloadJson"] = [];
+          sendResponse["error"] = err;
+        }
 
         return NextResponse.json(sendResponse, { status: 200 });
       } catch (err) {
@@ -432,7 +432,8 @@ export async function GET(request) {
       try {
         await connectMongoDB();
 
-        await Story.aggregate([
+        try {
+          const data = await Story.aggregate([
           { $match: _search },
           { $limit: 10 },
           {
@@ -524,31 +525,30 @@ export async function GET(request) {
           {
             $sort: { pin_status: -1, n_story_order: -1, createdAt: -1 },
           },
-        ])
-          .then((data) => {
-            const data1 = seprateData(data);
-            const encryptRes = encryptCryptoResponse(data1);
-            // const decryptRes = decrypCryptoRequest(encryptRes);
-            if (data.length > 0) {
-              sendResponse["appStatusCode"] = 0;
-              sendResponse["message"] = "";
+          ]);
 
-              sendResponse["payloadJson"] = encryptRes;
-              sendResponse["error"] = [];
-            } else {
-              sendResponse["appStatusCode"] = 0;
-              sendResponse["message"] = "Record not found!";
-              sendResponse["payloadJson"] = [];
-              sendResponse["error"] = [];
-            }
-          })
-          .catch((err) => {
-            sendResponse["appStatusCode"] = 4;
+          const data1 = seprateData(data);
+          const encryptRes = encryptCryptoResponse(data1);
+          // const decryptRes = decrypCryptoRequest(encryptRes);
+          if (data.length > 0) {
+            sendResponse["appStatusCode"] = 0;
             sendResponse["message"] = "";
 
+            sendResponse["payloadJson"] = encryptRes;
+            sendResponse["error"] = [];
+          } else {
+            sendResponse["appStatusCode"] = 0;
+            sendResponse["message"] = "Record not found!";
             sendResponse["payloadJson"] = [];
-            sendResponse["error"] = err;
-          });
+            sendResponse["error"] = [];
+          }
+        } catch (err) {
+          sendResponse["appStatusCode"] = 4;
+          sendResponse["message"] = "";
+
+          sendResponse["payloadJson"] = [];
+          sendResponse["error"] = err;
+        }
 
         return NextResponse.json(sendResponse, { status: 200 });
       } catch (err) {
@@ -580,7 +580,8 @@ export async function GET(request) {
     ];
     try {
       await connectMongoDB();
-      await Story.aggregate([
+      try {
+        const data = await Story.aggregate([
         { $match: _search },
         { $sort: { timestamp: -1 } },
         {
@@ -667,31 +668,30 @@ export async function GET(request) {
           $sort: { pin_status: -1, n_story_order: -1, createdAt: -1, _id: -1 },
         },
         { $limit: 5 },
-      ])
-        .then((data) => {
-          const data1 = seprateData(data);
-          const encryptRes = encryptCryptoResponse(data1);
-          // const decryptRes = decrypCryptoRequest(encryptRes);
-          if (data.length > 0) {
-            sendResponse["appStatusCode"] = 0;
-            sendResponse["message"] = "";
+        ]);
 
-            sendResponse["payloadJson"] = encryptRes;
-            sendResponse["error"] = [];
-          } else {
-            sendResponse["appStatusCode"] = 0;
-            sendResponse["message"] = "Record not found!";
-            sendResponse["payloadJson"] = [];
-            sendResponse["error"] = [];
-          }
-        })
-        .catch((err) => {
-          sendResponse["appStatusCode"] = 4;
+        const data1 = seprateData(data);
+        const encryptRes = encryptCryptoResponse(data1);
+        // const decryptRes = decrypCryptoRequest(encryptRes);
+        if (data.length > 0) {
+          sendResponse["appStatusCode"] = 0;
           sendResponse["message"] = "";
 
+          sendResponse["payloadJson"] = encryptRes;
+          sendResponse["error"] = [];
+        } else {
+          sendResponse["appStatusCode"] = 0;
+          sendResponse["message"] = "Record not found!";
           sendResponse["payloadJson"] = [];
-          sendResponse["error"] = err;
-        });
+          sendResponse["error"] = [];
+        }
+      } catch (err) {
+        sendResponse["appStatusCode"] = 4;
+        sendResponse["message"] = "";
+
+        sendResponse["payloadJson"] = [];
+        sendResponse["error"] = err;
+      }
 
       return NextResponse.json(sendResponse, { status: 200 });
     } catch (err) {

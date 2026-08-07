@@ -16,6 +16,19 @@ let server; // Track server reference for graceful shutdown
 
 app.prepare().then(() => {
   server = http.createServer((req, res) => {
+    // Add request timeouts to prevent hanging requests
+    // 60 seconds is generous for database queries but prevents indefinite hangs
+    req.setTimeout(60000, () => {
+      console.error(`[TIMEOUT] Request timeout for ${req.method} ${req.url}`);
+      res.writeHead(504, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ error: "Request timeout" }));
+    });
+    
+    res.setTimeout(60000, () => {
+      console.error(`[TIMEOUT] Response timeout for ${req.method} ${req.url}`);
+      res.destroy();
+    });
+    
     const parsedUrl = parse(req.url, true);
     handle(req, res, parsedUrl);
   });

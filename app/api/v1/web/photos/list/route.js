@@ -171,7 +171,8 @@ export async function GET(request) {
       try {
         await connectMongoDB();
 
-        await Photos.aggregate([
+        try {
+          const data = await Photos.aggregate([
           { $match: _search },
           {
             $set: {
@@ -236,27 +237,26 @@ export async function GET(request) {
           {
             $sort: { updatedAt: -1 },
           },
-        ]).then((data) => {
-            const encryptRes = encryptCryptoResponse(data);
-            // const decryptRes = decrypCryptoRequest(encryptRes);
-            if (data.length > 0) {
-              sendResponse["appStatusCode"] = 0;
-              sendResponse["message"] = "";
-              sendResponse["payloadJson"] = encryptRes;
-              sendResponse["error"] = [];
-            } else {
-              sendResponse["appStatusCode"] = 0;
-              sendResponse["message"] = "Record not found!";
-              sendResponse["payloadJson"] = [];
-              sendResponse["error"] = [];
-            }
-          })
-          .catch((err) => {
-            sendResponse["appStatusCode"] = 4;
+          ]);
+          const encryptRes = encryptCryptoResponse(data);
+          // const decryptRes = decrypCryptoRequest(encryptRes);
+          if (data.length > 0) {
+            sendResponse["appStatusCode"] = 0;
             sendResponse["message"] = "";
+            sendResponse["payloadJson"] = encryptRes;
+            sendResponse["error"] = [];
+          } else {
+            sendResponse["appStatusCode"] = 0;
+            sendResponse["message"] = "Record not found!";
             sendResponse["payloadJson"] = [];
-            sendResponse["error"] = err;
-          });
+            sendResponse["error"] = [];
+          }
+        } catch (err) {
+          sendResponse["appStatusCode"] = 4;
+          sendResponse["message"] = "";
+          sendResponse["payloadJson"] = [];
+          sendResponse["error"] = err;
+        }
 
         return NextResponse.json(sendResponse, { status: 200 });
       } catch (err) {
@@ -287,7 +287,8 @@ export async function GET(request) {
       try {
         await connectMongoDB();
 
-        await Photos.aggregate([
+        try {
+          const data = await Photos.aggregate([
           { $match: _search },
           {
             $set: {
@@ -352,27 +353,26 @@ export async function GET(request) {
           {
             $sort: { updatedAt: -1 },
           },
-        ]).then((data) => {
-            const encryptRes = encryptCryptoResponse(data);
-            // const decryptRes = decrypCryptoRequest(encryptRes);
-            if (data.length > 0) {
-              sendResponse["appStatusCode"] = 0;
-              sendResponse["message"] = "";
-              sendResponse["payloadJson"] = encryptRes;
-              sendResponse["error"] = [];
-            } else {
-              sendResponse["appStatusCode"] = 0;
-              sendResponse["message"] = "Record not found!";
-              sendResponse["payloadJson"] = [];
-              sendResponse["error"] = [];
-            }
-          })
-          .catch((err) => {
-            sendResponse["appStatusCode"] = 4;
+          ]);
+          const encryptRes = encryptCryptoResponse(data);
+          // const decryptRes = decrypCryptoRequest(encryptRes);
+          if (data.length > 0) {
+            sendResponse["appStatusCode"] = 0;
             sendResponse["message"] = "";
+            sendResponse["payloadJson"] = encryptRes;
+            sendResponse["error"] = [];
+          } else {
+            sendResponse["appStatusCode"] = 0;
+            sendResponse["message"] = "Record not found!";
             sendResponse["payloadJson"] = [];
-            sendResponse["error"] = err;
-          });
+            sendResponse["error"] = [];
+          }
+        } catch (err) {
+          sendResponse["appStatusCode"] = 4;
+          sendResponse["message"] = "";
+          sendResponse["payloadJson"] = [];
+          sendResponse["error"] = err;
+        }
 
         return NextResponse.json(sendResponse, { status: 200 });
       } catch (err) {
@@ -394,7 +394,8 @@ export async function GET(request) {
 
       try {
         await connectMongoDB();
-        await Photos.aggregate([
+        try {
+          const data = await Photos.aggregate([
           { $match: _search },
           {
             $set: {
@@ -459,27 +460,26 @@ export async function GET(request) {
           {
             $sort: { updatedAt: -1 },
           },
-        ]).then((data) => {
-            const encryptRes = encryptCryptoResponse(data);
-            // const decryptRes = decrypCryptoRequest(encryptRes);
-            if (data.length > 0) {
-              sendResponse["appStatusCode"] = 0;
-              sendResponse["message"] = "";
-              sendResponse["payloadJson"] = encryptRes;
-              sendResponse["error"] = [];
-            } else {
-              sendResponse["appStatusCode"] = 0;
-              sendResponse["message"] = "Record not found!";
-              sendResponse["payloadJson"] = [];
-              sendResponse["error"] = [];
-            }
-          })
-          .catch((err) => {
-            sendResponse["appStatusCode"] = 4;
+          ]);
+          const encryptRes = encryptCryptoResponse(data);
+          // const decryptRes = decrypCryptoRequest(encryptRes);
+          if (data.length > 0) {
+            sendResponse["appStatusCode"] = 0;
             sendResponse["message"] = "";
+            sendResponse["payloadJson"] = encryptRes;
+            sendResponse["error"] = [];
+          } else {
+            sendResponse["appStatusCode"] = 0;
+            sendResponse["message"] = "Record not found!";
             sendResponse["payloadJson"] = [];
-            sendResponse["error"] = err;
-          });
+            sendResponse["error"] = [];
+          }
+        } catch (err) {
+          sendResponse["appStatusCode"] = 4;
+          sendResponse["message"] = "";
+          sendResponse["payloadJson"] = [];
+          sendResponse["error"] = err;
+        }
         return NextResponse.json(sendResponse, { status: 200 });
       } catch (err) {
         sendResponse["appStatusCode"] = 4;

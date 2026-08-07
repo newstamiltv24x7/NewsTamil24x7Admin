@@ -103,7 +103,8 @@ export async function GET() {
           ],
         },
       ];
-      await Story.aggregate([
+      try {
+        const data = await Story.aggregate([
         { $match: _search },
         { $sort: { createdAt: -1 } },
         { $limit: 10},
@@ -142,31 +143,29 @@ export async function GET() {
         {
           $sort: { createdAt: -1 },
         },
-      ])
-        .then((data) => {
-          const categoryData = createList(data, controlData[0]?.c_control_type);
-          const encryptRes = encryptCryptoResponse(categoryData);
-          const decryptRes = decrypCryptoRequest(encryptRes);
-          if (data.length > 0) {
-            sendResponse["appStatusCode"] = 0;
-            sendResponse["message"] = "";
-            sendResponse["type"] = controlData[0]?.c_control_type;
-            sendResponse["payloadJson"] = decryptRes;
-            sendResponse["error"] = [];
-          } else {
-            sendResponse["appStatusCode"] = 0;
-            sendResponse["message"] = "Record not found!";
-            sendResponse["payloadJson"] = [];
-            sendResponse["error"] = [];
-          }
-        })
-        .catch((err) => {
-          sendResponse["appStatusCode"] = 4;
+        ]);
+        const categoryData = createList(data, controlData[0]?.c_control_type);
+        const encryptRes = encryptCryptoResponse(categoryData);
+        const decryptRes = decrypCryptoRequest(encryptRes);
+        if (data.length > 0) {
+          sendResponse["appStatusCode"] = 0;
           sendResponse["message"] = "";
-          sendResponse["type"] = "";
+          sendResponse["type"] = controlData[0]?.c_control_type;
+          sendResponse["payloadJson"] = decryptRes;
+          sendResponse["error"] = [];
+        } else {
+          sendResponse["appStatusCode"] = 0;
+          sendResponse["message"] = "Record not found!";
           sendResponse["payloadJson"] = [];
-          sendResponse["error"] = err;
-        });
+          sendResponse["error"] = [];
+        }
+      } catch (err) {
+        sendResponse["appStatusCode"] = 4;
+        sendResponse["message"] = "";
+        sendResponse["type"] = "";
+        sendResponse["payloadJson"] = [];
+        sendResponse["error"] = err;
+      }
 
       return NextResponse.json(sendResponse, { status: 200 });
     } catch (err) {
@@ -185,7 +184,8 @@ export async function GET() {
         },
       ];
       await connectMongoDB();
-      await LiveBlog.aggregate([
+      try {
+        const data = await LiveBlog.aggregate([
         { $match: _search },
         { $limit: 30},
         {
@@ -219,31 +219,29 @@ export async function GET() {
         {
           $sort: { createdAt: -1 },
         },
-      ])
-        .then((data) => {
-          const categoryData = createList(data, controlData[0]?.c_control_type);
-          const encryptRes = encryptCryptoResponse(categoryData);
-          const decryptRes = decrypCryptoRequest(encryptRes);
-          if (data.length > 0) {
-            sendResponse["appStatusCode"] = 0;
-            sendResponse["message"] = "";
-            sendResponse["type"] = controlData[0]?.c_control_type;
-            sendResponse["payloadJson"] = decryptRes;
-            sendResponse["error"] = [];
-          } else {
-            sendResponse["appStatusCode"] = 0;
-            sendResponse["message"] = "Record not found!";
-            sendResponse["type"] = controlData[0]?.c_control_type;
-            sendResponse["payloadJson"] = [];
-            sendResponse["error"] = [];
-          }
-        })
-        .catch((err) => {
-          sendResponse["appStatusCode"] = 4;
+        ]);
+        const categoryData = createList(data, controlData[0]?.c_control_type);
+        const encryptRes = encryptCryptoResponse(categoryData);
+        const decryptRes = decrypCryptoRequest(encryptRes);
+        if (data.length > 0) {
+          sendResponse["appStatusCode"] = 0;
           sendResponse["message"] = "";
+          sendResponse["type"] = controlData[0]?.c_control_type;
+          sendResponse["payloadJson"] = decryptRes;
+          sendResponse["error"] = [];
+        } else {
+          sendResponse["appStatusCode"] = 0;
+          sendResponse["message"] = "Record not found!";
+          sendResponse["type"] = controlData[0]?.c_control_type;
           sendResponse["payloadJson"] = [];
-          sendResponse["error"] = err;
-        });
+          sendResponse["error"] = [];
+        }
+      } catch (err) {
+        sendResponse["appStatusCode"] = 4;
+        sendResponse["message"] = "";
+        sendResponse["payloadJson"] = [];
+        sendResponse["error"] = err;
+      }
 
       return NextResponse.json(sendResponse, { status: 200 });
     } catch (err) {
