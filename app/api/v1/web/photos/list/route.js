@@ -48,68 +48,53 @@ export async function POST(request) {
       const data = await Photos.aggregate([
         { $match: _search },
         {
-          $set: {
-            c_photos_continue_item: {
-              $sortArray: {
-                input: "$c_photos_continue_item",
-                sortBy: { c_photos_continue_create_date: -1 },
-              },
-            },
-          },
-        },
-        {
-          $group: {
-            _id: "$_id",
-            c_photos_title: { $first: "$c_photos_title" },
-            c_photos_sub_title: { $first: "$c_photos_sub_title" },
-            c_photos_img: { $first: "$c_photos_img" },
-            c_photos_content: { $first: "$c_photos_content" },
-            c_photos_id: { $first: "$c_photos_id" },
-            c_photos_continue_item: { $first: "$c_photos_continue_item" },
-            createdAt: { $first: "$createdAt" },
-            updatedAt: { $first: "$updatedAt" },
-            c_createdBy: { $first: "$c_createdBy" },
-            n_status: { $first: "$n_status" },
-            n_published: { $first: "$n_published" },
-          },
-        },
-
-        {
-          $lookup: {
-            from: "users",
-            localField: "c_createdBy",
-            foreignField: "user_id",
-            as: "users",
-          },
-        },
-        {
-          $unwind: "$users",
-        },
-        {
-          $project: {
-            _id: 1,
-            c_photos_title: 1,
-            c_category_id: 1,
-            c_photos_sub_title: 1,
-            c_photos_img: 1,
-            c_photos_content: 1,
-            c_photos_id: 1,
-            // c_photos_continue_item: 1, // Excluded from list to save payload size
-            createdAt: 1,
-            updatedAt: 1,
-            c_createdBy: 1,
-            c_createdName: "$users.user_name",
-            c_userImg: "$users.c_user_img_url",
-            n_status: 1,
-            n_published: 1,
-          },
-        },
-        {
           $sort: { updatedAt: -1 },
         },
         {
           $facet: {
-            data: [{ $skip: n_pageTerm }, { $limit: n_limitTerm }],
+            data: [
+              { $skip: n_pageTerm },
+              { $limit: n_limitTerm },
+              {
+                $set: {
+                  c_photos_continue_item: {
+                    $sortArray: {
+                      input: "$c_photos_continue_item",
+                      sortBy: { c_photos_continue_create_date: -1 },
+                    },
+                  },
+                },
+              },
+              {
+                $lookup: {
+                  from: "users",
+                  localField: "c_createdBy",
+                  foreignField: "user_id",
+                  as: "users",
+                },
+              },
+              {
+                $unwind: "$users",
+              },
+              {
+                $project: {
+                  _id: 1,
+                  c_photos_title: 1,
+                  c_category_id: 1,
+                  c_photos_sub_title: 1,
+                  c_photos_img: 1,
+                  c_photos_content: 1,
+                  c_photos_id: 1,
+                  createdAt: 1,
+                  updatedAt: 1,
+                  c_createdBy: 1,
+                  c_createdName: "$users.user_name",
+                  c_userImg: "$users.c_user_img_url",
+                  n_status: 1,
+                  n_published: 1,
+                },
+              },
+            ],
             total_count: [
               {
                 $count: "count",

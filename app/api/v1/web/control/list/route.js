@@ -43,47 +43,38 @@ export async function POST(request) {
         const data = await Control.aggregate([
           { $match: _search },
           {
-            $group: {
-              _id: "$_id",
-              c_control_type: { $first: "$c_control_type" },
-              c_control_name: { $first: "$c_control_name" },
-              c_control: { $first: "$c_control" },
-              createdAt: { $first: "$createdAt" },
-              c_createdBy: { $first: "$c_createdBy" },
-              n_status: { $first: "$n_status" },
-              n_published: { $first: "$n_published" },
-            },
-          },
-          {
-            $lookup: {
-              from: "users",
-              localField: "c_createdBy",
-              foreignField: "user_id",
-              as: "users",
-            },
-          },
-          {
-            $unwind: "$users",
-          },
-          {
-            $project: {
-              _id: 1,
-              c_control_type: 1,
-              c_control_name: 1,
-              c_control: 1,
-              createdAt: 1,
-              c_createdBy: 1,
-              c_createdName: "$users.user_name",
-              n_status: 1,
-              n_published: 1
-            },
-          },
-          {
             $sort: { createdAt: 1 },
           },
           {
             $facet: {
-              data: [{ $skip: n_pageTerm }, { $limit: n_limitTerm }],
+              data: [
+                { $skip: n_pageTerm },
+                { $limit: n_limitTerm },
+                {
+                  $lookup: {
+                    from: "users",
+                    localField: "c_createdBy",
+                    foreignField: "user_id",
+                    as: "users",
+                  },
+                },
+                {
+                  $unwind: "$users",
+                },
+                {
+                  $project: {
+                    _id: 1,
+                    c_control_type: 1,
+                    c_control_name: 1,
+                    c_control: 1,
+                    createdAt: 1,
+                    c_createdBy: 1,
+                    c_createdName: "$users.user_name",
+                    n_status: 1,
+                    n_published: 1
+                  },
+                },
+              ],
               total_count: [
                 {
                   $count: "count",

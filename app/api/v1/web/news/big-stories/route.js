@@ -583,39 +583,10 @@ export async function GET(request) {
       try {
         const data = await Story.aggregate([
         { $match: _search },
-        { $sort: { timestamp: -1 } },
         {
-          $group: {
-            _id: "$_id",
-            story_title_name: { $first: "$story_title_name" },
-            story_sub_title_name: { $first: "$story_sub_title_name" },
-            story_cover_image_url: { $first: "$story_cover_image_url" },
-            story_desk_created_name: { $first: "$story_desk_created_name" },
-            main_category_id: { $first: "$main_category_id" },
-            story_subject_name: { $first: "$story_subject_name" },
-            story_asked_title: { $first: "$story_asked_title" },
-            news_image_caption: { $first: "$news_image_caption" },
-            story_asked_quotes_content: {
-              $first: "$story_asked_quotes_content",
-            },
-            story_asked_quotes_author: { $first: "$story_asked_quotes_author" },
-            story_asked_question: { $first: "$story_asked_question" },
-            story_summary_snippet: { $first: "$story_summary_snippet" },
-            blurb_title: { $first: "$blurb_title" },
-            blurb_content: { $first: "$blurb_content" },
-            seo_tag: { $first: "$seo_tag" },
-            seo_keywords: { $first: "$seo_keywords" },
-            story_id: { $first: "$story_id" },
-            createdAt: { $first: "$createdAt" },
-            updatedAt: { $first: "$updatedAt" },
-            n_story_order: { $first: "$n_story_order" },
-            post_status: { $first: "$post_status" },
-            pin_status: { $first: "$pin_status" },
-            youtube_embed_id: { $first: "$youtube_embed_id" },
-            view_count: { $first: "$view_count" },
-            
-          },
+          $sort: { pin_status: -1, n_story_order: -1, createdAt: -1, _id: -1 },
         },
+        { $limit: 5 },
         {
           $lookup: {
             from: "categories",
@@ -664,10 +635,6 @@ export async function GET(request) {
             view_count: 1
           },
         },
-        {
-          $sort: { pin_status: -1, n_story_order: -1, createdAt: -1, _id: -1 },
-        },
-        { $limit: 5 },
         ]);
 
         const data1 = seprateData(data);

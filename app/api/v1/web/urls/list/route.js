@@ -111,67 +111,49 @@ const sendResponse = {
             $match: _search,
           },
           {
-            $group: {
-              _id: "$_id",
-              c_url_title: { $first: "$c_url_title" },
-              c_slug_url: { $first: "$c_slug_url" },
-              c_url_subject: { $first: "$c_url_subject" },
-              c_url_content: { $first: "$c_url_content" },
-              c_url_id: { $first: "$c_url_id" },
-              c_url_link: { $first: "$c_url_link" },
-              c_url_web_link: { $first: "$c_url_web_link" },
-              c_thumbanail_image: { $first: "$c_thumbanail_image" },
-              c_video_type: { $first: "$c_video_type" },
-              c_youtube_type: { $first: "$c_youtube_type" },
-              c_url_order_id: { $first: "$c_url_order_id" },
-              n_status: { $first: "$n_status" },
-              n_published: { $first: "$n_published" },
-              createdAt: { $first: "$createdAt" },
-              c_createdBy: { $first: "$c_createdBy" },
-            },
-          },
-          {
-            $lookup: {
-              from: "users",
-              localField: "c_createdBy",
-              foreignField: "user_id",
-              as: "createdById",
-            },
-          },
-          {
-            $unwind: {
-              path: "$createdById",
-              preserveNullAndEmptyArrays: true,
-            },
-          },
-
-          {
-            $project: {
-              _id: 1,
-              c_url_title: 1,
-              c_slug_url: 1,
-              c_url_subject: 1,
-              c_url_content: 1,
-              c_url_id: 1,
-              c_url_link: 1,
-              c_url_web_link: 1,
-              c_video_type: 1,
-              c_youtube_type: 1,
-              c_thumbanail_image: 1,
-              c_url_order_id: 1,
-              n_status: 1,
-              n_published: 1,
-              createdAt: 1,
-              c_createdBy: 1,
-              createdName: "$createdById.user_name",
-            },
-          },
-          {
             $sort: { c_url_order_id: -1, updatedAt: -1 },
           },
           {
             $facet: {
-              data: [{ $skip: n_pageTerm }, { $limit: n_limitTerm }],
+                data: [
+                  { $skip: n_pageTerm },
+                  { $limit: n_limitTerm },
+                  {
+                    $lookup: {
+                      from: "users",
+                      localField: "c_createdBy",
+                      foreignField: "user_id",
+                      as: "createdById",
+                    },
+                  },
+                  {
+                    $unwind: {
+                      path: "$createdById",
+                      preserveNullAndEmptyArrays: true,
+                    },
+                  },
+                  {
+                    $project: {
+                      _id: 1,
+                      c_url_title: 1,
+                      c_slug_url: 1,
+                      c_url_subject: 1,
+                      c_url_content: 1,
+                      c_url_id: 1,
+                      c_url_link: 1,
+                      c_url_web_link: 1,
+                      c_video_type: 1,
+                      c_youtube_type: 1,
+                      c_thumbanail_image: 1,
+                      c_url_order_id: 1,
+                      n_status: 1,
+                      n_published: 1,
+                      createdAt: 1,
+                      c_createdBy: 1,
+                      createdName: "$createdById.user_name",
+                    },
+                  },
+                ],
               total_count: [
                 {
                   $count: "count",
