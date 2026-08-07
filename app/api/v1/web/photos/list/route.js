@@ -45,7 +45,7 @@ export async function POST(request) {
 
       await connectMongoDB();
 
-      await Photos.aggregate([
+      const data = await Photos.aggregate([
         { $match: _search },
         {
           $set: {

@@ -10,7 +10,9 @@
         "exec_mode": "cluster_mode",
         "instances": 4,
         "log_file": "server.log",
-        "merge_logs": true
+        "merge_logs": true,
+        "wait_ready": true,
+        "kill_timeout": 5000
       }
     ]
   }
