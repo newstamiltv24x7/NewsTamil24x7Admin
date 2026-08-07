@@ -222,7 +222,11 @@ module.exports.imageTowebp = (file) => {
 
 module.exports.encryptCryptoResponse = (data) => {
   const secretPassphrase = `${process.env.ENCY_DECY_SECRET}`;
-  const encryptedResponse = CryptoJS.AES.encrypt(JSON.stringify(data),secretPassphrase).toString();
+  // Ensure we never encrypt `undefined` or `null` which would produce
+  // empty/invalid ciphertext that decrypts to an empty string and
+  // causes JSON.parse errors on the frontend.
+  const safeData = data === undefined || data === null ? [] : data;
+  const encryptedResponse = CryptoJS.AES.encrypt(JSON.stringify(safeData), secretPassphrase).toString();
   return encryptedResponse;
 };
 

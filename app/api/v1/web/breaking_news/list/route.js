@@ -50,7 +50,8 @@ function createList(data, type) {
 export async function POST(request) {
   try {
     await connectMongoDB();
-    const controlData = await Control.findOne();
+    // ✅ FIXED: Added lean() for better performance
+    const controlData = await Control.findOne().lean();
     const { n_page, n_limit, c_search_term } = await request.json();
     const sendResponse = {
       appStatusCode: "",
@@ -61,7 +62,7 @@ export async function POST(request) {
     };
     sendResponse["appStatusCode"] = 0;
     sendResponse["message"] = "";
-    sendResponse["type"] = controlData.c_control_type;
+    sendResponse["type"] = controlData?.c_control_type;
     sendResponse["payloadJson"] = [];
     sendResponse["error"] = [];
     return NextResponse.json(sendResponse, { status: 200 });
@@ -76,7 +77,8 @@ export async function POST(request) {
 
 export async function GET() {
   await connectMongoDB();
-  const controlData = await Control.find();
+  // ✅ FIXED: Only fetch ONE control record, not ALL
+  const controlData = await Control.find().limit(1).lean();
 
   const sendResponse = {
     appStatusCode: "",
@@ -88,8 +90,8 @@ export async function GET() {
 
   
 
-  if (controlData[1]?.c_control_name === "Control Breaking News" || controlData[1].c_control_type === "yes") {
-    try {
+  if (controlData[0]?.c_control_name === "Control Breaking News" || controlData[0]?.c_control_type === "yes") {
+      try {
       let _search = {};
       _search["$and"] = [
         {
@@ -101,7 +103,6 @@ export async function GET() {
           ],
         },
       ];
-
       await Story.aggregate([
         { $match: _search },
         { $sort: { createdAt: -1 } },
@@ -143,15 +144,13 @@ export async function GET() {
         },
       ])
         .then((data) => {
-          
-          
-          const categoryData = createList(data, controlData.c_control_type);
+          const categoryData = createList(data, controlData[0]?.c_control_type);
           const encryptRes = encryptCryptoResponse(categoryData);
           const decryptRes = decrypCryptoRequest(encryptRes);
           if (data.length > 0) {
             sendResponse["appStatusCode"] = 0;
             sendResponse["message"] = "";
-            sendResponse["type"] = controlData.c_control_type;
+            sendResponse["type"] = controlData[0]?.c_control_type;
             sendResponse["payloadJson"] = decryptRes;
             sendResponse["error"] = [];
           } else {
@@ -177,7 +176,7 @@ export async function GET() {
       sendResponse["error"] = "Something went wrong!";
       return NextResponse.json(sendResponse, { status: 400 });
     }
-  } else if (controlData[2]?.c_control_name === "Control Quick Links" || controlData[2].c_control_type === "yes") {
+  } else if (controlData[0]?.c_control_name === "Control Quick Links" || controlData[0]?.c_control_type === "yes") {
     try {
       let _search = {};
       _search["$and"] = [
@@ -222,19 +221,19 @@ export async function GET() {
         },
       ])
         .then((data) => {
-          const categoryData = createList(data, controlData.c_control_type);
+          const categoryData = createList(data, controlData[0]?.c_control_type);
           const encryptRes = encryptCryptoResponse(categoryData);
           const decryptRes = decrypCryptoRequest(encryptRes);
           if (data.length > 0) {
             sendResponse["appStatusCode"] = 0;
             sendResponse["message"] = "";
-            sendResponse["type"] = controlData.c_control_type;
+            sendResponse["type"] = controlData[0]?.c_control_type;
             sendResponse["payloadJson"] = decryptRes;
             sendResponse["error"] = [];
           } else {
             sendResponse["appStatusCode"] = 0;
             sendResponse["message"] = "Record not found!";
-            sendResponse["type"] = controlData.c_control_type;
+            sendResponse["type"] = controlData[0]?.c_control_type;
             sendResponse["payloadJson"] = [];
             sendResponse["error"] = [];
           }
@@ -258,7 +257,7 @@ export async function GET() {
   } else {
     sendResponse["appStatusCode"] = 0;
     sendResponse["message"] = "Record not found";
-    sendResponse["type"] = controlData.c_control_type;
+    sendResponse["type"] = controlData[0]?.c_control_type || "";
     sendResponse["payloadJson"] = [];
     sendResponse["error"] = "";
     return NextResponse.json(sendResponse, { status: 400 });

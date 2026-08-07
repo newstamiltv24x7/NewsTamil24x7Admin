@@ -161,47 +161,62 @@ export async function POST(request) {
         }
       );
     } else {
-      await FcmDeviceToken.find().then((result) => {
-        const registrationTokens = [];
-        const registrationDevices = [];
-
-        result.map((data) => {
-          registrationTokens.push(data.c_fcm_device_token);
-        });
-        result.map((data1) => {
-          registrationDevices.push(data1.c_fcm_device_id);
-        });
-
-        // registrationTokens.push(process.env.DEVICE_TOKEN);
-
-        if (registrationTokens.length > 0) {
-          const resultdata = sendNotification(message, registrationTokens);
+      // ✅ FIXED: Batch notifications instead of loading ALL tokens at once
+      try {
+        const BATCH_SIZE = 500;
+        let skip = 0;
+        const totalTokens = await FcmDeviceToken.countDocuments();
+        const allRegistrationDevices = [];
+        let batchSent = 0;
+        
+        while (skip < totalTokens) {
+          const tokens = await FcmDeviceToken.find()
+            .skip(skip)
+            .limit(BATCH_SIZE)
+            .lean()
+            .select('c_fcm_device_token c_fcm_device_id');
+          
+          if (tokens.length === 0) break;
+          
+          const registrationTokens = tokens.map(t => t.c_fcm_device_token);
+          const registrationDevices = tokens.map(t => t.c_fcm_device_id);
+          allRegistrationDevices.push(...registrationDevices);
+          
+          // Send to this batch
+          if (registrationTokens.length > 0) {
+            const resultdata = sendNotification(message, registrationTokens);
+            batchSent++;
+            console.log(`✅ Sent batch ${batchSent} to ${registrationTokens.length} devices`);
+          }
+          
+          skip += BATCH_SIZE;
+        }
+        
+        // Save all notifications at once after batches complete
+        if (allRegistrationDevices.length > 0) {
           const saveresultData = saveNotification(
             c_title,
             c_content,
             c_img_url,
             c_redirect_id,
-            registrationDevices
+            allRegistrationDevices
           );
-          if (resultdata) {
-            sendResponse["appStatusCode"] = 0;
-            sendResponse["message"] = "";
-            sendResponse["payloadJson"] =
-              "Notification send both successfully!";
-            sendResponse["error"] = "";
-          } else {
-            sendResponse["appStatusCode"] = 4;
-            sendResponse["message"] = "";
-            sendResponse["payloadJson"] = [];
-            sendResponse["error"] = "Notification Not send!";
-          }
+          sendResponse["appStatusCode"] = 0;
+          sendResponse["message"] = "";
+          sendResponse["payloadJson"] = `Notifications sent in ${batchSent} batches to ${totalTokens} devices successfully!`;
+          sendResponse["error"] = "";
         } else {
           sendResponse["appStatusCode"] = 4;
           sendResponse["message"] = "";
           sendResponse["payloadJson"] = [];
-          sendResponse["error"] = "cannot found registration token";
+          sendResponse["error"] = "No registration tokens found";
         }
-      });
+      } catch (batchError) {
+        sendResponse["appStatusCode"] = 4;
+        sendResponse["message"] = "";
+        sendResponse["payloadJson"] = [];
+        sendResponse["error"] = "Batch notification error: " + batchError.message;
+      }
     }
 
     return NextResponse.json(sendResponse, { status: 200 });

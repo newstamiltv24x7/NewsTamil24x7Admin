@@ -41,76 +41,15 @@ export async function POST(request) {
         await connectMongoDB();
 
         await YouTubeURL.aggregate([
-          {
-            $match: _search,
-          },
-          {
-            $group: {
-              _id: "$_id",
-              c_url_title: { $first: "$c_url_title" },
-              c_slug_url: { $first: "$c_slug_url" },
-              c_url_subject: { $first: "$c_url_subject" },
-              c_url_content: { $first: "$c_url_content" },
-              c_url_id: { $first: "$c_url_id" },
-              c_url_link: { $first: "$c_url_link" },
-              c_url_web_link: { $first: "$c_url_web_link" },
-              c_thumbanail_image: { $first: "$c_thumbanail_image" },
-              c_video_type: { $first: "$c_video_type" },
-              c_url_order_id: { $first: "$c_url_order_id" },
-              c_youtube_type: { $first: "$c_youtube_type" },
-              n_status: { $first: "$n_status" },
-              n_published: { $first: "$n_published" },
-              createdAt: { $first: "$createdAt" },
-              c_createdBy: { $first: "$c_createdBy" },
-            },
-          },
-          {
-            $lookup: {
-              from: "users",
-              localField: "c_createdBy",
-              foreignField: "user_id",
-              as: "createdById",
-            },
-          },
-          {
-            $unwind: {
-              path: "$createdById",
-              preserveNullAndEmptyArrays: true,
-            },
-          },
-
-          {
-            $project: {
-              _id: 1,
-              c_url_title: 1,
-              c_slug_url: 1,
-              c_url_subject: 1,
-              c_url_content: 1,
-              c_url_id: 1,
-              c_url_link: 1,
-              c_url_web_link: 1,
-              c_video_type: 1,
-              c_youtube_type: 1,
-              c_thumbanail_image: 1,
-              c_url_order_id: 1,
-              n_status: 1,
-              n_published: 1,
-              createdAt: 1,
-              c_createdBy: 1,
-              createdName: "$createdById.user_name",
-            },
-          },
-          {
-            $sort: { c_url_order_id: -1 },
-          },
+          { $match: _search },
+          { $sort: { c_url_order_id: -1 } },
           {
             $facet: {
-              data: [{ $skip: n_pageTerm }, { $limit: n_limitTerm }],
-              total_count: [
-                {
-                  $count: "count",
-                },
+              data: [
+                { $skip: n_pageTerm },
+                { $limit: n_limitTerm },
               ],
+              total_count: [{ $count: "count" }],
             },
           },
         ])
@@ -118,12 +57,14 @@ export async function POST(request) {
             if (data[0].data.length > 0) {
               sendResponse["appStatusCode"] = 0;
               sendResponse["message"] = "";
-              sendResponse["payloadJson"] = data;
+              sendResponse["payloadJson"] = data[0].data;
+              sendResponse["total_count"] = data[0].total_count[0].count;
               sendResponse["error"] = [];
             } else {
               sendResponse["appStatusCode"] = 0;
               sendResponse["message"] = "Record not found!";
               sendResponse["payloadJson"] = [];
+              sendResponse["total_count"] = 0;
               sendResponse["error"] = [];
             }
           })
@@ -166,76 +107,15 @@ export async function POST(request) {
         await connectMongoDB();
 
         await YouTubeURL.aggregate([
-          {
-            $match: _search,
-          },
-          {
-            $group: {
-              _id: "$_id",
-              c_url_title: { $first: "$c_url_title" },
-              c_slug_url: { $first: "$c_slug_url" },
-              c_url_subject: { $first: "$c_url_subject" },
-              c_url_content: { $first: "$c_url_content" },
-              c_url_id: { $first: "$c_url_id" },
-              c_url_link: { $first: "$c_url_link" },
-              c_url_web_link: { $first: "$c_url_web_link" },
-              c_thumbanail_image: { $first: "$c_thumbanail_image" },
-              c_video_type: { $first: "$c_video_type" },
-              c_url_order_id: { $first: "$c_url_order_id" },
-              c_youtube_type: { $first: "$c_youtube_type" },
-              n_status: { $first: "$n_status" },
-              n_published: { $first: "$n_published" },
-              createdAt: { $first: "$createdAt" },
-              c_createdBy: { $first: "$c_createdBy" },
-            },
-          },
-          {
-            $lookup: {
-              from: "users",
-              localField: "c_createdBy",
-              foreignField: "user_id",
-              as: "createdById",
-            },
-          },
-          {
-            $unwind: {
-              path: "$createdById",
-              preserveNullAndEmptyArrays: true,
-            },
-          },
-
-          {
-            $project: {
-              _id: 1,
-              c_url_title: 1,
-              c_slug_url: 1,
-              c_url_subject: 1,
-              c_url_content: 1,
-              c_url_id: 1,
-              c_url_link: 1,
-              c_url_web_link: 1,
-              c_video_type: 1,
-              c_youtube_type: 1,
-              c_thumbanail_image: 1,
-              c_url_order_id: 1,
-              n_status: 1,
-              n_published: 1,
-              createdAt: 1,
-              c_createdBy: 1,
-              createdName: "$createdById.user_name",
-            },
-          },
-          {
-            $sort: { c_url_order_id: -1 },
-          },
+          { $match: _search },
+          { $sort: { c_url_order_id: -1 } },
           {
             $facet: {
-              data: [{ $skip: n_pageTerm }, { $limit: n_limitTerm }],
-              total_count: [
-                {
-                  $count: "count",
-                },
+              data: [
+                { $skip: n_pageTerm },
+                { $limit: n_limitTerm },
               ],
+              total_count: [{ $count: "count" }],
             },
           },
         ])
@@ -243,12 +123,14 @@ export async function POST(request) {
             if (data[0].data.length > 0) {
               sendResponse["appStatusCode"] = 0;
               sendResponse["message"] = "";
-              sendResponse["payloadJson"] = data;
+              sendResponse["payloadJson"] = data[0].data;
+              sendResponse["total_count"] = data[0].total_count[0].count;
               sendResponse["error"] = [];
             } else {
               sendResponse["appStatusCode"] = 0;
               sendResponse["message"] = "Record not found!";
               sendResponse["payloadJson"] = [];
+              sendResponse["total_count"] = 0;
               sendResponse["error"] = [];
             }
           })

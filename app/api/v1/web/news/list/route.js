@@ -334,137 +334,138 @@ fromDate = new Date(c_from_date);
         ...(_search),
         story_desk_created_name: { $nin: [null, ""] }
       };
-      await Story.aggregate([
-        { $match: matchStage },
-        { $unwind: "$main_category_id" },
-        {
-          $group: {
-            _id: "$_id",
-            story_subject_name: { $first: "$story_subject_name" },
-            story_title_name: { $first: "$story_title_name" },
-            story_sub_title_name: { $first: "$story_sub_title_name" },
-            story_id: { $first: "$story_id" },
-            main_category_id: { $first: "$main_category_id" },
-            sub_category_id: { $first: "$sub_category_id" },
-            story_cover_image_url: { $first: "$story_cover_image_url" },
-            story_desk_created_name: { $first: "$story_desk_created_name" },
-            seo_tag: { $first: "$seo_tag" },
-            seo_keywords: { $first: "$seo_keywords" },
-            createdAt: { $first: "$createdAt" },
-            updatedAt: { $first: "$updatedAt" },
-            n_story_order: { $first: "$n_story_order" },
-            post_status: { $first: "$post_status" },
-            pin_status: { $first: "$pin_status" },
-            youtube_embed_id: { $first: "$youtube_embed_id" },
-            view_count: { $first: "$view_count" },
+      try {
+        const data = await Story.aggregate([
+          { $match: matchStage },
+          { $unwind: "$main_category_id" },
+          {
+            $group: {
+              _id: "$_id",
+              story_subject_name: { $first: "$story_subject_name" },
+              story_title_name: { $first: "$story_title_name" },
+              story_sub_title_name: { $first: "$story_sub_title_name" },
+              story_id: { $first: "$story_id" },
+              main_category_id: { $first: "$main_category_id" },
+              sub_category_id: { $first: "$sub_category_id" },
+              story_cover_image_url: { $first: "$story_cover_image_url" },
+              story_desk_created_name: { $first: "$story_desk_created_name" },
+              seo_tag: { $first: "$seo_tag" },
+              seo_keywords: { $first: "$seo_keywords" },
+              createdAt: { $first: "$createdAt" },
+              updatedAt: { $first: "$updatedAt" },
+              n_story_order: { $first: "$n_story_order" },
+              post_status: { $first: "$post_status" },
+              pin_status: { $first: "$pin_status" },
+              youtube_embed_id: { $first: "$youtube_embed_id" },
+              view_count: { $first: "$view_count" },
 
+            },
           },
-        },
-        {
-          $lookup: {
-            from: "categories",
-            localField: "main_category_id",
-            foreignField: "c_category_id",
-            as: "categories",
+          {
+            $lookup: {
+              from: "categories",
+              localField: "main_category_id",
+              foreignField: "c_category_id",
+              as: "categories",
+            },
           },
-        },
-        {
-          $unwind: {
-            path: "$categories",
-            preserveNullAndEmptyArrays: true,
+          {
+            $unwind: {
+              path: "$categories",
+              preserveNullAndEmptyArrays: true,
+            },
           },
-        },
 {
-          $lookup: {
-            from: "categories",
-            localField: "sub_category_id",
-            foreignField: "c_category_id",
-            as: "subcategories",
+            $lookup: {
+              from: "categories",
+              localField: "sub_category_id",
+              foreignField: "c_category_id",
+              as: "subcategories",
+            },
           },
-        },
-        {
-          $unwind: {
-            path: "$subcategories",
-            preserveNullAndEmptyArrays: true,
+          {
+            $unwind: {
+              path: "$subcategories",
+              preserveNullAndEmptyArrays: true,
+            },
           },
-        },
-        {
-          $project: {
-            _id: 1,
-            story_subject_name: 1,
-            story_title_name: 1,
-            story_sub_title_name: 1,
-            story_id: 1,
-            main_category_id: 1,
-            story_cover_image_url: 1,
-            story_desk_created_name: 1,
-            seo_tag: 1,
-            seo_keywords: 1,
-            createdAt: 1,
-            updatedAt: 1,
-            c_category_name: "$categories.c_category_name",
-            c_category_slug_english_name:
-              "$categories.c_category_slug_english_name",
-            c_sub_category_name: "$subcategories.c_category_name",
-            n_story_order: 1,
-            n_story_order: 1,
-            post_status: 1,
-            pin_status: 1,
-            youtube_embed_id: 1,
-            view_count: 1,
+          {
+            $project: {
+              _id: 1,
+              story_subject_name: 1,
+              story_title_name: 1,
+              story_sub_title_name: 1,
+              story_id: 1,
+              main_category_id: 1,
+              story_cover_image_url: 1,
+              story_desk_created_name: 1,
+              seo_tag: 1,
+              seo_keywords: 1,
+              createdAt: 1,
+              updatedAt: 1,
+              c_category_name: "$categories.c_category_name",
+              c_category_slug_english_name:
+                "$categories.c_category_slug_english_name",
+              c_sub_category_name: "$subcategories.c_category_name",
+              n_story_order: 1,
+              n_story_order: 1,
+              post_status: 1,
+              pin_status: 1,
+              youtube_embed_id: 1,
+              view_count: 1,
  view_control :controlResult[0]?.c_control_type
+            },
           },
-        },
-        {
-          $sort: { pin_status: -1, n_story_order: -1, createdAt: -1 },
-        },
-        {
-          $facet: {
-            data: [{ $skip: n_pageTerm }, { $limit: n_limitTerm }],
-            total_count: [
-              {
-                $count: "count",
-              },
-            ],
+          {
+            $sort: { pin_status: -1, n_story_order: -1, createdAt: -1 },
           },
-        },
-      ])
-        .then((data) => {
-          const datas = [];
-          const data1 = getUniqueListBy(data[0].data, "story_id");
-          const data2 = seprateArrayData(data1);
+          {
+            $facet: {
+              data: [{ $skip: n_pageTerm }, { $limit: n_limitTerm }],
+              total_count: [
+                {
+                  $count: "count",
+                },
+              ],
+            },
+          },
+        ]);
 
-          datas.push({ data: data2, total_count: data[0].total_count });
-          const returnResponse = mobilePaginations(n_page, n_limit);
+        const datas = [];
+        const data1 = getUniqueListBy(data[0].data, "story_id");
+        const data2 = seprateArrayData(data1);
 
-          const encryptRes = encryptCryptoResponse(datas);
-          // const decryptRes = decrypCryptoRequest(encryptRes);
+        datas.push({ data: data2, total_count: data[0].total_count });
+        const returnResponse = mobilePaginations(n_page, n_limit);
 
-          if (data[0].data.length > 0) {
-            sendResponse["appStatusCode"] = 0;
-            sendResponse["message"] = "";
-            sendResponse["n_page"] = returnResponse.n_page;
-            sendResponse["n_limit"] = returnResponse.n_limit;
-            sendResponse["payloadJson"] = encryptRes;
-            sendResponse["error"] = [];
-          } else {
-            sendResponse["appStatusCode"] = 0;
-            sendResponse["message"] = "Record not found!";
- sendResponse["n_page"] = 0;
-            sendResponse["n_limit"] = 0;
-            sendResponse["payloadJson"] = [];
-            sendResponse["error"] = [];
-          }
-        })
-        .catch((err) => {
-          sendResponse["appStatusCode"] = 4;
+        const encryptRes = encryptCryptoResponse(datas);
+        // const decryptRes = decrypCryptoRequest(encryptRes);
+
+        if ((data[0]?.data || []).length > 0) {
+          sendResponse["appStatusCode"] = 0;
           sendResponse["message"] = "";
-          sendResponse["n_page"] = 0;
+          sendResponse["n_page"] = returnResponse.n_page;
+          sendResponse["n_limit"] = returnResponse.n_limit;
+          sendResponse["payloadJson"] = encryptRes;
+          sendResponse["error"] = [];
+        } else {
+          sendResponse["appStatusCode"] = 0;
+          sendResponse["message"] = "Record not found!";
+ sendResponse["n_page"] = 0;
           sendResponse["n_limit"] = 0;
           sendResponse["payloadJson"] = [];
-          sendResponse["error"] = err;
-        });
-      return NextResponse.json(sendResponse, { status: 200 });
+          sendResponse["error"] = [];
+        }
+        return NextResponse.json(sendResponse, { status: 200 });
+      } catch (err) {
+        sendResponse["appStatusCode"] = 4;
+        sendResponse["message"] = "";
+        sendResponse["n_page"] = 0;
+        sendResponse["n_limit"] = 0;
+        sendResponse["payloadJson"] = [];
+        sendResponse["error"] = err;
+        return NextResponse.json(sendResponse, { status: 200 });
+      }
     } else {
       sendResponse["appStatusCode"] = 3;
       sendResponse["message"] = "";

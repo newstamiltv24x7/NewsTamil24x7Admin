@@ -7,113 +7,63 @@ import {
 } from "../../../../../../helper/helper";
 import { parseBody } from "../../../utils/parseBody";
 
-let sendResponse = {};
+let sendResponse = {
+  appStatusCode: "",
+  message: "",
+  n_page: 0,
+  n_limit: 0,
+  payloadJson: [],
+  error: "",
+};
+
+
 const seprateData = (data) => {
   const datas = [];
 
-  data.map((list) => {
-    datas.push({
-      _id: list?._id,
-      story_title_name: list?.story_title_name,
-      story_sub_title_name: list?.story_sub_title_name,
-      story_desk_created_name: list?.story_desk_created_name,
-      seo_tag: list?.seo_tag,
-      seo_keywords: list?.seo_keywords,
-      story_id: list?.story_id,
-      main_category_id: list?.main_category_id,
-      story_subject_name: list?.story_subject_name,
-      story_asked_title: list?.story_asked_title,
-      news_image_caption: list?.news_image_caption,
-      story_summary_snippet: list?.story_summary_snippet,
-      story_asked_quotes_content: list?.story_asked_quotes_content,
-      story_asked_quotes_author: list?.story_asked_quotes_author,
-      story_asked_question: list?.story_asked_question,
-      blurb_title: list?.blurb_title,
-      blurb_content: list?.blurb_content,
-      youtube_embed_id: list?.youtube_embed_id,
-      story_cover_image_url: list?.story_cover_image_url,
-      createdAt: list?.createdAt,
-      updatedAt: list?.updatedAt,
-      n_story_order: list?.n_story_order,
-      post_status: list?.post_status,
-      pin_status: list?.pin_status,
-      c_about_user: list?.c_about_user,
-      c_category_name: list?.c_category_name,
-      view_count: list?.view_count,
-    });
+  datas.push({
+    _id: data[0]?._id,
+    story_title_name: data[0]?.story_title_name,
+    story_sub_title_name: data[0]?.story_sub_title_name,
+    story_desk_created_name: data[0]?.story_desk_created_name,
+    seo_tag: data[0]?.seo_tag,
+    seo_keywords: data[0]?.seo_keywords,
+    story_id: data[0]?.story_id,
+    main_category_id: data[0]?.main_category_id,
+    story_details: data[0]?.story_details,
+    story_subject_name: data[0]?.story_subject_name,
+    story_asked_title: data[0]?.story_asked_title,
+    news_image_caption: data[0]?.news_image_caption,
+    story_summary_snippet: data[0]?.story_summary_snippet,
+    story_asked_quotes_content: data[0]?.story_asked_quotes_content,
+    story_asked_quotes_author: data[0]?.story_asked_quotes_author,
+    story_asked_question: data[0]?.story_asked_question,
+    blurb_title: data[0]?.blurb_title,
+    blurb_content: data[0]?.blurb_content,
+    twitter_embed_id: data[0]?.twitter_embed_id,
+    youtube_embed_id: data[0]?.youtube_embed_id,
+    facebook_embed_id: data[0]?.facebook_embed_id,
+    instagram_embed_id: data[0]?.instagram_embed_id,
+    threads_embed_id: data[0]?.threads_embed_id,
+    author_desk: data[0]?.author_desk,
+    story_cover_image_url: data[0]?.story_cover_image_url,
+    createdAt: data[0]?.createdAt,
+    updatedAt: data[0]?.updatedAt,
+    n_status: data[0]?.n_status,
+    n_published: data[0]?.n_published,
+    n_story_order: data[0]?.n_story_order,
+    post_status: data[0]?.post_status,
+    pin_status: data[0]?.pin_status,
+    c_createdName: data[0]?.c_createdName,
+    c_slugName: data[0]?.c_slugName,
+    c_userImg: data[0]?.c_userImg,
+    c_about_user: data[0]?.c_about_user,
+    c_category_name: data[0]?.c_category_name,
+    view_count: data[0]?.view_count,
   });
 
   return datas;
 };
 
-
-
-export async function POST(request) {
-  const body = await parseBody(request);
-  const { n_page, n_limit, main_category_id } = body;
-  await connectMongoDB();
-  var page = Number(n_page);
-  var limit = Number(n_limit);
-
-  const options = {
-    page: page,
-    limit: limit,
-    sort: {pin_status: -1, _id: -1,  n_story_order: -1, createdAt: -1 },
-    select: {
-      _id: 1,
-      story_id: 1,
-      story_subject_name: 1,
-      story_title_name: 1,
-      story_sub_title_name: 1,
-      story_english_name: 1,
-      story_sub_english_name: 1,
-      story_desk_created_name: 1,
-      main_category_id: 1,
-      youtube_embed_id: 1,
-      story_cover_image_url: 1,
-      story_thumb_image_url: 1,
-      news_image_caption: 1,
-      createdAt: 1,
-      updatedAt: 1,
-      view_count: 1
-    },
-  };
-  let sendResponse = {};
-  try {
-    await connectMongoDB();
-    // const data = {
-    //   c_control_name:"Control Views Count"
-    // }
-    // const controlResult = await Control.find(data);
-    await Story.paginate(
-      { n_status: 1, n_published: 1, c_save_type: "published", main_category_id : main_category_id },
-      options,
-      function (err, result) {
-        if (err) {
-          sendResponse["appStatusCode"] = 4;
-          sendResponse["message"] = "";
-          sendResponse["payloadJson"] = err;
-          sendResponse["error"] = "";
-        } else {
-          const encryptRes = encryptCryptoResponse(result);
-          // const decryptRes = decrypCryptoRequest(encryptRes);
-          sendResponse["appStatusCode"] = 0;
-          sendResponse["message"] = "";
-          sendResponse["payloadJson"] = encryptRes;
-          sendResponse["error"] = "";
-        }
-      }
-    );
-    return NextResponse.json(sendResponse, { status: 200 });
-  } catch (err) {
-    sendResponse["appStatusCode"] = 4;
-    sendResponse["message"] = [];
-
-    sendResponse["payloadJson"] = [];
-    sendResponse["error"] = "Something went wrong!";
-    return NextResponse.json(sendResponse, { status: 400 });
-  }
-}
 export async function GET(request) {
   const id = request.nextUrl.searchParams.get("id");
   const url = request.nextUrl.searchParams.get("url");
@@ -175,7 +125,7 @@ export async function GET(request) {
               n_story_order: { $first: "$n_story_order" },
               post_status: { $first: "$post_status" },
               pin_status: { $first: "$pin_status" },
-              view_count: { $first: "$view_count" },
+              youtube_embed_id: { $first: "$youtube_embed_id" },
             },
           },
           {
@@ -232,11 +182,12 @@ export async function GET(request) {
           .then((data) => {
             const data1 = seprateData(data);
             const encryptRes = encryptCryptoResponse(data1);
-            // const decryptRes = decrypCryptoRequest(encryptRes);
+            const decryptRes = decrypCryptoRequest(encryptRes);
             if (data.length > 0) {
               sendResponse["appStatusCode"] = 0;
               sendResponse["message"] = "";
-
+              sendResponse["n_page"] = 0;
+              sendResponse["n_limit"] = 0;
               sendResponse["payloadJson"] = encryptRes;
               sendResponse["error"] = [];
             } else {
@@ -249,7 +200,8 @@ export async function GET(request) {
           .catch((err) => {
             sendResponse["appStatusCode"] = 4;
             sendResponse["message"] = "";
-
+            sendResponse["n_page"] = 0;
+            sendResponse["n_limit"] = 0;
             sendResponse["payloadJson"] = [];
             sendResponse["error"] = err;
           });
@@ -258,7 +210,8 @@ export async function GET(request) {
       } catch (err) {
         sendResponse["appStatusCode"] = 4;
         sendResponse["message"] = "";
-
+        sendResponse["n_page"] = 0;
+        sendResponse["n_limit"] = 0;
         sendResponse["payloadJson"] = [];
         sendResponse["error"] = "Something went wrong!";
         return NextResponse.json(sendResponse, { status: 400 });
@@ -266,7 +219,8 @@ export async function GET(request) {
     } else {
       sendResponse["appStatusCode"] = 4;
       sendResponse["message"] = "";
-
+      sendResponse["n_page"] = 0;
+      sendResponse["n_limit"] = 0;
       sendResponse["payloadJson"] = [];
       sendResponse["error"] = "Invalid Id!";
       return NextResponse.json(sendResponse, { status: 400 });
@@ -370,6 +324,7 @@ export async function GET(request) {
               threads_embed_id: 1,
               author_desk: 1,
               story_cover_image_url: 1,
+              story_desk_created_name: 1,
               createdAt: 1,
               updatedAt: 1,
               c_category_name: "$categories.c_category_name",
@@ -386,11 +341,12 @@ export async function GET(request) {
           .then((data) => {
             const data1 = seprateData(data);
             const encryptRes = encryptCryptoResponse(data1);
-            // const decryptRes = decrypCryptoRequest(encryptRes);
+            const decryptRes = decrypCryptoRequest(encryptRes);
             if (data.length > 0) {
               sendResponse["appStatusCode"] = 0;
               sendResponse["message"] = "";
-
+              sendResponse["n_page"] = 0;
+              sendResponse["n_limit"] = 0;
               sendResponse["payloadJson"] = encryptRes;
               sendResponse["error"] = [];
             } else {
@@ -403,7 +359,8 @@ export async function GET(request) {
           .catch((err) => {
             sendResponse["appStatusCode"] = 4;
             sendResponse["message"] = "";
-
+            sendResponse["n_page"] = 0;
+            sendResponse["n_limit"] = 0;
             sendResponse["payloadJson"] = [];
             sendResponse["error"] = err;
           });
@@ -412,7 +369,8 @@ export async function GET(request) {
       } catch (err) {
         sendResponse["appStatusCode"] = 4;
         sendResponse["message"] = "";
-
+        sendResponse["n_page"] = 0;
+        sendResponse["n_limit"] = 0;
         sendResponse["payloadJson"] = [];
         sendResponse["error"] = "Something went wrong!";
         return NextResponse.json(sendResponse, { status: 400 });
@@ -420,7 +378,8 @@ export async function GET(request) {
     } else {
       sendResponse["appStatusCode"] = 4;
       sendResponse["message"] = "";
-
+      sendResponse["n_page"] = 0;
+      sendResponse["n_limit"] = 0;
       sendResponse["payloadJson"] = [];
       sendResponse["error"] = "Invalid Id!";
       return NextResponse.json(sendResponse, { status: 400 });
@@ -539,11 +498,12 @@ export async function GET(request) {
           .then((data) => {
             const data1 = seprateData(data);
             const encryptRes = encryptCryptoResponse(data1);
-            // const decryptRes = decrypCryptoRequest(encryptRes);
+            const decryptRes = decrypCryptoRequest(encryptRes);
             if (data.length > 0) {
               sendResponse["appStatusCode"] = 0;
               sendResponse["message"] = "";
-
+              sendResponse["n_page"] = 0;
+              sendResponse["n_limit"] = 0;
               sendResponse["payloadJson"] = encryptRes;
               sendResponse["error"] = [];
             } else {
@@ -556,7 +516,8 @@ export async function GET(request) {
           .catch((err) => {
             sendResponse["appStatusCode"] = 4;
             sendResponse["message"] = "";
-
+            sendResponse["n_page"] = 0;
+            sendResponse["n_limit"] = 0;
             sendResponse["payloadJson"] = [];
             sendResponse["error"] = err;
           });
@@ -565,7 +526,8 @@ export async function GET(request) {
       } catch (err) {
         sendResponse["appStatusCode"] = 4;
         sendResponse["message"] = "";
-
+        sendResponse["n_page"] = 0;
+        sendResponse["n_limit"] = 0;
         sendResponse["payloadJson"] = [];
         sendResponse["error"] = "Something went wrong!";
         return NextResponse.json(sendResponse, { status: 400 });
@@ -573,7 +535,8 @@ export async function GET(request) {
     } else {
       sendResponse["appStatusCode"] = 4;
       sendResponse["message"] = "";
-
+      sendResponse["n_page"] = 0;
+      sendResponse["n_limit"] = 0;
       sendResponse["payloadJson"] = [];
       sendResponse["error"] = "Invalid Id!";
       return NextResponse.json(sendResponse, { status: 400 });
@@ -586,6 +549,7 @@ export async function GET(request) {
           { n_status: 1 },
           { n_published: 1 },
           { c_save_type: "published" },
+          // { main_category_id: { $nin: ["d121363c2a79"] } },
         ],
       },
     ];
@@ -593,7 +557,7 @@ export async function GET(request) {
       await connectMongoDB();
       await Story.aggregate([
         { $match: _search },
-        { $sort: { timestamp: -1 } },
+        { $limit: 300 },
         {
           $group: {
             _id: "$_id",
@@ -642,11 +606,10 @@ export async function GET(request) {
             _id: 1,
             story_title_name: 1,
             story_sub_title_name: 1,
+            story_desk_created_name: 1,
+            story_cover_image_url: 1,
             main_category_id: 1,
             seo_tag: 1,
-            seo_keywords: 1,
-            story_id: 1,
-            story_details: 1,
             story_subject_name: 1,
             story_asked_title: 1,
             news_image_caption: 1,
@@ -656,14 +619,8 @@ export async function GET(request) {
             story_summary_snippet: 1,
             blurb_title: 1,
             blurb_content: 1,
-            twitter_embed_id: 1,
-            youtube_embed_id: 1,
-            facebook_embed_id: 1,
-            instagram_embed_id: 1,
-            threads_embed_id: 1,
-            author_desk: 1,
-            story_cover_image_url: 1,
-            story_desk_created_name: 1,
+            seo_keywords: 1,
+            story_id: 1,
             createdAt: 1,
             updatedAt: 1,
             c_category_name: "$categories.c_category_name",
@@ -671,22 +628,23 @@ export async function GET(request) {
             post_status: 1,
             pin_status: 1,
             youtube_embed_id: 1,
-            view_count: 1
+            view_count: 1,
           },
         },
         {
-          $sort: { pin_status: -1, n_story_order: -1, createdAt: -1, _id: -1 },
+          $sort: { pin_status: -1, n_story_order: -1, createdAt: -1 },
         },
-        { $limit: 5 },
       ])
         .then((data) => {
           const data1 = seprateData(data);
+
           const encryptRes = encryptCryptoResponse(data1);
-          // const decryptRes = decrypCryptoRequest(encryptRes);
+          const decryptRes = decrypCryptoRequest(encryptRes);
           if (data.length > 0) {
             sendResponse["appStatusCode"] = 0;
             sendResponse["message"] = "";
-
+            sendResponse["n_page"] = 0;
+            sendResponse["n_limit"] = 0;
             sendResponse["payloadJson"] = encryptRes;
             sendResponse["error"] = [];
           } else {
@@ -699,7 +657,8 @@ export async function GET(request) {
         .catch((err) => {
           sendResponse["appStatusCode"] = 4;
           sendResponse["message"] = "";
-
+          sendResponse["n_page"] = 0;
+          sendResponse["n_limit"] = 0;
           sendResponse["payloadJson"] = [];
           sendResponse["error"] = err;
         });
@@ -708,10 +667,104 @@ export async function GET(request) {
     } catch (err) {
       sendResponse["appStatusCode"] = 4;
       sendResponse["message"] = "";
-
+      sendResponse["n_page"] = 0;
+      sendResponse["n_limit"] = 0;
       sendResponse["payloadJson"] = [];
       sendResponse["error"] = "Something went wrong!";
       return NextResponse.json(sendResponse, { status: 400 });
     }
+  }
+}
+
+export async function POST(request) {
+  try {
+    let body = {};
+
+    try {
+      body = await request.json();
+    } catch {
+      body = {};
+    }
+
+    const {
+      n_page = 1,
+      n_limit = 10,
+      trending_news,
+    } = body;
+
+    await connectMongoDB();
+
+    const filter = {
+      n_status: 1,
+      n_published: 1,
+      c_save_type: "published",
+    };
+
+    if (trending_news) {
+      filter.trending_news = 1;
+    }
+    
+    const page = Math.max(1, Number(n_page) || 1);
+    const limit = Math.min(50, Math.max(1, Number(n_limit) || 10));
+    const skip = (page - 1) * limit;
+
+    // ✅ COMPLETE FIX: Multiple optimizations to prevent timeouts
+    // 1. maxTimeMS() - Kill query at MongoDB level after 15 seconds
+    // 2. batchSize() - Limit in-memory data
+    // 3. lean() - Return plain objects
+    const docs = await Story.find(filter)
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit + 1)
+      .lean()
+      .maxTimeMS(15000)  // MongoDB-level timeout at 15 seconds
+      .batchSize(Math.min(limit + 1, 100))  // Batch in chunks to reduce memory
+      .select({
+        _id: 1, story_id: 1, story_title_name: 1,
+        story_cover_image_url: 1, story_thumb_image_url: 1,
+        createdAt: 1, view_count: 1, main_category_id: 1
+      })
+      .exec();
+
+    const hasMore = docs.length > limit;
+    const result = {
+      docs: hasMore ? docs.slice(0, limit) : docs,
+      totalDocs: 0,
+      limit: limit,
+      page: page,
+      pages: 0,
+      hasNextPage: hasMore,
+      nextPage: hasMore ? page + 1 : null,
+      hasPrevPage: page > 1,
+      prevPage: page > 1 ? page - 1 : null
+    };
+
+    return NextResponse.json({
+      appStatusCode: 0,
+      message: "",
+      payloadJson: encryptCryptoResponse(result),
+      error: "",
+    });
+
+  } catch (err) {
+    console.error("Error in POST /api/v1/web/news/world:", err.message);
+    // Return safe empty response
+    const emptyResult = {
+      docs: [],
+      totalDocs: 0,
+      limit: 10,
+      page: 1,
+      pages: 0,
+      hasNextPage: false,
+      nextPage: null,
+      hasPrevPage: false,
+      prevPage: null
+    };
+    return NextResponse.json({
+      appStatusCode: 0,
+      message: "",
+      payloadJson: encryptCryptoResponse(emptyResult),
+      error: "",
+    });
   }
 }

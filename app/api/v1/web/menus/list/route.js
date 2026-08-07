@@ -172,93 +172,96 @@ export async function POST(request) {
     if (n_limitTerm !== "" && n_pageTerm !== "") {
       await connectMongoDB();
 
-      await Categories.aggregate([
-        { $match: _search },
-        {
-          $group: {
-            _id: "$_id",
-            c_category_name: { $first: "$c_category_name" },
-            c_category_id: { $first: "$c_category_id" },
-            c_category_english_name: { $first: "$c_category_english_name" },
-            c_category_slug_english_name: {
-              $first: "$c_category_slug_english_name",
-            },
-            c_spl_category_order: { $first: "$c_spl_category_order" },
-
-            createdAt: { $first: "$createdAt" },
-            c_createdBy: { $first: "$c_createdBy" },
-            n_status: { $first: "$n_status" },
-            n_published: { $first: "$n_published" },
-          },
-        },
-
-        {
-          $lookup: {
-            from: "users",
-            localField: "c_createdBy",
-            foreignField: "user_id",
-            as: "users",
-          },
-        },
-        {
-          $unwind: "$users",
-        },
-        {
-          $project: {
-            _id: 1,
-            c_category_name: 1,
-            c_category_id: 1,
-            c_category_english_name: 1,
-            c_category_slug_english_name: 1,
-            c_spl_category_order: 1,
-            createdAt: 1,
-            c_createdBy: 1,
-            c_createdName: "$users.user_name",
-            n_status: 1,
-            n_published: 1,
-          },
-        },
-        {
-          $sort: typeView,
-        },
-        {
-          $facet: {
-            data: [{ $skip: n_pageTerm }, { $limit: n_limitTerm }],
-            total_count: [
-              {
-                $count: "count",
+      try {
+        const data = await Categories.aggregate([
+          { $match: _search },
+          {
+            $group: {
+              _id: "$_id",
+              c_category_name: { $first: "$c_category_name" },
+              c_category_id: { $first: "$c_category_id" },
+              c_category_english_name: { $first: "$c_category_english_name" },
+              c_category_slug_english_name: {
+                $first: "$c_category_slug_english_name",
               },
-            ],
+              c_spl_category_order: { $first: "$c_spl_category_order" },
+
+              createdAt: { $first: "$createdAt" },
+              c_createdBy: { $first: "$c_createdBy" },
+              n_status: { $first: "$n_status" },
+              n_published: { $first: "$n_published" },
+            },
           },
-        },
-      ])
-        .then((data) => {
-          const returnResponse = mobilePaginations(n_page, n_limit);
-          const encryptRes = encryptCryptoResponse(data);
-          // const decryptRes = decrypCryptoRequest(encryptRes);
-          if (data[0].data.length > 0) {
-            sendResponse["appStatusCode"] = 0;
-            sendResponse["message"] = "";
-            sendResponse["n_page"] = returnResponse.n_page;
-            sendResponse["n_limit"] = returnResponse.n_limit;
-            sendResponse["payloadJson"] = encryptRes;
-            sendResponse["error"] = [];
-          } else {
-            sendResponse["appStatusCode"] = 0;
-            sendResponse["message"] = "Record not found!";
-            sendResponse["n_page"] = 0;
-            sendResponse["n_limit"] = 0;
-            sendResponse["payloadJson"] = [];
-            sendResponse["error"] = [];
-          }
-        })
-        .catch((err) => {
-          sendResponse["appStatusCode"] = 4;
+
+          {
+            $lookup: {
+              from: "users",
+              localField: "c_createdBy",
+              foreignField: "user_id",
+              as: "users",
+            },
+          },
+          {
+            $unwind: "$users",
+          },
+          {
+            $project: {
+              _id: 1,
+              c_category_name: 1,
+              c_category_id: 1,
+              c_category_english_name: 1,
+              c_category_slug_english_name: 1,
+              c_spl_category_order: 1,
+              createdAt: 1,
+              c_createdBy: 1,
+              c_createdName: "$users.user_name",
+              n_status: 1,
+              n_published: 1,
+            },
+          },
+          {
+            $sort: typeView,
+          },
+          {
+            $facet: {
+              data: [{ $skip: n_pageTerm }, { $limit: n_limitTerm }],
+              total_count: [
+                {
+                  $count: "count",
+                },
+              ],
+            },
+          },
+        ]);
+
+        const returnResponse = mobilePaginations(n_page, n_limit);
+        const encryptRes = encryptCryptoResponse(data[0]?.data || []);
+        // const decryptRes = decrypCryptoRequest(encryptRes);
+        if ((data[0]?.data || []).length > 0) {
+          sendResponse["appStatusCode"] = 0;
           sendResponse["message"] = "";
+          sendResponse["n_page"] = returnResponse.n_page;
+          sendResponse["n_limit"] = returnResponse.n_limit;
+          sendResponse["payloadJson"] = encryptRes;
+          sendResponse["total_count"] = data[0]?.total_count?.[0]?.count || 0;
+          sendResponse["error"] = [];
+        } else {
+          sendResponse["appStatusCode"] = 0;
+          sendResponse["message"] = "Record not found!";
+          sendResponse["n_page"] = 0;
+          sendResponse["n_limit"] = 0;
           sendResponse["payloadJson"] = [];
-          sendResponse["error"] = err;
-        });
-      return NextResponse.json(sendResponse, { status: 200 });
+          sendResponse["total_count"] = 0;
+          sendResponse["error"] = [];
+        }
+        return NextResponse.json(sendResponse, { status: 200 });
+      } catch (err) {
+        sendResponse["appStatusCode"] = 4;
+        sendResponse["message"] = "";
+        sendResponse["payloadJson"] = [];
+        sendResponse["error"] = err;
+        return NextResponse.json(sendResponse, { status: 200 });
+      }
     } else {
       sendResponse["appStatusCode"] = 3;
       sendResponse["message"] = "";

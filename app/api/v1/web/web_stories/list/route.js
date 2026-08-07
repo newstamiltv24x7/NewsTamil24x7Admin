@@ -6,6 +6,7 @@ import {
     decrypCryptoRequest,
   } from "../../../../../../helper/helper";
   import { parseBody } from "../../../utils/parseBody";
+// timer logic removed
 
 export async function POST(request) {
   const sendResponse = {
@@ -16,6 +17,7 @@ export async function POST(request) {
   };
   const body = await parseBody(request);
   const { n_page, n_limit, c_search_term } = body;
+  // timer removed
 
   try {
 
@@ -39,9 +41,9 @@ export async function POST(request) {
       }
 
       if (n_limitTerm !== "" && n_pageTerm !== "") {
-        await connectMongoDB();
+      await connectMongoDB();
 
-        await WebStories.aggregate([
+      await WebStories.aggregate([
           {
             $match: _search,
           },
@@ -122,6 +124,7 @@ export async function POST(request) {
             }
           })
           .catch((err) => {
+            
             sendResponse["appStatusCode"] = 4;
             sendResponse["message"] = "";
             sendResponse["payloadJson"] = [];

@@ -54,12 +54,13 @@ function createList(data, type) {
 export async function POST(request) {
   try {
     await connectMongoDB();
-    const controlData = await Control.findOne();
+    // ✅ FIXED: Added lean() for better performance
+    const controlData = await Control.findOne().lean();
     const { n_page, n_limit, c_search_term } = await request.json();
 
     sendResponse["appStatusCode"] = 0;
     sendResponse["message"] = "";
-    sendResponse["type"] = controlData.c_control_type;
+    sendResponse["type"] = controlData?.c_control_type;
     sendResponse["payloadJson"] = [];
     sendResponse["error"] = [];
     return NextResponse.json(sendResponse, { status: 200 });
@@ -74,9 +75,10 @@ export async function POST(request) {
 
 export async function GET() {
   await connectMongoDB();
-  const controlData = await Control.find();
+  // ✅ FIXED: Only fetch ONE control record with limit, not ALL
+  const controlData = await Control.find().limit(1).lean();
 
-  if (controlData[1]?.c_control_name === "Control Breaking News" || controlData[1].c_control_type === "yes") {
+  if (controlData[0]?.c_control_name === "Control Breaking News" || controlData[0]?.c_control_type === "yes") {
     try {
       let _search = {};
       _search["$and"] = [
@@ -246,7 +248,7 @@ export async function GET() {
   } else {
     sendResponse["appStatusCode"] = 0;
     sendResponse["message"] = "Record not found";
-    sendResponse["type"] = controlData.c_control_type;
+    sendResponse["type"] = controlData[0]?.c_control_type || "";
     sendResponse["payloadJson"] = [];
     sendResponse["error"] = "";
     return NextResponse.json(sendResponse, { status: 400 });

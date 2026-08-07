@@ -45,74 +45,51 @@ export async function POST(request) {
 
       await Photos.aggregate([
         { $match: _search },
-        {
-          $set: {
-            c_photos_continue_item: {
-              $sortArray: {
-                input: "$c_photos_continue_item",
-                sortBy: { c_photos_continue_create_date: -1 },
-              },
-            },
-          },
-        },
-        {
-          $group: {
-            _id: "$_id",
-            c_photos_title: { $first: "$c_photos_title" },
-            c_photos_slug_title: { $first: "$c_photos_slug_title" },            
-            c_photos_short_name: { $first: "$c_photos_short_name" },            
-            c_photos_sub_title: { $first: "$c_photos_sub_title" },
-            c_photos_img: { $first: "$c_photos_img" },
-            c_photos_content: { $first: "$c_photos_content" },
-            c_photos_id: { $first: "$c_photos_id" },
-            c_photos_continue_item: { $first: "$c_photos_continue_item" },
-            createdAt: { $first: "$createdAt" },
-            c_createdBy: { $first: "$c_createdBy" },
-            n_status: { $first: "$n_status" },
-            n_published: { $first: "$n_published" },
-          },
-        },
-
-        {
-          $lookup: {
-            from: "users",
-            localField: "c_createdBy",
-            foreignField: "user_id",
-            as: "users",
-          },
-        },
-        {
-          $unwind: "$users",
-        },
-        {
-          $project: {
-            _id: 1,
-            c_photos_title: 1,
-            c_photos_slug_title: 1,
-            c_photos_short_name: 1,
-            c_photos_sub_title: 1,
-            c_photos_img: 1,
-            c_photos_content: 1,
-            c_photos_id: 1,
-            c_photos_continue_item: 1,
-            createdAt: 1,
-            c_createdBy: 1,
-            c_createdName: "$users.user_name",
-            n_status: 1,
-            n_published: 1,
-          },
-        },
-        {
-          $sort: { createdAt: -1 },
-        },
+        { $sort: { createdAt: -1 } },
         {
           $facet: {
-            data: [{ $skip: n_pageTerm }, { $limit: n_limitTerm }],
-            total_count: [
+            data: [
+              { $skip: n_pageTerm },
+              { $limit: n_limitTerm },
               {
-                $count: "count",
+                $set: {
+                  c_photos_continue_item: {
+                    $sortArray: {
+                      input: "$c_photos_continue_item",
+                      sortBy: { c_photos_continue_create_date: -1 },
+                    },
+                  },
+                },
+              },
+              {
+                $lookup: {
+                  from: "users",
+                  localField: "c_createdBy",
+                  foreignField: "user_id",
+                  as: "users",
+                },
+              },
+              { $unwind: "$users" },
+              {
+                $project: {
+                  _id: 1,
+                  c_photos_title: 1,
+                  c_photos_slug_title: 1,
+                  c_photos_short_name: 1,
+                  c_photos_sub_title: 1,
+                  c_photos_img: 1,
+                  c_photos_content: 1,
+                  c_photos_id: 1,
+                  c_photos_continue_item: 1,
+                  createdAt: 1,
+                  c_createdBy: 1,
+                  c_createdName: "$users.user_name",
+                  n_status: 1,
+                  n_published: 1,
+                },
               },
             ],
+            total_count: [{ $count: "count" }],
           },
         },
       ])
@@ -120,12 +97,14 @@ export async function POST(request) {
           if (data[0].data.length > 0) {
             sendResponse["appStatusCode"] = 0;
             sendResponse["message"] = "";
-            sendResponse["payloadJson"] = data;
+            sendResponse["payloadJson"] = data[0].data;
+            sendResponse["total_count"] = data[0].total_count[0].count;
             sendResponse["error"] = [];
           } else {
             sendResponse["appStatusCode"] = 0;
             sendResponse["message"] = "Record not found!";
             sendResponse["payloadJson"] = [];
+            sendResponse["total_count"] = 0;
             sendResponse["error"] = [];
           }
         })

@@ -15,12 +15,14 @@ let sendResponse = {
 
 
 export async function POST(request) {
-  const { n_page, n_limit, c_search_term } =
-    await request.json();
-
-
   try {
     await connectMongoDB();
+    const { n_page, n_limit, c_search_term } =
+      await request.json();
+
+
+    try {
+      
 
 
 
@@ -38,7 +40,7 @@ export async function POST(request) {
       if (n_limitTerm !== "" && n_pageTerm !== "") {
         await connectMongoDB();
 
-        await Control.aggregate([
+        const data = await Control.aggregate([
           { $match: _search },
           {
             $group: {
@@ -89,28 +91,23 @@ export async function POST(request) {
               ],
             },
           },
-        ])
-          .then((data) => {
-            const encryptRes = encryptCryptoResponse(data);
-            const decryptRes = decrypCryptoRequest(encryptRes);
-            if (data[0].data.length > 0) {
-              sendResponse["appStatusCode"] = 0;
-              sendResponse["message"] = "";
-              sendResponse["payloadJson"] = encryptRes;
-              sendResponse["error"] = [];
-            } else {
-              sendResponse["appStatusCode"] = 0;
-              sendResponse["message"] = "Record not found!";
-              sendResponse["payloadJson"] = [];
-              sendResponse["error"] = [];
-            }
-          })
-          .catch((err) => {
-            sendResponse["appStatusCode"] = 4;
-            sendResponse["message"] = "";
-            sendResponse["payloadJson"] = [];
-            sendResponse["error"] = err;
-          });
+        ]);
+        
+        // Return only paged data (avoid sending entire aggregation result)
+        const encryptRes = encryptCryptoResponse(data[0]?.data || []);
+        if ((data[0]?.data || []).length > 0) {
+          sendResponse["appStatusCode"] = 0;
+          sendResponse["message"] = "";
+          sendResponse["payloadJson"] = encryptRes;
+          sendResponse["total_count"] = data[0]?.total_count?.[0]?.count || 0;
+          sendResponse["error"] = [];
+        } else {
+          sendResponse["appStatusCode"] = 0;
+          sendResponse["message"] = "Record not found!";
+          sendResponse["payloadJson"] = [];
+          sendResponse["total_count"] = 0;
+          sendResponse["error"] = [];
+        }
         return NextResponse.json(sendResponse, { status: 200 });
       } else {
         sendResponse["appStatusCode"] = 3;
@@ -120,6 +117,13 @@ export async function POST(request) {
         return NextResponse.json(sendResponse, { status: 200 });
       }
     
+    } catch (err) {
+      sendResponse["appStatusCode"] = 4;
+      sendResponse["message"] = [];
+      sendResponse["payloadJson"] = [];
+      sendResponse["error"] = "Something went wrong!";
+      return NextResponse.json(sendResponse, { status: 400 });
+    }
   } catch (err) {
     sendResponse["appStatusCode"] = 4;
     sendResponse["message"] = [];
@@ -130,6 +134,7 @@ export async function POST(request) {
 }
 
 export async function GET(request) {
+  await connectMongoDB();
   const id = request.nextUrl.searchParams.get("id");
 
     if (id) {
@@ -143,7 +148,7 @@ export async function GET(request) {
         ];
 
         try {
-          await connectMongoDB();
+          
 
           await Control.aggregate([
             { $match: _search },

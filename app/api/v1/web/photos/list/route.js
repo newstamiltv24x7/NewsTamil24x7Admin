@@ -5,6 +5,7 @@ import {
     encryptCryptoResponse,
     decrypCryptoRequest,
   } from "../../../../../../helper/helper";
+  // timer logic removed
 import { parseBody } from "../../../utils/parseBody";
 
 let sendResponse = {
@@ -15,8 +16,8 @@ let sendResponse = {
 };
 
 export async function POST(request) {
-  const body = await parseBody(request);
-  const { n_page, n_limit, c_search_term } = body;
+    const body = await parseBody(request);
+    const { n_page, n_limit, c_search_term } = body;
   try {
     await connectMongoDB();
     
@@ -116,37 +117,32 @@ export async function POST(request) {
             ],
           },
         },
-      ])
-        .then((data) => {
-            const encryptRes = encryptCryptoResponse(data);
-            // const decryptRes = decrypCryptoRequest(encryptRes);
-          if (data[0].data.length > 0) {
-            sendResponse["appStatusCode"] = 0;
-            sendResponse["message"] = "";
-            sendResponse["payloadJson"] = encryptRes;
-            sendResponse["error"] = [];
-          } else {
-            sendResponse["appStatusCode"] = 0;
-            sendResponse["message"] = "Record not found!";
-            sendResponse["payloadJson"] = [];
-            sendResponse["error"] = [];
-          }
-        })
-        .catch((err) => {
-          sendResponse["appStatusCode"] = 4;
-          sendResponse["message"] = "";
-          sendResponse["payloadJson"] = [];
-          sendResponse["error"] = err;
-        });
+      ]);
+      
+      // ✅ FIXED: Await aggregation and handle properly
+      const encryptRes = encryptCryptoResponse(data);
+      if (data[0].data.length > 0) {
+        sendResponse["appStatusCode"] = 0;
+        sendResponse["message"] = "";
+        sendResponse["payloadJson"] = encryptRes;
+        sendResponse["error"] = [];
+      } else {
+        sendResponse["appStatusCode"] = 0;
+        sendResponse["message"] = "Record not found!";
+        sendResponse["payloadJson"] = [];
+        sendResponse["error"] = [];
+      }
       return NextResponse.json(sendResponse, { status: 200 });
-  
   } catch (err) {
     sendResponse["appStatusCode"] = 4;
     sendResponse["message"] = [];
     sendResponse["payloadJson"] = [];
+    sendResponse["error"] = err;
+    return NextResponse.json(sendResponse, { status: 400 });
+  } finally {
+  }
     sendResponse["error"] = "Something went wrong!";
     return NextResponse.json(sendResponse, { status: 400 });
-  }
 }
 
 export async function GET(request) {

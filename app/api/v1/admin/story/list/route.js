@@ -403,137 +403,138 @@ export async function POST(request) {
       if (n_limitTerm !== "" && n_pageTerm !== "") {
         await connectMongoDB();
 
-        await Story.aggregate([
-          {
-            $match: _search,
-          },
-          {
-            $group: {
-              _id: "$_id",
-              story_title_name: { $first: "$story_title_name" },
-              story_subject_name: { $first: "$story_subject_name" },
-              story_id: { $first: "$story_id" },
-              reviwer_id: { $first: "$reviwer_id" },
-              story_cover_image_url: { $first: "$story_cover_image_url" },
-              c_save_type: { $first: "$c_save_type" },
-              n_story_order: { $first: "$n_story_order" },
-              trending_news: { $first: "$trending_news" },
-              flash_news: { $first: "$flash_news" },
-              n_status: { $first: "$n_status" },
-              n_published: { $first: "$n_published" },
-              createdAt: { $first: "$createdAt" },
-              updatedAt: { $first: "$updatedAt" },
-              c_createdBy: { $first: "$c_createdBy" },
-              author_desk: { $first: "$author_desk" },
-              post_status: { $first: "$post_status" },
-              replaced_url: { $first: "$replaced_url" },
-              live_status: { $first: "$live_status" },
-              pin_status: { $first: "$pin_status" },
-              view_count: { $first: "$view_count" },
-              
-              
+        try {
+          const data = await Story.aggregate([
+            {
+              $match: _search,
             },
-          },
-          {
-            $lookup: {
-              from: "users",
-              localField: "c_createdBy",
-              foreignField: "user_id",
-              as: "createdById",
+            {
+              $group: {
+                _id: "$_id",
+                story_title_name: { $first: "$story_title_name" },
+                story_subject_name: { $first: "$story_subject_name" },
+                story_id: { $first: "$story_id" },
+                reviwer_id: { $first: "$reviwer_id" },
+                story_cover_image_url: { $first: "$story_cover_image_url" },
+                c_save_type: { $first: "$c_save_type" },
+                n_story_order: { $first: "$n_story_order" },
+                trending_news: { $first: "$trending_news" },
+                flash_news: { $first: "$flash_news" },
+                n_status: { $first: "$n_status" },
+                n_published: { $first: "$n_published" },
+                createdAt: { $first: "$createdAt" },
+                updatedAt: { $first: "$updatedAt" },
+                c_createdBy: { $first: "$c_createdBy" },
+                author_desk: { $first: "$author_desk" },
+                post_status: { $first: "$post_status" },
+                replaced_url: { $first: "$replaced_url" },
+                live_status: { $first: "$live_status" },
+                pin_status: { $first: "$pin_status" },
+                view_count: { $first: "$view_count" },
+                
+                
+              },
             },
-          },
-          {
-            $unwind: {
-              path: "$createdById",
-              preserveNullAndEmptyArrays: true,
+            {
+              $lookup: {
+                from: "users",
+                localField: "c_createdBy",
+                foreignField: "user_id",
+                as: "createdById",
+              },
             },
-          },
-          {
-            $lookup: {
-              from: "users",
-              localField: "reviwer_id",
-              foreignField: "user_id",
-              as: "reviwerById",
+            {
+              $unwind: {
+                path: "$createdById",
+                preserveNullAndEmptyArrays: true,
+              },
             },
-          },
-          {
-            $unwind: {
-              path: "$reviwerById",
-              preserveNullAndEmptyArrays: true,
+            {
+              $lookup: {
+                from: "users",
+                localField: "reviwer_id",
+                foreignField: "user_id",
+                as: "reviwerById",
+              },
             },
-          },
-          // {
-          //   $lookup: {
-          //     from: "visitcounttokens",
-          //     localField: "story_id",
-          //     foreignField: "c_story_id",
-          //     as: "visitcounttokens",
-          //   },
-          // },
-          {
-            $project: {
-              _id: 1,
-              story_subject_name: 1,
-              story_id: 1,
-              story_title_name: 1,
-              reviwer_id: 1,
-              story_cover_image_url: 1,
-              c_save_type: 1,
-              n_story_order: 1,
-              post_status: 1,
-              n_status: 1,
-              n_published: 1,
-              createdAt: 1,
-              updatedAt: 1,
-              c_createdBy: 1,
-              author_desk: 1,
-              replaced_url: 1,
-              live_status: 1,
-              createdName: "$createdById.user_name",
-              reviwerName: "$reviwerById.user_name",
-              // visitcount: "$visitcounttokens.c_visit_all_count",
-              pin_status: 1,
-              view_count: 1
+            {
+              $unwind: {
+                path: "$reviwerById",
+                preserveNullAndEmptyArrays: true,
+              },
             },
-          },
-          {
-            // $sort: { n_story_order: -1 },
-            $sort: {pin_status: -1, n_story_order: -1, createdAt: -1 },
-          },
-          {
-            $facet: {
-              data: [{ $skip: n_pageTerm }, { $limit: n_limitTerm }],
-              total_count: [
-                {
-                  $count: "count",
-                },
-              ],
+            // {
+            //   $lookup: {
+            //     from: "visitcounttokens",
+            //     localField: "story_id",
+            //     foreignField: "c_story_id",
+            //     as: "visitcounttokens",
+            //   },
+            // },
+            {
+              $project: {
+                _id: 1,
+                story_subject_name: 1,
+                story_id: 1,
+                story_title_name: 1,
+                reviwer_id: 1,
+                story_cover_image_url: 1,
+                c_save_type: 1,
+                n_story_order: 1,
+                post_status: 1,
+                n_status: 1,
+                n_published: 1,
+                createdAt: 1,
+                updatedAt: 1,
+                c_createdBy: 1,
+                author_desk: 1,
+                replaced_url: 1,
+                live_status: 1,
+                createdName: "$createdById.user_name",
+                reviwerName: "$reviwerById.user_name",
+                // visitcount: "$visitcounttokens.c_visit_all_count",
+                pin_status: 1,
+                view_count: 1
+              },
             },
-          },
-        ])
-          .then((data) => {
-            const datas = [];
-            const data1 = seprateArrayData(data[0].data);
-            datas.push({ data: data1, total_count: data[0].total_count });
-            if (data[0].data.length > 0) {
-              sendResponse["appStatusCode"] = 0;
-              sendResponse["message"] = "";
-              sendResponse["payloadJson"] = datas;
-              sendResponse["error"] = [];
-            } else {
-              sendResponse["appStatusCode"] = 0;
-              sendResponse["message"] = "Record not found!";
-              sendResponse["payloadJson"] = [];
-              sendResponse["error"] = [];
-            }
-          })
-          .catch((err) => {
-            sendResponse["appStatusCode"] = 4;
+            {
+              // $sort: { n_story_order: -1 },
+              $sort: {pin_status: -1, n_story_order: -1, createdAt: -1 },
+            },
+            {
+              $facet: {
+                data: [{ $skip: n_pageTerm }, { $limit: n_limitTerm }],
+                total_count: [
+                  {
+                    $count: "count",
+                  },
+                ],
+              },
+            },
+          ]);
+
+          const datas = [];
+          const data1 = seprateArrayData(data[0].data);
+          datas.push({ data: data1, total_count: data[0].total_count });
+          if ((data[0]?.data || []).length > 0) {
+            sendResponse["appStatusCode"] = 0;
             sendResponse["message"] = "";
+            sendResponse["payloadJson"] = datas;
+            sendResponse["error"] = [];
+          } else {
+            sendResponse["appStatusCode"] = 0;
+            sendResponse["message"] = "Record not found!";
             sendResponse["payloadJson"] = [];
-            sendResponse["error"] = err;
-          });
-        return NextResponse.json(sendResponse, { status: 200 });
+            sendResponse["error"] = [];
+          }
+          return NextResponse.json(sendResponse, { status: 200 });
+        } catch (err) {
+          sendResponse["appStatusCode"] = 4;
+          sendResponse["message"] = "";
+          sendResponse["payloadJson"] = [];
+          sendResponse["error"] = err;
+          return NextResponse.json(sendResponse, { status: 200 });
+        }
       } else {
         sendResponse["appStatusCode"] = 3;
         sendResponse["message"] = "";

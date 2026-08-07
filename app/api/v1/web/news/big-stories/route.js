@@ -5,15 +5,9 @@ import {
   encryptCryptoResponse,
   decrypCryptoRequest,
 } from "../../../../../../helper/helper";
+import { parseBody } from "../../../utils/parseBody";
 
-let sendResponse = {
-  appStatusCode: "",
-  message: "",
-  payloadJson: [],
-  error: "",
-};
-
-
+let sendResponse = {};
 const seprateData = (data) => {
   const datas = [];
 
@@ -55,60 +49,50 @@ const seprateData = (data) => {
 
 
 export async function POST(request) {
-  const { n_page, n_limit, main_category_id } = await request.json();
+  const body = await parseBody(request);
+  const { n_page, n_limit, main_category_id } = body;
   await connectMongoDB();
-  var page = Number(n_page);
-  var limit = Number(n_limit);
+  const page = Number(n_page) || 1;
+  const limit = Number(n_limit) || 10;
+  const skip = (page - 1) * limit;
 
-  const options = {
-    page: page,
-    limit: limit,
-    sort: {pin_status: -1, _id: -1,  n_story_order: -1, createdAt: -1 },
-    select: {
-      _id: 1,
-      story_id: 1,
-      story_subject_name: 1,
-      story_title_name: 1,
-      story_sub_title_name: 1,
-      story_english_name: 1,
-      story_sub_english_name: 1,
-      story_desk_created_name: 1,
-      main_category_id: 1,
-      youtube_embed_id: 1,
-      story_cover_image_url: 1,
-      story_thumb_image_url: 1,
-      news_image_caption: 1,
-      createdAt: 1,
-      updatedAt: 1,
-      view_count: 1
-    },
-  };
-  
+  let sendResponse = {};
   try {
-    await connectMongoDB();
-    // const data = {
-    //   c_control_name:"Control Views Count"
-    // }
-    // const controlResult = await Control.find(data);
-    await Story.paginate(
-      { n_status: 1, n_published: 1, c_save_type: "published", main_category_id : main_category_id },
-      options,
-      function (err, result) {
-        if (err) {
-          sendResponse["appStatusCode"] = 4;
-          sendResponse["message"] = "";
-          sendResponse["payloadJson"] = err;
-          sendResponse["error"] = "";
-        } else {
-          const encryptRes = encryptCryptoResponse(result);
-          // const decryptRes = decrypCryptoRequest(encryptRes);
-          sendResponse["appStatusCode"] = 0;
-          sendResponse["message"] = "";
-          sendResponse["payloadJson"] = encryptRes;
-          sendResponse["error"] = "";
-        }
-      }
-    );
+    // ✅ CRITICAL FIX: Bypass paginate plugin - use direct find() to avoid countDocuments() timeout
+    const filter = { n_status: 1, n_published: 1, c_save_type: "published" };
+    if (main_category_id) filter.main_category_id = main_category_id;
+
+    const docs = await Story.find(filter)
+      .sort({ pin_status: -1, _id: -1, n_story_order: -1, createdAt: -1 })
+      .skip(skip)
+      .limit(limit + 1)
+      .lean()
+      .select({
+        _id: 1, story_id: 1, story_subject_name: 1, story_title_name: 1,
+        story_sub_title_name: 1, story_english_name: 1, story_sub_english_name: 1,
+        story_desk_created_name: 1, main_category_id: 1, youtube_embed_id: 1,
+        story_cover_image_url: 1, story_thumb_image_url: 1, news_image_caption: 1,
+        createdAt: 1, updatedAt: 1, view_count: 1, pin_status: 1, n_story_order: 1
+      });
+
+    const hasMore = docs.length > limit;
+    const result = {
+      docs: hasMore ? docs.slice(0, limit) : docs,
+      totalDocs: 0,
+      limit: limit,
+      page: page,
+      pages: 0,
+      hasNextPage: hasMore,
+      nextPage: hasMore ? page + 1 : null,
+      hasPrevPage: page > 1,
+      prevPage: page > 1 ? page - 1 : null
+    };
+
+    const encryptRes = encryptCryptoResponse(result);
+    sendResponse["appStatusCode"] = 0;
+    sendResponse["message"] = "";
+    sendResponse["payloadJson"] = encryptRes;
+    sendResponse["error"] = "";
     return NextResponse.json(sendResponse, { status: 200 });
   } catch (err) {
     sendResponse["appStatusCode"] = 4;
@@ -647,10 +631,11 @@ export async function GET(request) {
             _id: 1,
             story_title_name: 1,
             story_sub_title_name: 1,
-            story_desk_created_name: 1,
-            story_cover_image_url: 1,
             main_category_id: 1,
             seo_tag: 1,
+            seo_keywords: 1,
+            story_id: 1,
+            story_details: 1,
             story_subject_name: 1,
             story_asked_title: 1,
             news_image_caption: 1,
@@ -660,8 +645,14 @@ export async function GET(request) {
             story_summary_snippet: 1,
             blurb_title: 1,
             blurb_content: 1,
-            seo_keywords: 1,
-            story_id: 1,
+            twitter_embed_id: 1,
+            youtube_embed_id: 1,
+            facebook_embed_id: 1,
+            instagram_embed_id: 1,
+            threads_embed_id: 1,
+            author_desk: 1,
+            story_cover_image_url: 1,
+            story_desk_created_name: 1,
             createdAt: 1,
             updatedAt: 1,
             c_category_name: "$categories.c_category_name",
