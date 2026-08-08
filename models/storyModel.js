@@ -404,6 +404,7 @@ const storySchema = new Schema(
 
 // Optimize common queries for homepage and lists
 storySchema.index({ n_status: 1, n_published: 1, c_save_type: 1, createdAt: -1 });
+storySchema.index({ n_status: 1, n_published: 1, c_save_type: 1, pin_status: -1, createdAt: -1 });
 storySchema.index({ main_category_id: 1, n_status: 1, n_published: 1, createdAt: -1 });
 storySchema.index({ pin_status: -1, n_story_order: -1, createdAt: -1 });
 storySchema.index({ story_desk_created_name: 1 });

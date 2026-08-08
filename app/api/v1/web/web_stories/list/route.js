@@ -257,7 +257,7 @@ export async function GET(request) {
           sendResponse["message"] = "";
           sendResponse["payloadJson"] = [];
           sendResponse["error"] = "Invalid Id!";
-          return NextResponse.json(sendResponse, { status: 400 });
+          return NextResponse.json(sendResponse, { status: 404 });
         }
       }else  if (url) {
         const checkUrl = await WebStories.findOne({ c_web_story_slug_name: url });
@@ -355,7 +355,7 @@ export async function GET(request) {
           sendResponse["message"] = "";
           sendResponse["payloadJson"] = [];
           sendResponse["error"] = "Invalid Id!";
-          return NextResponse.json(sendResponse, { status: 400 });
+          return NextResponse.json(sendResponse, { status: 404 });
         }
       } else {
         let _search = {};

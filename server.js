@@ -20,13 +20,18 @@ app.prepare().then(() => {
     // 60 seconds is generous for database queries but prevents indefinite hangs
     req.setTimeout(60000, () => {
       console.error(`[TIMEOUT] Request timeout for ${req.method} ${req.url}`);
-      res.writeHead(504, { "Content-Type": "application/json" });
-      res.end(JSON.stringify({ error: "Request timeout" }));
+      if (!res.headersSent) {
+        res.writeHead(504, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ error: "Gateway Timeout - Request timed out" }));
+      }
     });
     
     res.setTimeout(60000, () => {
       console.error(`[TIMEOUT] Response timeout for ${req.method} ${req.url}`);
-      res.destroy();
+      if (!res.headersSent) {
+        res.writeHead(504, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ error: "Gateway Timeout - Response timed out" }));
+      }
     });
     
     const parsedUrl = parse(req.url, true);
