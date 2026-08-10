@@ -1,4 +1,3 @@
-const accessTokenKey = "b72f724c-586a-4394-b20e-edfe74866d4b"
-const forgetToken = "b72f724c-586a-4394-b20e-edfe74866d4b"
-
+const accessTokenKey = process.env.JWT_SECRET
+const forgetToken = process.env.JWT_SECRET
 module.exports = {accessTokenKey,forgetToken}
