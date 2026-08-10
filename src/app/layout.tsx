@@ -39,19 +39,6 @@ export default function RootLayout({
         ></link>
         <script async src="https://platform.twitter.com/widgets.js"  charSet="utf-8"></script>
         <script async src="https://www.instagram.com/embed.js"  charSet="utf-8"></script>
-        <script async type="application/javascript" src="https://news.google.com/swg/js/v1/swg-basic.js"></script>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `(self.SWG_BASIC = self.SWG_BASIC || []).push( basicSubscriptions => {
-    basicSubscriptions.init({
-      type: "NewsArticle",
-      isPartOfType: ["Product"],
-      isPartOfProductId: "CAow2NTDDA:openaccess",
-      clientOptions: { theme: "light", lang: "ta" },
-    });
-  });`,
-          }}
-        ></script>
         <script
           src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`}
           async
