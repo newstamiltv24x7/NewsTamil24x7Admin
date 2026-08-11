@@ -121,7 +121,7 @@ export async function POST(request) {
     let body = {};
     try { body = await request.json(); } catch { body = {}; }
 
-    const { n_page = 1, n_limit = 10, trending_news } = body;
+    const { n_page = 1, n_limit = 10, main_category_id, trending_news } = body;
 
     // Ensure MongoDB connection is established
     try {
@@ -144,6 +144,7 @@ export async function POST(request) {
     }
 
     const filter = { n_status: 1, n_published: 1, c_save_type: "published" };
+    if (main_category_id) filter.main_category_id = main_category_id;
     if (trending_news) filter.trending_news = 1;
 
     const page = Number(n_page) || 1;

@@ -28,8 +28,8 @@ const connectMongoDB = async () => {
     mongoose.set("strictQuery", false);
 
     cachedConnection = await mongoose.connect(connectionURL, {
-      maxPoolSize: 50,  // Increased from 10 to handle more concurrent requests
-      minPoolSize: 10,  // Increased from 2 to maintain more connections
+      maxPoolSize: 15,
+      minPoolSize: 5,
       serverSelectionTimeoutMS: 5000,
       socketTimeoutMS: 45000,
       heartbeatFrequencyMS: 30000,
