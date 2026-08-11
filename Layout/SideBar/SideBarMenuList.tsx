@@ -3,7 +3,7 @@ import { Fragment, useEffect, useState } from "react";
 import Menulist from "./Menulist";
 import { MenuList } from "@/Data/Layout/Menu";
 import { MenuItem } from "@/Types/LayoutTypes";
-import { useTranslation } from "@/app/i18n/client";
+import { useTranslation } from "../../src/app/i18n/client";
 import { getSideBarMenu } from "@/apiFunctions/ApiAction";
 
 const SidebarMenuList = () => {

@@ -3,7 +3,7 @@ import { LanguagesData } from "@/Data/Layout";
 import { useAppDispatch, useAppSelector } from "@/Redux/Hooks";
 import { setLanguage } from "@/Redux/Reducers/LanguageSlice";
 import { ChangeLngType, LanguageFlags } from "@/Types/LayoutTypes";
-import { useTranslation } from "@/app/i18n/client";
+import { useTranslation } from "../../src/app/i18n/client";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";

@@ -3,7 +3,7 @@ import { Href } from "@/Constant";
 import { useAppDispatch, useAppSelector } from "@/Redux/Hooks";
 import { handlePined } from "@/Redux/Reducers/LayoutSlice";
 import { MenuListType, SidebarItemTypes } from "@/Types/LayoutTypes";
-import { useTranslation } from "@/app/i18n/client";
+import { useTranslation } from "../../src/app/i18n/client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";

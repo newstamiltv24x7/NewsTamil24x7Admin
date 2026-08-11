@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
-import { AdsTxt } from "../../../../../../models/adsTxtModel";
-import connectMongoDB from "../../../../../../libs/mongodb";
+import { AdsTxt } from "../../../../../../../models/adsTxtModel";
+import connectMongoDB from "../../../../../../../libs/mongodb";
 import {
   create_UUID,
   verifyAccessToken,
-} from "../../../../../../helper/helper";
+} from "../../../../../../../helper/helper";
 
 let sendResponse = {
   appStatusCode: "",
